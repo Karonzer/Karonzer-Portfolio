@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &7688610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7688611}
+  m_Layer: 0
+  m_Name: ProjectiveBody
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7688611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7688610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1946724561}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &161990717
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,11 +213,11 @@ Transform:
   m_GameObject: {fileID: 472228501}
   serializedVersion: 2
   m_LocalRotation: {x: 0.105034426, y: 0.000000033135706, z: -0.0000000034997485, w: 0.9944686}
-  m_LocalPosition: {x: 0, y: 1.7674286, z: -3.358429}
+  m_LocalPosition: {x: 0, y: 0.7174287, z: -3.358429}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1925594722}
+  m_Father: {fileID: 1888641676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &472228503
 MonoBehaviour:
@@ -1120,7 +1151,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 472228502}
   m_Father: {fileID: 845209164}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1888641678
@@ -1198,7 +1230,7 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1888641681
@@ -1213,8 +1245,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e063da080a2297b48b6d09496e905400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterController: {fileID: 0}
+  playerGravityController: {fileID: 0}
   playerData: {fileID: 0}
   moveDirection: {x: 0, y: 0}
+  turnSmoothTime: 0.1
+  turnSmoothVelocity: 0
+  cameraPos: {fileID: 0}
 --- !u!1 &1892739299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,7 +1313,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 897659189}
-  - {fileID: 472228502}
   m_Father: {fileID: 1272855053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1946724560
@@ -1310,6 +1346,7 @@ Transform:
   m_Children:
   - {fileID: 1183553945}
   - {fileID: 1892739300}
+  - {fileID: 7688611}
   m_Father: {fileID: 1272855053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807

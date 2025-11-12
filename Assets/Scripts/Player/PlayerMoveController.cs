@@ -1,17 +1,28 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 public class PlayerMoveController : MonoBehaviour
 {
+	[Header("기본 설정")]
 	[SerializeField] private CharacterController characterController;
 	[SerializeField] private InputSystem_Actions inputActions;
+	[SerializeField] private GravityController playerGravityController;
+
+	[Header("기본 스크립트 오브젝트 변수 값")]
 	[SerializeField] private PlayerData playerData;
+
+	[Header("기본 변수 값")]
 	[SerializeField] private Vector2 moveDirection;
 	[SerializeField] private float turnSmoothTime = 0.1f;
 	[SerializeField] private float turnSmoothVelocity;
 	[SerializeField] private Camera cameraPos;
+	[SerializeField] private Vector3 gravityDelta;
+	[SerializeField] private Vector3 horizontalDelta;
+
 	private Coroutine moveRoutine;
+
+
 
 	private void Awake()
 	{
@@ -31,14 +42,25 @@ public class PlayerMoveController : MonoBehaviour
 		DiSetting_InputActionMove();
 	}
 
+	void Update()
+	{
+		gravityDelta = Vector3.zero;
+		if (playerGravityController != null)
+			gravityDelta = playerGravityController.GetGravityDelta(characterController);
+
+		characterController.Move(horizontalDelta + gravityDelta);
+	}
+
 	private void Initialize_PlayerMoveController()
 	{
 		characterController = GetComponent<CharacterController>();
 		inputActions = new InputSystem_Actions();
 		playerData = new PlayerData();
-
+		playerGravityController = transform.AddComponent<GravityController>();
 		cameraPos = Camera.main;
 	}
+
+
 
 	private void Setting_PlayerMoveController()
 	{
@@ -53,34 +75,44 @@ public class PlayerMoveController : MonoBehaviour
 
 	private void Setting_InputActionMove()
 	{
-
 		inputActions.Player.Move.performed += OnMove;
 		inputActions.Player.Move.canceled += OnMoveCanceled;
+		inputActions.Player.Jump.performed += OnJump;
 	}	
 
 	private void DiSetting_InputActionMove()
 	{
 		inputActions.Player.Move.performed -= OnMove;
 		inputActions.Player.Move.canceled -= OnMoveCanceled;
+		inputActions.Player.Jump.performed -= OnJump;
 	}
+
 	private void OnMove(InputAction.CallbackContext context)
 	{
 		moveDirection = context.ReadValue<Vector2>();
-		Debug.Log($"Move: {moveDirection}");
 		if (moveRoutine == null)
 		{
 			moveRoutine = StartCoroutine(MoveCoroutine());
 		}
 
 	}
+
 	private void OnMoveCanceled(InputAction.CallbackContext context)
 	{
 		moveDirection = Vector2.zero;
-
+		horizontalDelta = Vector3.zero;
 		if (moveRoutine != null)
 		{
 			StopCoroutine(moveRoutine);
 			moveRoutine = null;
+		}
+	}
+
+	public void OnJump(InputAction.CallbackContext context)
+	{
+		if (context.performed)
+		{
+			playerGravityController?.Jump();
 		}
 	}
 
@@ -98,7 +130,7 @@ public class PlayerMoveController : MonoBehaviour
 
 			Vector3 worldMove = camRight * moveDirection.x + camForward * moveDirection.y;
 			if (worldMove.sqrMagnitude > 1f) worldMove.Normalize();
-			characterController.Move(worldMove * playerData.moveSpeed * Time.deltaTime);
+			horizontalDelta = worldMove * playerData.moveSpeed * Time.deltaTime;
 
 			if (worldMove.sqrMagnitude > 0.001f)
 			{
