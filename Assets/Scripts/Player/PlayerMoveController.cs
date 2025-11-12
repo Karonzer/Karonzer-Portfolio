@@ -8,7 +8,8 @@ public class PlayerMoveController : MonoBehaviour
 	[SerializeField] private InputSystem_Actions inputActions;
 	[SerializeField] private PlayerData playerData;
 	[SerializeField] private Vector2 moveDirection;
-
+	[SerializeField] private float turnSmoothTime = 0.1f;
+	[SerializeField] private float turnSmoothVelocity;
 	[SerializeField] private Camera cameraPos;
 	private Coroutine moveRoutine;
 
@@ -98,6 +99,13 @@ public class PlayerMoveController : MonoBehaviour
 			Vector3 worldMove = camRight * moveDirection.x + camForward * moveDirection.y;
 			if (worldMove.sqrMagnitude > 1f) worldMove.Normalize();
 			characterController.Move(worldMove * playerData.moveSpeed * Time.deltaTime);
+
+			if (worldMove.sqrMagnitude > 0.001f)
+			{
+				float targetAngle = Mathf.Atan2(worldMove.x, worldMove.z) * Mathf.Rad2Deg;
+				float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+				transform.rotation = Quaternion.Euler(0f, smoothAngle, 0f);
+			}
 
 			yield return null;
 		}
