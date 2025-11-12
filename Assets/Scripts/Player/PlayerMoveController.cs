@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerMoveController : MonoBehaviour
 {
+
+
 	[Header("기본 설정")]
 	[SerializeField] private CharacterController characterController;
 	[SerializeField] private InputSystem_Actions inputActions;
@@ -20,6 +22,8 @@ public class PlayerMoveController : MonoBehaviour
 	[SerializeField] private Vector3 gravityDelta;
 	[SerializeField] private Vector3 horizontalDelta;
 
+	[SerializeField] private Animator animator;
+
 	private Coroutine moveRoutine;
 
 
@@ -27,6 +31,8 @@ public class PlayerMoveController : MonoBehaviour
 	private void Awake()
 	{
 		Initialize_PlayerMoveController();
+
+		animator = transform.GetChild(0).GetComponent<Animator>();
 	}
 
 	private void OnEnable()
@@ -49,6 +55,10 @@ public class PlayerMoveController : MonoBehaviour
 			gravityDelta = playerGravityController.GetGravityDelta(characterController);
 
 		characterController.Move(horizontalDelta + gravityDelta);
+
+		animator.SetFloat("HSpeed", moveDirection.x);
+		animator.SetFloat("VSpeed", moveDirection.y);
+		animator.SetBool("IsGrounded", playerGravityController.IsGrounded);
 	}
 
 	private void Initialize_PlayerMoveController()
@@ -90,6 +100,7 @@ public class PlayerMoveController : MonoBehaviour
 	private void OnMove(InputAction.CallbackContext context)
 	{
 		moveDirection = context.ReadValue<Vector2>();
+		Debug.Log("Move Direction: " + moveDirection);
 		if (moveRoutine == null)
 		{
 			moveRoutine = StartCoroutine(MoveCoroutine());
@@ -131,6 +142,7 @@ public class PlayerMoveController : MonoBehaviour
 			Vector3 worldMove = camRight * moveDirection.x + camForward * moveDirection.y;
 			if (worldMove.sqrMagnitude > 1f) worldMove.Normalize();
 			horizontalDelta = worldMove * playerData.moveSpeed * Time.deltaTime;
+
 
 			if (worldMove.sqrMagnitude > 0.001f)
 			{
