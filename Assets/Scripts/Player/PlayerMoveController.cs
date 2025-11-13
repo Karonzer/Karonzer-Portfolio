@@ -100,7 +100,6 @@ public class PlayerMoveController : MonoBehaviour
 	private void OnMove(InputAction.CallbackContext context)
 	{
 		moveDirection = context.ReadValue<Vector2>();
-		Debug.Log("Move Direction: " + moveDirection);
 		if (moveRoutine == null)
 		{
 			moveRoutine = StartCoroutine(MoveCoroutine());

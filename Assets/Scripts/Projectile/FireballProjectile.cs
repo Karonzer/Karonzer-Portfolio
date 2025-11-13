@@ -1,0 +1,51 @@
+using UnityEngine;
+using System.Collections;
+public class FireballProjectile : Projectile
+{
+	private Coroutine moveRoutine;
+	private Coroutine projectileSurvivalTimeCoroutine;
+
+
+	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 spawnPos)
+	{
+		projectileName = _projectileName;
+		projectileDemage = _projectileDemage;
+		projectileDir = _dir;
+		projectileSpeed = _projectileSpeed;
+		projectileSurvivalTime = _projectileSurvivalTime;
+		transform.position = spawnPos;
+	}
+
+	public override void fire()
+	{
+		if(moveRoutine != null)
+		{
+			StopCoroutine(moveRoutine);
+			moveRoutine = null;
+		}
+
+		if(projectileSurvivalTimeCoroutine != null)
+		{
+			StopCoroutine(projectileSurvivalTimeCoroutine);
+			projectileSurvivalTimeCoroutine = null;
+		}
+		moveRoutine = StartCoroutine(Start_MoveFireballProjectile());
+		projectileSurvivalTimeCoroutine = StartCoroutine(Start_ProjectileSurvivalTimeCoroutine());
+	}
+
+	private IEnumerator Start_MoveFireballProjectile()
+	{
+		while (true)
+		{
+			transform.Translate(projectileDir * projectileSpeed * Time.deltaTime);
+			yield return null;
+		}
+	}
+
+	private IEnumerator Start_ProjectileSurvivalTimeCoroutine()
+	{
+		yield return new WaitForSeconds(projectileSurvivalTime);
+		transform.gameObject.SetActive(false);
+		GSC.spawnManager.DeSpawn_Projectile(projectileName, transform.gameObject);
+	}
+}
