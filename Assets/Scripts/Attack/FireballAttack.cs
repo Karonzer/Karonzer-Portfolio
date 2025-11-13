@@ -13,7 +13,7 @@ public class FireballAttack : AttackRoot
 	}
 	private void Start()
 	{
-		attackName = "Fireball";
+		attackName = "FireballProjectile";
 		attackDamage = 25;
 		attackRange = 15f;
 		attackTime = 2f;
@@ -51,13 +51,9 @@ public class FireballAttack : AttackRoot
 					Vector3 spawnOffset = direction.normalized * 0.5f;
 					Vector3 spawnPosition = transform.position + spawnOffset;
 					spawnPosition += new Vector3(0, 0.5f, 0);
-					TryGetComponent.Set_ProjectileInfo("FireballProjectile", 10, direction, 5, 30, spawnPosition);
+					TryGetComponent.Set_ProjectileInfo("FireballProjectile", attackDamage, attackRange, direction, 5, DBManager.ProjectileSurvivalTime, spawnPosition);
 					TryGetComponent.fire();
 				}
-			}
-			else
-			{
-				Debug.Log("No target enemy found within range.");
 			}
 		}
 
