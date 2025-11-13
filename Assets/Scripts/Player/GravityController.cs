@@ -17,6 +17,8 @@ public class GravityController : MonoBehaviour
 	public float VelocityY => velocityY;
 	public bool IsGrounded => isGrounded;
 
+
+
 	public Vector3 GetGravityDelta(CharacterController controller)
 	{
 		isGrounded = controller.isGrounded;
@@ -37,6 +39,7 @@ public class GravityController : MonoBehaviour
 		if (!isGrounded) return;
 		velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity * gravityScale);
 	}
+
 
 
 }

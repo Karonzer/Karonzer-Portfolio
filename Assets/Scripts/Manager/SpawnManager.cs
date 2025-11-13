@@ -13,7 +13,7 @@ public class SpawnManager : MonoBehaviour
 	Dictionary<string, Queue<GameObject>> projectile;
 	private void Awake()
 	{
-		GSC.spawnManager = this;
+		GSC.Instance.RegisterSpawn(this);
 		projectile = new Dictionary<string, Queue<GameObject>>();
 
 		EnemySpawnGroup= transform.Find("EnemySpawnGroup");

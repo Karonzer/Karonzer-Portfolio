@@ -5,6 +5,13 @@ public class FireballProjectile : Projectile
 	private Coroutine moveRoutine;
 	private Coroutine projectileSurvivalTimeCoroutine;
 
+	private SphereCollider sphereCollider;
+
+	private void Awake()
+	{
+		sphereCollider = GetComponent<SphereCollider>();
+		sphereCollider.isTrigger = true;
+	}
 
 	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 spawnPos)
 	{
@@ -46,6 +53,18 @@ public class FireballProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
 		transform.gameObject.SetActive(false);
-		GSC.spawnManager.DeSpawn_Projectile(projectileName, transform.gameObject);
+		GSC.Instance.Spawn.DeSpawn_Projectile(projectileName, transform.gameObject);
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if(other.CompareTag("Player"))
+			return;
+
+		if(other.CompareTag("Enemy"))
+		{
+
+		}
+		GSC.Instance.Spawn.DeSpawn_Projectile(projectileName, transform.gameObject);
 	}
 }
