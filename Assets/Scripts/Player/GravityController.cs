@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class GravityController : MonoBehaviour
 {
-	[Header("Áß·Â ¼³Á¤ (gravity´Â À½¼ö)")]
+	[Header("ì¤‘ë ¥ ì„¤ì • (gravityëŠ” ìŒìˆ˜)")]
 	[SerializeField] private float gravity = -9.81f;
 	[SerializeField] private float gravityScale = 1f;
 	[SerializeField] private float terminalVelocity = -50f;
 
-	[Header("Á¡ÇÁ ¼³Á¤")]
+	[Header("ì í”„ ì„¤ì •")]
 	[SerializeField] private float jumpHeight = 1.5f;
 
 

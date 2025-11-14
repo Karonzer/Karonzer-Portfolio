@@ -9,7 +9,7 @@ public static class DBManager
 {
 	private static int projectileSurvivalTime = 30;
 	public static int ProjectileSurvivalTime => projectileSurvivalTime;
-	//ÇÑ±Û Å×½ºÆ®
-	// ÇÑ±Û
+	//í•œê¸€ í…ŒìŠ¤íŠ¸
+	// í•œê¸€
 }
 

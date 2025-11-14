@@ -6,15 +6,15 @@ public class PlayerMoveController : MonoBehaviour
 {
 
 
-	[Header("±âº» ¼³Á¤")]
+	[Header("ê¸°ë³¸ ì„¤ì •")]
 	[SerializeField] private CharacterController characterController;
 	[SerializeField] private InputSystem_Actions inputActions;
 	[SerializeField] private GravityController playerGravityController;
 
-	[Header("±âº» ½ºÅ©¸³Æ® ¿ÀºêÁ§Æ® º¯¼ö °ª")]
+	[Header("ê¸°ë³¸ ìŠ¤í¬ë¦½íŠ¸ ì˜¤ë¸Œì íŠ¸ ë³€ìˆ˜ ê°’")]
 	[SerializeField] private PlayerData playerData;
 
-	[Header("±âº» º¯¼ö °ª")]
+	[Header("ê¸°ë³¸ ë³€ìˆ˜ ê°’")]
 	[SerializeField] private Vector2 moveDirection;
 	[SerializeField] private float turnSmoothTime = 0.1f;
 	[SerializeField] private float turnSmoothVelocity;

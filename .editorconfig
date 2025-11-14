@@ -3,10 +3,13 @@ root = true
 
 [*]
 charset = utf-8
+
 # C# 파일
 [*.cs]
 
 #### 코어 EditorConfig 옵션 ####
+
+
 
 # 들여쓰기 및 간격
 indent_size = 4
