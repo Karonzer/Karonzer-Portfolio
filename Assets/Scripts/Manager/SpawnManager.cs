@@ -11,18 +11,57 @@ public class SpawnManager : MonoBehaviour
 	[SerializeField] private Transform projectileSpawn;
 
 	Dictionary<string, Queue<GameObject>> projectile;
+	Dictionary<string, AsyncOperationHandle<GameObject>> prefabHandles;
+
+
 	private void Awake()
 	{
 		GSC.Instance.RegisterSpawn(this);
+	}
+	private void Start()
+	{
 		projectile = new Dictionary<string, Queue<GameObject>>();
+		prefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
-		EnemySpawnGroup= transform.Find("EnemySpawnGroup");
+		EnemySpawnGroup = transform.Find("EnemySpawnGroup");
 		projectileSpawn = transform.Find("ProjectileSpawn");
 	}
+
 	private void OnEnable()
 	{
 		prefabKey = "FireballProjectile";
 	}
+
+	private void OnDestroy()
+	{
+		if (projectile != null)
+		{
+			foreach (var kvp in projectile)
+			{
+				while (kvp.Value.Count > 0)
+				{
+					var obj = kvp.Value.Dequeue();
+					if (obj != null)
+						Destroy(obj);
+				}
+			}
+		}
+
+		if (prefabHandles != null)
+		{
+			foreach (var kvp in prefabHandles)
+			{
+				var handle = kvp.Value;
+				if (handle.IsValid())
+				{
+					Addressables.Release(handle);
+				}
+			}
+
+			prefabHandles.Clear();
+		}
+	}
+
 	public void Spawn()
 	{
 		Addressables.LoadAssetAsync<GameObject>(prefabKey).Completed += handle =>
@@ -77,11 +116,24 @@ public class SpawnManager : MonoBehaviour
 
 	private GameObject Create_ProjectileObject(string _projectileName)
 	{
-		GameObject obj = null;
-		AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(_projectileName);
-		handle.WaitForCompletion();
-		var prefab = handle.Result;
-		obj = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity, projectileSpawn);
+		if (!prefabHandles.ContainsKey(_projectileName))
+		{
+			AsyncOperationHandle<GameObject> handle =
+				Addressables.LoadAssetAsync<GameObject>(_projectileName);
+			handle.WaitForCompletion();
+
+			prefabHandles[_projectileName] = handle;
+		}
+
+		var prefab = prefabHandles[_projectileName].Result;
+
+		GameObject obj = Instantiate(
+			prefab,
+			new Vector3(0, 0, 0),
+			Quaternion.identity,
+			projectileSpawn
+		);
+
 		obj.SetActive(false);
 		return obj;
 	}
