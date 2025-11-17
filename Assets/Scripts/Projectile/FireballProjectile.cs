@@ -1,16 +1,31 @@
-using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
+using UnityEngine;
 public class FireballProjectile : Projectile
 {
 	private Coroutine moveRoutine;
 	private Coroutine projectileSurvivalTimeCoroutine;
+	private Coroutine hitRoutine;
 
 	private SphereCollider sphereCollider;
+
+	[SerializeField] private GameObject visualRoot;
+	[SerializeField] private ParticleSystem hitParticle;
+
+	private bool isHit;
 
 	private void Awake()
 	{
 		sphereCollider = GetComponent<SphereCollider>();
 		sphereCollider.isTrigger = true;
+
+		visualRoot = transform.GetChild(0).gameObject;
+		hitParticle = transform.GetChild(1).GetComponent<ParticleSystem>() ;
+	}
+
+	private void OnEnable()
+	{
+		isHit = false;
 	}
 
 	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, float _projectileRange, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 spawnPos)
@@ -22,9 +37,25 @@ public class FireballProjectile : Projectile
 		projectileSpeed = _projectileSpeed;
 		projectileSurvivalTime = _projectileSurvivalTime;
 		transform.position = spawnPos;
+
+		Setting_CurrentProjectile();
 	}
 
-	public override void fire()
+	private void Setting_CurrentProjectile()
+	{
+		isHit = false;
+		sphereCollider.enabled = true;
+
+		if (visualRoot != null)
+			visualRoot.SetActive(true);
+
+		if (hitParticle != null)
+		{
+			hitParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+		}
+	}
+
+	public override void Launch_Projectile()
 	{
 		if(moveRoutine != null)
 		{
@@ -37,6 +68,13 @@ public class FireballProjectile : Projectile
 			StopCoroutine(projectileSurvivalTimeCoroutine);
 			projectileSurvivalTimeCoroutine = null;
 		}
+
+		if (hitRoutine != null)
+		{
+			StopCoroutine(hitRoutine);
+			hitRoutine = null;
+		}
+
 		moveRoutine = StartCoroutine(Start_MoveFireballProjectile());
 		projectileSurvivalTimeCoroutine = StartCoroutine(Start_ProjectileSurvivalTimeCoroutine());
 	}
@@ -59,13 +97,59 @@ public class FireballProjectile : Projectile
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(other.CompareTag("Player"))
+		if (isHit) return;
+		if (other.CompareTag("Player"))
 			return;
 
-		if(other.CompareTag("Enemy"))
+		isHit = true;
+
+		if (moveRoutine != null)
+		{
+			StopCoroutine(moveRoutine);
+			moveRoutine = null;
+		}
+		if (projectileSurvivalTimeCoroutine != null)
+		{
+			StopCoroutine(projectileSurvivalTimeCoroutine);
+			projectileSurvivalTimeCoroutine = null;
+		}
+
+		sphereCollider.enabled = false;
+
+		if (other.CompareTag("Enemy"))
 		{
 
 		}
-		GSC.Instance.Spawn.DeSpawn_Projectile(projectileName, transform.gameObject);
+
+		if (visualRoot != null)
+			visualRoot.SetActive(false);
+
+		if (hitParticle != null)
+		{
+			hitRoutine = StartCoroutine(Wait_HitParticle());
+		}
+		else
+		{
+			DespawnImmediately();
+		}
+	}
+
+	private IEnumerator Wait_HitParticle()
+	{
+		hitParticle.Play();
+
+		// 파티클이 완전히 끝날 때까지 대기
+		while (hitParticle != null && hitParticle.IsAlive(true))
+		{
+			yield return null;
+		}
+
+		DespawnImmediately();
+	}
+
+	private void DespawnImmediately()
+	{
+		gameObject.SetActive(false);
+		GSC.Instance.Spawn.DeSpawn_Projectile(projectileName, gameObject);
 	}
 }

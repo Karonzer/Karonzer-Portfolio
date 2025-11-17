@@ -59,7 +59,7 @@ public class FireballAttack : AttackRoot
 					Vector3 spawnPosition = transform.position + spawnOffset;
 					spawnPosition += new Vector3(0, 0.5f, 0);
 					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage,2, direction, attackStats.currentProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
-					TryGetComponent.fire();
+					TryGetComponent.Launch_Projectile();
 				}
 			}
 		}
