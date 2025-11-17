@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 public class FireballProjectile : Projectile
@@ -118,10 +119,16 @@ public class FireballProjectile : Projectile
 
 		if (other.CompareTag("Enemy"))
 		{
-			if(other.TryGetComponent<IDamageable>(out IDamageable _damageable))
+			Collider[] hits = Physics.OverlapSphere(transform.position, projectileRange);
+			List<Transform> enemies = hits.Get_Enemies();
+			foreach (var e in enemies)
 			{
-				_damageable.Take_Damage(projectileDemage);
+				if (e.TryGetComponent<IDamageable>(out IDamageable _damageable))
+				{
+					_damageable.Take_Damage(projectileDemage);
+				}
 			}
+
 		}
 
 		if (visualRoot != null)

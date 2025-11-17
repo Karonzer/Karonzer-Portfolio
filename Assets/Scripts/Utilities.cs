@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -30,6 +31,20 @@ public static class Utilities
 			}
 		}
 		return target;
+	}
+
+	// Enemy 태그 가진 Transform들을 모두 반환
+	public static List<Transform> Get_Enemies(this Collider[] _results)
+	{
+		List<Transform> enemies = new List<Transform>();
+
+		foreach (var c in _results)
+		{
+			if (c.CompareTag("Enemy"))
+				enemies.Add(c.transform);
+		}
+
+		return enemies;
 	}
 
 	public static Vector3 Get_TargetDir(this Transform _target, Transform _pos)
