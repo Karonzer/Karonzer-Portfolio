@@ -8,16 +8,13 @@ public class FireballAttack : AttackRoot
 
 	private void Awake()
 	{
-		sphereCollider = gameObject.AddComponent<SphereCollider>();
+		attackName = "FireballProjectile";
+		sphereCollider = gameObject.GetComponent<SphereCollider>();
 		sphereCollider.isTrigger = true;
 	}
-	private void Start()
+	protected override void Start()
 	{
-		attackName = "FireballProjectile";
-		attackDamage = 25;
-		attackRange = 15f;
-		attackTime = 2f;
-
+		base.Start();
 		sphereCollider.radius = attackRange;
 		
 	}
@@ -36,6 +33,16 @@ public class FireballAttack : AttackRoot
 		StartCoroutine(Coroutine_FindTargetEnemyAttackTime());
 	}
 
+	protected override void ApplyStatsFromAttackStats()
+	{
+		base.ApplyStatsFromAttackStats();
+
+		if (sphereCollider != null && attackStats != null)
+		{
+			sphereCollider.radius = attackStats.currentExplosionRange;
+		}
+	}
+
 	private IEnumerator Coroutine_FindTargetEnemyAttackTime()
 	{
 		while (true)
@@ -44,14 +51,14 @@ public class FireballAttack : AttackRoot
 			if (Find_TargetEnemyDir(out Vector3 direction))
 			{
 				Debug.Log("Fireball Attack towards direction: " + direction);
-				GameObject projectileObj = GSC.Instance.Spawn.Spawn_ProjectileSpawn("FireballProjectile");
+				GameObject projectileObj = GSC.Instance.Spawn.Spawn_ProjectileSpawn(attackName);
 				if (projectileObj.TryGetComponent<Projectile>(out Projectile TryGetComponent))
 				{
 					projectileObj.gameObject.SetActive(true);
 					Vector3 spawnOffset = direction.normalized * 0.5f;
 					Vector3 spawnPosition = transform.position + spawnOffset;
 					spawnPosition += new Vector3(0, 0.5f, 0);
-					TryGetComponent.Set_ProjectileInfo("FireballProjectile", attackDamage, attackRange, direction, 5, DBManager.ProjectileSurvivalTime, spawnPosition);
+					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage,2, direction, attackStats.currentProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 					TryGetComponent.fire();
 				}
 			}
