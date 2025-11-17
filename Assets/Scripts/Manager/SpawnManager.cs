@@ -87,7 +87,7 @@ public class SpawnManager : MonoBehaviour
 	{
 		if(projectile[_projectileName].Count == 0)
 		{
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				GameObject obj = Create_ProjectileObject(_projectileName);
 				projectile[_projectileName].Enqueue(obj);
@@ -105,7 +105,7 @@ public class SpawnManager : MonoBehaviour
 	private GameObject Create_Projectile(string _projectileName)
 	{
 		Queue<GameObject> gameObjects = new Queue<GameObject>();
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			GameObject obj = Create_ProjectileObject(_projectileName);
 			gameObjects.Enqueue(obj);

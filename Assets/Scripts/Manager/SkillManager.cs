@@ -34,7 +34,7 @@ public class SkillManager : MonoBehaviour
 			return stats;
 
 		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
-		return null;
+		return default;
 	}
 
 

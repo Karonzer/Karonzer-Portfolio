@@ -37,7 +37,7 @@ public class FireballAttack : AttackRoot
 	{
 		base.ApplyStatsFromAttackStats();
 
-		if (sphereCollider != null && attackStats != null)
+		if (sphereCollider != null)
 		{
 			sphereCollider.radius = attackStats.baseExplosionRange;
 		}

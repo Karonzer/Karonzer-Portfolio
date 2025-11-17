@@ -17,14 +17,14 @@ public enum AttackStatType
 }
 
 [System.Serializable]
-public class EnemyStruct
+public struct EnemyStruct
 {
 	public string key;
 	public float moveSpeed;
 	public float currentHP;
 }
 [System.Serializable]
-public class AttackStats
+public struct AttackStats
 {
 	[Header("Key (스킬 이름)")]
 	public string key;

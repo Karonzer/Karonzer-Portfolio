@@ -13,11 +13,6 @@ public class StatManager : MonoBehaviour
 
 	}
 
-	private void Start()
-	{
-		
-	}
-
 	void Build_Dict()
 	{
 		enemyStatDict = new Dictionary<string, EnemyStruct>();
@@ -36,7 +31,12 @@ public class StatManager : MonoBehaviour
 			return stats;
 
 		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
-		return null;
+		return default;
+	}
+
+	public void TEST()
+	{
+
 	}
 
 }

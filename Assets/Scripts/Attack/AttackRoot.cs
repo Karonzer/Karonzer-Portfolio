@@ -39,12 +39,9 @@ public abstract class AttackRoot : MonoBehaviour
 
 	protected virtual void ApplyStatsFromAttackStats()
 	{
-		if(attackStats!= null)
-		{
-			attackDamage = attackStats.baseDamage;
-			attackRange = attackStats.baseRange;
-			attackIntervalTime = attackStats.baseAttackInterval;
-		}
+		attackDamage = attackStats.baseDamage;
+		attackRange = attackStats.baseRange;
+		attackIntervalTime = attackStats.baseAttackInterval;
 	}
 
 	protected abstract void Attack();
