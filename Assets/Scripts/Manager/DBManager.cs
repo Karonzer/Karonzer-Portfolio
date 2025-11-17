@@ -16,7 +16,10 @@ public enum AttackStatType
 	ExplosionRange
 }
 
-
+public interface IDamageable
+{
+	public void Take_Damage(int damageInfo);
+}
 
 public static class DBManager
 {

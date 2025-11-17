@@ -8,16 +8,15 @@ public class SkillManager : MonoBehaviour
 	private Dictionary<string, AttackStats> statsDict;
 
 	// 특정 스킬 스탯이 바뀔 때 알려주는 이벤트
-	public event Action<string> OnAttackStatsChanged;
-
+	public Dictionary<string, Action<string>> eventTableOnAttackStatsChanged;
 	private void Awake()
 	{
 		GSC.Instance.RegisterSkillManager(this);
-		BuildDict();
-		//RefreshAllStats();
+		Build_Dict();
+		RefreshAllStats();
 	}
 
-	void BuildDict()
+	void Build_Dict()
 	{
 		statsDict = new Dictionary<string, AttackStats>();
 		foreach (var s in attackStatsList)
@@ -44,28 +43,39 @@ public class SkillManager : MonoBehaviour
 		{
 			if (s == null) continue;
 			s.ResetToBase();
-			GSC.Instance.attackShardSystemManager.ApplyToStats(s);
-			OnAttackStatsChanged?.Invoke(s.key);   // 모든 스킬에게 갱신 알림
+			Invoke_Action(s.key);   // 모든 스킬에게 갱신 알림
 		}
 	}
 
-	// 특정 스킬만 다시 계산하고 알림
-	public void RefreshAttackStats(string _key)
-	{
-		var s = GetStats(_key);
-		if (s == null) return;
+    // 외부에서 “이 스킬 스탯 바뀌었다”고 알리고 싶을 때 쓰는 헬퍼
+    public void NotifyStatsChanged(string key)
+    {
+		Invoke_Action(key);
+    }
 
-		s.ResetToBase();
-		GSC.Instance.attackShardSystemManager.ApplyToStats(s);
-		OnAttackStatsChanged?.Invoke(_key);
+	public void AddListener(string key, Action<string> callback)
+	{
+		if (!eventTableOnAttackStatsChanged.ContainsKey(key))
+			eventTableOnAttackStatsChanged[key] = null;
+
+		eventTableOnAttackStatsChanged[key] += callback;
 	}
 
-	// 파편 추가 예시
-	public void AddFireballShard(string _name ,AttackStatType _type, int _count = 1 )
+	public void RemoveListener(string key, Action<string> callback)
 	{
-		GSC.Instance.attackShardSystemManager.AddShard(_name, _type, _count);
-		RefreshAttackStats(_name);   // 파이어볼만 다시 계산 + 이벤트
+		if (!eventTableOnAttackStatsChanged.ContainsKey(key))
+			return;
+
+		eventTableOnAttackStatsChanged[key] -= callback;
 	}
+
+	public void Invoke_Action(string key)
+	{
+		if (eventTableOnAttackStatsChanged.TryGetValue(key, out var action))
+			action?.Invoke(key);
+	}
+
+
 
 
 }

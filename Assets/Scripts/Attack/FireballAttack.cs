@@ -48,17 +48,17 @@ public class FireballAttack : AttackRoot
 		while (true)
 		{
 			yield return new WaitForSeconds(attackTime);
-			if (Find_TargetEnemyDir(out Vector3 direction))
+			if (Find_TargetEnemyDir(out Vector3 _direction))
 			{
-				Debug.Log("Fireball Attack towards direction: " + direction);
-				GameObject projectileObj = GSC.Instance.Spawn.Spawn_ProjectileSpawn(attackName);
+				Debug.Log("Fireball Attack towards direction: " + _direction);
+				GameObject projectileObj = GSC.Instance.spawn.Spawn_ProjectileSpawn(attackName);
 				if (projectileObj.TryGetComponent<Projectile>(out Projectile TryGetComponent))
 				{
 					projectileObj.gameObject.SetActive(true);
-					Vector3 spawnOffset = direction.normalized * 0.5f;
+					Vector3 spawnOffset = _direction.normalized * 0.5f;
 					Vector3 spawnPosition = transform.position + spawnOffset;
 					spawnPosition += new Vector3(0, 0.5f, 0);
-					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage, attackStats.baseExplosionRange, direction, attackStats.currentProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
+					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.currentProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 					TryGetComponent.Launch_Projectile();
 				}
 			}
@@ -66,9 +66,9 @@ public class FireballAttack : AttackRoot
 
 	}
 
-	private bool Find_TargetEnemyDir(out Vector3 direction)
+	private bool Find_TargetEnemyDir(out Vector3 _direction)
 	{
-		direction = Vector3.zero;
+		_direction = Vector3.zero;
 
 		Transform target = null;
 		Collider[] results = Physics.OverlapSphere(transform.position, attackRange);
@@ -76,7 +76,7 @@ public class FireballAttack : AttackRoot
 
 		if (target != null)
 		{
-			direction = target.Get_TargetDir(transform);
+			_direction = target.Get_TargetDir(transform);
 			return true;
 		}
 

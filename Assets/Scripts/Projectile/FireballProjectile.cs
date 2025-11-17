@@ -92,7 +92,7 @@ public class FireballProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
 		transform.gameObject.SetActive(false);
-		GSC.Instance.Spawn.DeSpawn_Projectile(projectileName, transform.gameObject);
+		GSC.Instance.spawn.DeSpawn_Projectile(projectileName, transform.gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -118,7 +118,10 @@ public class FireballProjectile : Projectile
 
 		if (other.CompareTag("Enemy"))
 		{
-
+			if(other.TryGetComponent<IDamageable>(out IDamageable _damageable))
+			{
+				_damageable.Take_Damage(projectileDemage);
+			}
 		}
 
 		if (visualRoot != null)
@@ -150,6 +153,6 @@ public class FireballProjectile : Projectile
 	private void DespawnImmediately()
 	{
 		gameObject.SetActive(false);
-		GSC.Instance.Spawn.DeSpawn_Projectile(projectileName, gameObject);
+		GSC.Instance.spawn.DeSpawn_Projectile(projectileName, gameObject);
 	}
 }
