@@ -14,12 +14,11 @@ public class SkillManager : MonoBehaviour
 	{
 		GSC.Instance.RegisterSkillManager(this);
 		BuildDict();
-		RefreshAllStats();
+		//RefreshAllStats();
 	}
 
 	void BuildDict()
 	{
-		Debug.Log("test");
 		statsDict = new Dictionary<string, AttackStats>();
 		foreach (var s in attackStatsList)
 		{
@@ -30,12 +29,12 @@ public class SkillManager : MonoBehaviour
 		}
 	}
 
-	public AttackStats GetStats(string key)
+	public AttackStats GetStats(string _key)
 	{
-		if (statsDict.TryGetValue(key, out var stats))
+		if (statsDict.TryGetValue(_key, out var stats))
 			return stats;
 
-		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {key}");
+		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
 		return null;
 	}
 
@@ -45,27 +44,27 @@ public class SkillManager : MonoBehaviour
 		{
 			if (s == null) continue;
 			s.ResetToBase();
-			//GSC.Instance.attackShardSystemManager.ApplyToStats(s);
+			GSC.Instance.attackShardSystemManager.ApplyToStats(s);
 			OnAttackStatsChanged?.Invoke(s.key);   // 모든 스킬에게 갱신 알림
 		}
 	}
 
 	// 특정 스킬만 다시 계산하고 알림
-	public void RefreshAttackStats(string key)
+	public void RefreshAttackStats(string _key)
 	{
-		var s = GetStats(key);
+		var s = GetStats(_key);
 		if (s == null) return;
 
 		s.ResetToBase();
-		//GSC.Instance.attackShardSystemManager.ApplyToStats(s);
-		OnAttackStatsChanged?.Invoke(key);
+		GSC.Instance.attackShardSystemManager.ApplyToStats(s);
+		OnAttackStatsChanged?.Invoke(_key);
 	}
 
 	// 파편 추가 예시
-	public void AddFireballShard(AttackStatType type, int count = 1)
+	public void AddFireballShard(string _name ,AttackStatType _type, int _count = 1 )
 	{
-		//GSC.Instance.attackShardSystemManager.AddShard("Fireball", type, count);
-		RefreshAttackStats("Fireball");   // 파이어볼만 다시 계산 + 이벤트
+		GSC.Instance.attackShardSystemManager.AddShard(_name, _type, _count);
+		RefreshAttackStats(_name);   // 파이어볼만 다시 계산 + 이벤트
 	}
 
 

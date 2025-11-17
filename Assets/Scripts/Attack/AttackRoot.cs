@@ -28,9 +28,9 @@ public abstract class AttackRoot : MonoBehaviour
 	}
 
 	// SkillManager에서 스탯이 바뀌었다고 알려줄 때 호출
-	private void HandleAttackStatsChanged(string key)
+	private void HandleAttackStatsChanged(string _key)
 	{
-		if (key != attackName)
+		if (_key != attackName)
 			return; // 내 스킬이 아니면 무시
 
 		attackStats = GSC.Instance.SkillManager.GetStats(attackName);

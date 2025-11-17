@@ -58,7 +58,7 @@ public class FireballAttack : AttackRoot
 					Vector3 spawnOffset = direction.normalized * 0.5f;
 					Vector3 spawnPosition = transform.position + spawnOffset;
 					spawnPosition += new Vector3(0, 0.5f, 0);
-					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage,2, direction, attackStats.currentProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
+					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage, attackStats.baseExplosionRange, direction, attackStats.currentProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 					TryGetComponent.Launch_Projectile();
 				}
 			}
@@ -70,26 +70,13 @@ public class FireballAttack : AttackRoot
 	{
 		direction = Vector3.zero;
 
-		Collider target = null;
+		Transform target = null;
 		Collider[] results = Physics.OverlapSphere(transform.position, attackRange);
-		float minDist = Mathf.Infinity;
-
-		foreach (var c in results)
-		{
-			if (!c.CompareTag("Enemy"))
-				continue;
-			float dist = (c.transform.position - transform.position).sqrMagnitude;
-
-			if (dist < minDist)
-			{
-				minDist = dist;
-				target = c;
-			}
-		}
+		target = results.Get_CloseEnemy(transform);
 
 		if (target != null)
 		{
-			direction = (target.transform.position - transform.position).normalized;
+			direction = target.Get_TargetDir(transform);
 			return true;
 		}
 
