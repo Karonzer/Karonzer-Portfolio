@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
-	public List<AttackStats> attackStatsList = new List<AttackStats>();
+	public List<AttackStatsSO> attackStatsList = new List<AttackStatsSO>();
 	private Dictionary<string, AttackStats> statsDict;
 
 	// 특정 스킬 스탯이 바뀔 때 알려주는 이벤트
-	public Dictionary<string, Action<string>> eventTableOnAttackStatsChanged;
+	public Dictionary<string, Action<string>> eventTableOnAttackStatsChanged = new Dictionary<string, Action<string>>();
 	private void Awake()
 	{
 		GSC.Instance.RegisterSkillManager(this);
 		Build_Dict();
-		RefreshAllStats();
+
 	}
 
 	void Build_Dict()
@@ -21,10 +21,10 @@ public class SkillManager : MonoBehaviour
 		statsDict = new Dictionary<string, AttackStats>();
 		foreach (var s in attackStatsList)
 		{
-			if (s != null && !string.IsNullOrEmpty(s.key))
-				statsDict[s.key] = s;
+			if (s != null && !string.IsNullOrEmpty(s.attackStats.key))
+				statsDict[s.attackStats.key] = s.attackStats;
 			Debug.Log(s);
-			Debug.Log(s.key);
+			Debug.Log(s.attackStats.key);
 		}
 	}
 
@@ -37,15 +37,7 @@ public class SkillManager : MonoBehaviour
 		return null;
 	}
 
-	public void RefreshAllStats()
-	{
-		foreach (var s in attackStatsList)
-		{
-			if (s == null) continue;
-			s.ResetToBase();
-			Invoke_Action(s.key);   // 모든 스킬에게 갱신 알림
-		}
-	}
+
 
     // 외부에서 “이 스킬 스탯 바뀌었다”고 알리고 싶을 때 쓰는 헬퍼
     public void NotifyStatsChanged(string key)

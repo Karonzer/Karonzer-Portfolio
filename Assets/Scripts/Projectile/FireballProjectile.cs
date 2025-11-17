@@ -128,7 +128,6 @@ public class FireballProjectile : Projectile
 					_damageable.Take_Damage(projectileDemage);
 				}
 			}
-
 		}
 
 		if (visualRoot != null)

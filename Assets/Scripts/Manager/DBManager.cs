@@ -16,6 +16,29 @@ public enum AttackStatType
 	ExplosionRange
 }
 
+[System.Serializable]
+public class EnemyStruct
+{
+	public string key;
+	public float moveSpeed;
+	public float currentHP;
+}
+[System.Serializable]
+public class AttackStats
+{
+	[Header("Key (스킬 이름)")]
+	public string key;
+
+	[Header("Base")]
+	public int baseDamage;
+	public float baseAttackInterval;
+	public float baseRange;
+	public float baseProjectileSpeed;
+	public float baseExplosionRange;
+}
+
+
+
 public interface IDamageable
 {
 	public void Take_Damage(int damageInfo);

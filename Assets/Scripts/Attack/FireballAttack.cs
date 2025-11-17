@@ -39,7 +39,7 @@ public class FireballAttack : AttackRoot
 
 		if (sphereCollider != null && attackStats != null)
 		{
-			sphereCollider.radius = attackStats.currentExplosionRange;
+			sphereCollider.radius = attackStats.baseExplosionRange;
 		}
 	}
 
@@ -47,7 +47,7 @@ public class FireballAttack : AttackRoot
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(attackTime);
+			yield return new WaitForSeconds(attackIntervalTime);
 			if (Find_TargetEnemyDir(out Vector3 _direction))
 			{
 				Debug.Log("Fireball Attack towards direction: " + _direction);
@@ -58,7 +58,7 @@ public class FireballAttack : AttackRoot
 					Vector3 spawnOffset = _direction.normalized * 0.5f;
 					Vector3 spawnPosition = transform.position + spawnOffset;
 					spawnPosition += new Vector3(0, 0.5f, 0);
-					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.currentProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
+					TryGetComponent.Set_ProjectileInfo(attackName, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseExplosionRange, DBManager.ProjectileSurvivalTime, spawnPosition);
 					TryGetComponent.Launch_Projectile();
 				}
 			}

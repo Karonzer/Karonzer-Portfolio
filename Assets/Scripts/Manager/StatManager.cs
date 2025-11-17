@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class StatManager : MonoBehaviour
 {
-	public List<EnemyData> enemyStatList = new List<EnemyData>();
-	private Dictionary<string, EnemyData> enemyStatDict;
+	public List<EnemyDataSO> enemyStatList = new List<EnemyDataSO>();
+	private Dictionary<string, EnemyStruct> enemyStatDict;
 
 	private void Awake()
 	{
@@ -20,17 +20,17 @@ public class StatManager : MonoBehaviour
 
 	void Build_Dict()
 	{
-		enemyStatDict = new Dictionary<string, EnemyData>();
+		enemyStatDict = new Dictionary<string, EnemyStruct>();
 		foreach (var s in enemyStatList)
 		{
-			if (s != null && !string.IsNullOrEmpty(s.key))
-			enemyStatDict[s.key] = s;
+			if (s != null && !string.IsNullOrEmpty(s.enemyStruct.key))
+			enemyStatDict[s.enemyStruct.key] = s.enemyStruct;
 			Debug.Log(s);
-			Debug.Log(s.key);
+			Debug.Log(s.enemyStruct.key);
 		}
 	}
 
-	public EnemyData Get_EnemyData(string _key)
+	public EnemyStruct Get_EnemyData(string _key)
 	{
 		if (enemyStatDict.TryGetValue(_key, out var stats))
 			return stats;

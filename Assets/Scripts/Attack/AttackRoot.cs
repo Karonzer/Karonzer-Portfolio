@@ -6,7 +6,7 @@ public abstract class AttackRoot : MonoBehaviour
 
 	[SerializeField] protected int attackDamage;
 	[SerializeField] protected float attackRange;
-	[SerializeField] protected float attackTime;
+	[SerializeField] protected float attackIntervalTime;
 
 	[SerializeField] protected AttackStats attackStats;
 
@@ -39,11 +39,12 @@ public abstract class AttackRoot : MonoBehaviour
 
 	protected virtual void ApplyStatsFromAttackStats()
 	{
-		if (attackStats == null) return;
-
-		attackDamage = attackStats.currentDamage;
-		attackRange = attackStats.currentRange;
-		attackTime = attackStats.currentAttackInterval;
+		if(attackStats!= null)
+		{
+			attackDamage = attackStats.baseDamage;
+			attackRange = attackStats.baseRange;
+			attackIntervalTime = attackStats.baseAttackInterval;
+		}
 	}
 
 	protected abstract void Attack();

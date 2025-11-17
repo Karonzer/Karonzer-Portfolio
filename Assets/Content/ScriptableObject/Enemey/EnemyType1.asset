@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe57f9e48a5f8bf49a97dddaf89df978, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c3a0c486ca23d44dad4b7571bcaac94, type: 3}
   m_Name: EnemyType1
   m_EditorClassIdentifier: 
-  key: EnemyType1
-  moveSpeed: 5
-  currentHP: 100
+  enemyStruct:
+    key: EnemyType1
+    moveSpeed: 5
+    currentHP: 100

@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStatList:
-  - {fileID: 11400000, guid: c0efc637937dfb6449cc28cd91d1d35e, type: 2}
+  - {fileID: 11400000, guid: f20cb462179ca634ebb41e307f4f5b2e, type: 2}
 --- !u!1 &161990717
 GameObject:
   m_ObjectHideFlags: 0
@@ -936,7 +936,13 @@ MonoBehaviour:
   attackDamage: 0
   attackRange: 0
   attackTime: 0
-  attackStats: {fileID: 0}
+  attackStats:
+    key: 
+    baseDamage: 0
+    baseAttackInterval: 0
+    baseRange: 0
+    baseProjectileSpeed: 0
+    baseExplosionRange: 0
 --- !u!1 &1183553944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,7 +1202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1850767998
 Transform:
   m_ObjectHideFlags: 0
@@ -1326,7 +1332,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  enemyData: {fileID: 0}
+  enemyStruct:
+    key: 
+    moveSpeed: 0
+    currentHP: 0
 --- !u!1 &1856776314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,7 +1356,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1856776315
 Transform:
   m_ObjectHideFlags: 0
@@ -1477,7 +1486,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  enemyData: {fileID: 0}
+  enemyStruct:
+    key: 
+    moveSpeed: 0
+    currentHP: 0
 --- !u!1 &1925594721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,7 +1699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackStatsList:
-  - {fileID: 11400000, guid: 8e779f65ed2c1924f98a2a8facd9f5cf, type: 2}
+  - {fileID: 11400000, guid: a7a2ca5b8d809154296f9f5c3e2ae204, type: 2}
 --- !u!1 &2097351178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1708,7 +1720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2097351179
 Transform:
   m_ObjectHideFlags: 0
@@ -1838,7 +1850,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  enemyData: {fileID: 0}
+  enemyStruct:
+    key: 
+    moveSpeed: 0
+    currentHP: 0
 --- !u!4 &98410014255424268
 Transform:
   m_ObjectHideFlags: 0

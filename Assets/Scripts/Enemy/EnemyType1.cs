@@ -14,14 +14,14 @@ public class EnemyType1 : Enemy, IDamageable
 
 	public void Take_Damage(int damageInfo)
 	{
-		Debug.Log($"enemyData.currentHP : {enemyData.currentHP}, damageInfo : {damageInfo}, enemyData.currentHP -= damageInfo : {enemyData.currentHP -= damageInfo} ");
-		enemyData.currentHP -= damageInfo;
+		Debug.Log($"damageInfo : {damageInfo}");
+		enemyStruct.currentHP -= damageInfo;
+		Debug.Log($"name : {transform.name} , enemyData.currentHP : {enemyStruct.currentHP} ");
 
-
-
-		if(enemyData.currentHP <=0)
+		if (enemyStruct.currentHP <= 0)
 		{
 			Debug.Log("EnemyType1 is die");
+			transform.gameObject.SetActive(false);
 		}
 	}
 }
