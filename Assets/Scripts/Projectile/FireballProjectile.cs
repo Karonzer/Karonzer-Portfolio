@@ -93,11 +93,12 @@ public class FireballProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawn.DeSpawn_Projectile(projectileName, transform.gameObject);
+		GSC.Instance.spawnManager.DeSpawn_Projectile(projectileName, transform.gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
+		Debug.Log(other.name);
 		if (isHit) return;
 		if (other.CompareTag("Player"))
 			return;
@@ -139,8 +140,15 @@ public class FireballProjectile : Projectile
 		}
 		else
 		{
-			DespawnImmediately();
+			Despawn_Immediately();
 		}
+	}
+
+
+	void OnCollisionEnter(Collision collision)
+	{
+		if (collision.gameObject.CompareTag("Player"))
+			return;
 	}
 
 	private IEnumerator Wait_HitParticle()
@@ -153,12 +161,12 @@ public class FireballProjectile : Projectile
 			yield return null;
 		}
 
-		DespawnImmediately();
+		Despawn_Immediately();
 	}
 
-	private void DespawnImmediately()
+	private void Despawn_Immediately()
 	{
 		gameObject.SetActive(false);
-		GSC.Instance.spawn.DeSpawn_Projectile(projectileName, gameObject);
+		GSC.Instance.spawnManager.DeSpawn_Projectile(projectileName, gameObject);
 	}
 }

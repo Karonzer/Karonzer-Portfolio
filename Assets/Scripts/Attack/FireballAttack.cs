@@ -51,7 +51,7 @@ public class FireballAttack : AttackRoot
 			if (Find_TargetEnemyDir(out Vector3 _direction))
 			{
 				Debug.Log("Fireball Attack towards direction: " + _direction);
-				GameObject projectileObj = GSC.Instance.spawn.Spawn_ProjectileSpawn(attackName);
+				GameObject projectileObj = GSC.Instance.spawnManager.Spawn_ProjectileSpawn(attackName);
 				if (projectileObj.TryGetComponent<Projectile>(out Projectile TryGetComponent))
 				{
 					projectileObj.gameObject.SetActive(true);

@@ -22,6 +22,9 @@ public struct EnemyStruct
 	public string key;
 	public float moveSpeed;
 	public float currentHP;
+	public float attackSpeed;
+	public float damage;
+	public float attackRange;
 }
 [System.Serializable]
 public struct AttackStats
