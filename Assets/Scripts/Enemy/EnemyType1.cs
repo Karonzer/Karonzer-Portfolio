@@ -5,27 +5,22 @@ using UnityEngine.AI;
 public class EnemyType1 : Enemy, IDamageable
 {
 
-	private Coroutine MoveCoroutine;
-	private void Awake()
+	protected override void Awake()
 	{
-		enemyName = "EnemyType1";
-	}
-	protected override void Start()
-	{
-		base.Start();
+		enemyName = DBManager.enemyType1;
+		base.Awake();
+
 		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
 		navigation = GetComponent<NavMeshAgent>();
+
+		StateMachine.AddState(new EnemyTrackingState());
+		StateMachine.AddState(new EnemyAttackState());
 	}
 
 
 	public override void Start_Enemy()
 	{
-		if (MoveCoroutine != null)
-		{
-			StopCoroutine(MoveCoroutine);
-			MoveCoroutine = null;
-		}
-		MoveCoroutine = StartCoroutine(Move_EnemyType1());
+		StateMachine.ChangeState(StateID.tracking);
 	}
 
 	public void Take_Damage(int damageInfo)
@@ -37,29 +32,11 @@ public class EnemyType1 : Enemy, IDamageable
 			transform.gameObject.SetActive(false);
 		}
 	}
-	IEnumerator Move_EnemyType1()
+
+	public override void DoAttack()
 	{
-		while (true)
-		{
-			if (targetNavigation == null)
-				yield break;
-
-			navigation.destination = targetNavigation.transform.position;
-
-			float distance = Vector3.Distance(transform.position, targetNavigation.transform.position);
-
-			if (distance > enemyStruct.attackRange)
-			{
-				navigation.isStopped = false;
-				navigation.speed = enemyStruct.moveSpeed;
-			}
-			else
-			{
-				navigation.isStopped = true;
-			}
-
-			yield return null;
-		}
+		// EnemyType1 전용 공격 로직
 	}
+
 }
 

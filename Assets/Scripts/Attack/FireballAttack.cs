@@ -8,7 +8,7 @@ public class FireballAttack : AttackRoot
 
 	private void Awake()
 	{
-		attackName = "FireballProjectile";
+		attackName = DBManager.fireballProjectile;
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
 		sphereCollider.isTrigger = true;
 	}

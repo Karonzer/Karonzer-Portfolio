@@ -16,13 +16,29 @@ public enum AttackStatType
 	ExplosionRange
 }
 
+public enum StateID
+{
+	tracking,
+	Attack,
+}
+
+public interface IState<T>
+{
+	StateID ID { get; }
+
+	void OnEnter(T owner);
+	void OnExit(T owner);
+	void Tick(T owner);
+}
+
+
 [System.Serializable]
 public struct EnemyStruct
 {
 	public string key;
 	public float moveSpeed;
 	public float currentHP;
-	public float attackSpeed;
+	public float attackInterval;
 	public float damage;
 	public float attackRange;
 }
@@ -51,5 +67,12 @@ public static class DBManager
 {
 	private static int projectileSurvivalTime = 30;
 	public static int ProjectileSurvivalTime => projectileSurvivalTime;
+
+	public const string fireballProjectile = "FireballProjectile";
+
+
+
+	public const string enemyType1 = "EnemyType1";
+
 }
 
