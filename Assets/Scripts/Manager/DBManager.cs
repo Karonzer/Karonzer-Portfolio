@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum PoolObjectType
@@ -25,7 +26,6 @@ public enum StateID
 public interface IState<T>
 {
 	StateID ID { get; }
-
 	void OnEnter(T owner);
 	void OnExit(T owner);
 	void Tick(T owner);
@@ -37,6 +37,7 @@ public struct EnemyStruct
 {
 	public string key;
 	public float moveSpeed;
+	public float maxHP;
 	public float currentHP;
 	public float attackInterval;
 	public float damage;
@@ -60,6 +61,9 @@ public struct AttackStats
 
 public interface IDamageable
 {
+	event Action<int, Vector3> OnDamaged;
+	float CurrentHP { get; }
+	float MaxHP { get; }
 	public void Take_Damage(int damageInfo);
 }
 
@@ -68,11 +72,15 @@ public static class DBManager
 	private static int projectileSurvivalTime = 30;
 	public static int ProjectileSurvivalTime => projectileSurvivalTime;
 
+	// 발사체
 	public const string fireballProjectile = "FireballProjectile";
 
 
-
+	// 몬스터
 	public const string enemyType1 = "EnemyType1";
+
+	//데이지 팝업
+	public const string popupPrefabKey = "DamagePopupPrefab"; 
 
 }
 

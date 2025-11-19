@@ -15,6 +15,7 @@ MonoBehaviour:
   enemyStruct:
     key: EnemyType1
     moveSpeed: 5
+    maxHP: 100
     currentHP: 100
     attackInterval: 2
     damage: 10

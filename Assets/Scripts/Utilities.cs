@@ -47,6 +47,7 @@ public static class Utilities
 		return enemies;
 	}
 
+	//방향 구하는 함수
 	public static Vector3 Get_TargetDir(this Transform _target, Transform _pos)
 	{
 		return (_target.position - _pos.position).normalized;

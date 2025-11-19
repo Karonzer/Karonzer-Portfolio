@@ -1,0 +1,53 @@
+using TMPro;
+using UnityEngine;
+
+public class DamagePopup : MonoBehaviour
+{
+	[SerializeField] private TextMeshProUGUI text;
+	[SerializeField] private float lifeTime = 0.7f;
+	[SerializeField] private float moveSpeed = 1.5f;
+	[SerializeField] private float fadeSpeed = 3f;
+
+	private float timer;
+	private CanvasGroup canvasGroup;
+
+	void Awake()
+	{
+		if (canvasGroup == null)
+			canvasGroup = gameObject.AddComponent<CanvasGroup>();
+
+		text = transform.Find("Text (TMP)").GetComponent<TextMeshProUGUI>();
+	}
+
+	void OnDisable()
+	{
+		if (GSC.Instance.damagePopupManager != null)
+			GSC.Instance.damagePopupManager.Return_ToDamagePopUpPool(transform.gameObject);
+	}
+
+	public void Init(int damage)
+	{
+		text.text = damage.ToString();
+		timer = lifeTime;
+		canvasGroup.alpha = 1f;
+	}
+
+	void Update()
+	{
+
+		transform.position += Vector3.up * moveSpeed * Time.deltaTime;
+
+		timer -= Time.deltaTime;
+
+		// 끝부분에서 서서히 사라지기
+		if (timer < lifeTime * 0.5f)
+		{
+			canvasGroup.alpha -= fadeSpeed * Time.deltaTime;
+		}
+
+		if (timer <= 0f)
+		{
+			gameObject.SetActive(false);
+		}
+	}
+}

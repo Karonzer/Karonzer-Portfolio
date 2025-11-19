@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.AI;
-public class EnemyType1 : Enemy, IDamageable
+public class EnemyType1 : Enemy
 {
 
 	protected override void Awake()
@@ -20,17 +20,16 @@ public class EnemyType1 : Enemy, IDamageable
 
 	public override void Start_Enemy()
 	{
+		base.Setting_Info();
 		StateMachine.ChangeState(StateID.tracking);
 	}
 
-	public void Take_Damage(int damageInfo)
+	public override void Take_Damage(int damageInfo)
 	{
-		enemyStruct.currentHP -= damageInfo;
-		if (enemyStruct.currentHP <= 0)
-		{
-			Debug.Log("EnemyType1 is die");
-			transform.gameObject.SetActive(false);
-		}
+		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
+		InvokeDamaged(damageInfo, hitPos);
+		InvokeHealthChanged();
+		base.Take_Damage(damageInfo);
 	}
 
 	public override void DoAttack()

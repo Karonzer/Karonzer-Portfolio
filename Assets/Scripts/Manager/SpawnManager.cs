@@ -4,15 +4,11 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 public class SpawnManager : MonoBehaviour
 {
-
-
 	[SerializeField] private Transform EnemySpawnGroup;
 	[SerializeField] private Transform projectileSpawn;
 
 	Dictionary<string, AsyncOperationHandle<GameObject>> prefabHandles;
-
 	Dictionary<string, Queue<GameObject>> enemyPool;
-
 	Dictionary<string, Queue<GameObject>> projectilePool;
 
 
@@ -31,8 +27,6 @@ public class SpawnManager : MonoBehaviour
 		EnemySpawnGroup = transform.Find("EnemySpawnGroup");
 		projectileSpawn = transform.Find("ProjectileSpawn");
 	}
-
-
 	private void OnDestroy()
 	{
 		if (projectilePool != null)
@@ -61,15 +55,6 @@ public class SpawnManager : MonoBehaviour
 
 			prefabHandles.Clear();
 		}
-	}
-
-	public void Spawn()
-	{
-		//Addressables.LoadAssetAsync<GameObject>(prefabKey).Completed += handle =>
-		//{
-		//	var prefab = handle.Result;
-		//	spawnedObject = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
-		//};
 	}
 
 	public GameObject Spawn_ProjectileSpawn(string _projectileName)
@@ -207,6 +192,7 @@ public class SpawnManager : MonoBehaviour
 		obj.SetActive(false);
 		return obj;
 	}
+
 	public void DeSpawn_Enemy(string _enemyName, GameObject _gameObject)
 	{
 		_gameObject.SetActive(false);

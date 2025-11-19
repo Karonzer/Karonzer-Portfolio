@@ -50,7 +50,6 @@ public class FireballAttack : AttackRoot
 			yield return new WaitForSeconds(attackIntervalTime);
 			if (Find_TargetEnemyDir(out Vector3 _direction))
 			{
-				Debug.Log("Fireball Attack towards direction: " + _direction);
 				GameObject projectileObj = GSC.Instance.spawnManager.Spawn_ProjectileSpawn(attackName);
 				if (projectileObj.TryGetComponent<Projectile>(out Projectile TryGetComponent))
 				{
