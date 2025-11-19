@@ -28,7 +28,6 @@ public class DamagePopupManager : MonoBehaviour
 		{
 			Addressables.Release(loadedPrefab);
 		}
-
 	}
 
 	private void LoadPopupPrefab()
@@ -95,9 +94,9 @@ public class DamagePopupManager : MonoBehaviour
 		if (mainCam != null)
 			popup.transform.forward = mainCam.transform.forward;
 
-		if(popup.TryGetComponent<DamagePopup>(out DamagePopup component))
+		if(popup.TryGetComponent<DamagePopup>(out DamagePopup _component))
 		{
-			component.Init(damage);
+			_component.Init(damage);
 		}
 	}
 }
