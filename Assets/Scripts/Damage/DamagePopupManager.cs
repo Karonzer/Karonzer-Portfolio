@@ -84,7 +84,7 @@ public class DamagePopupManager : MonoBehaviour
 		pool.Enqueue(popup);
 	}
 
-	public void Show_Damage(int damage, Vector3 worldPos)
+	public void Show_Damage(int damage, Vector3 worldPos ,Type _type)
 	{
 		var popup = Get_FromPool();
 
@@ -96,7 +96,16 @@ public class DamagePopupManager : MonoBehaviour
 
 		if(popup.TryGetComponent<DamagePopup>(out DamagePopup _component))
 		{
-			_component.Init(damage);
+			switch(_type)
+			{
+				case Type.Player:
+					_component.Init_Player(damage);
+					break;
+				case Type.Enemy:
+					_component.Init_Enemy(damage);
+					break;
+			}
+
 		}
 	}
 }

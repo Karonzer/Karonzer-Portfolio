@@ -5,14 +5,11 @@ using UnityEngine.InputSystem;
 public class PlayerMoveController : MonoBehaviour
 {
 
-
 	[Header("기본 설정")]
 	[SerializeField] private CharacterController characterController;
 	[SerializeField] private InputSystem_Actions inputActions;
 	[SerializeField] private GravityController playerGravityController;
 
-	[Header("기본 스크립트 오브젝트 변수 값")]
-	[SerializeField] private PlayerData playerData;
 
 	[Header("기본 변수 값")]
 	[SerializeField] private Vector2 moveDirection;
@@ -65,7 +62,6 @@ public class PlayerMoveController : MonoBehaviour
 	{
 		characterController = GetComponent<CharacterController>();
 		inputActions = new InputSystem_Actions();
-		playerData = new PlayerData();
 		playerGravityController = transform.AddComponent<GravityController>();
 		cameraPos = Camera.main;
 	}
@@ -140,7 +136,7 @@ public class PlayerMoveController : MonoBehaviour
 
 			Vector3 worldMove = camRight * moveDirection.x + camForward * moveDirection.y;
 			if (worldMove.sqrMagnitude > 1f) worldMove.Normalize();
-			horizontalDelta = worldMove * playerData.moveSpeed * Time.deltaTime;
+			horizontalDelta = worldMove * GSC.Instance.statManager.Get_PlayerData(DBManager.playerName).moveSpeed * Time.deltaTime;
 
 
 			if (worldMove.sqrMagnitude > 0.001f)

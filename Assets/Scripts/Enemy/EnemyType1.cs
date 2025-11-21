@@ -27,7 +27,7 @@ public class EnemyType1 : Enemy
 	public override void Take_Damage(int damageInfo)
 	{
 		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
-		InvokeDamaged(damageInfo, hitPos);
+		InvokeDamaged(damageInfo, hitPos,enemyType);
 		InvokeHealthChanged();
 		base.Take_Damage(damageInfo);
 	}

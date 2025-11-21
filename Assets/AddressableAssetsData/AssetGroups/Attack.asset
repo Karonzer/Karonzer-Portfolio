@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Attack
+  m_EditorClassIdentifier: 
+  m_GroupName: Attack
+  m_GUID: d8ba413cc1eab9845923b9ef6091e97f
+  m_SerializeEntries:
+  - m_GUID: ed284eae301d9ac449a34a6964ecbfa3
+    m_Address: FireballAttack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: e0657a797f4c80f4a973253eba7689b9, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: bf2597267fd32bc4e9dd00347ae8ca50, type: 2}
+    - {fileID: 11400000, guid: 9e905602e77a76c4597dcf57fb37421b, type: 2}

@@ -25,12 +25,24 @@ public class DamagePopup : MonoBehaviour
 			GSC.Instance.damagePopupManager.Return_ToDamagePopUpPool(transform.gameObject);
 	}
 
-	public void Init(int damage)
+	public void Init_Enemy(int damage)
 	{
 		text.text = damage.ToString();
+		text.color = Color.white;
+		text.fontSize = 36;
 		timer = lifeTime;
 		canvasGroup.alpha = 1f;
 	}
+
+	public void Init_Player(int damage)
+	{
+		text.text = $"-{damage.ToString()}";
+		text.color = Color.red;
+		text.fontSize = 40;
+		timer = lifeTime;
+		canvasGroup.alpha = 1f;
+	}
+
 
 	void Update()
 	{

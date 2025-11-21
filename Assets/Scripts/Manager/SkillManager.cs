@@ -9,6 +9,8 @@ public class SkillManager : MonoBehaviour
 
 	// 특정 스킬 스탯이 바뀔 때 알려주는 이벤트
 	public Dictionary<string, Action<string>> eventTableOnAttackStatsChanged = new Dictionary<string, Action<string>>();
+
+	public Dictionary<string, AttackRoot> currentAttacks = new Dictionary<string, AttackRoot>();
 	private void Awake()
 	{
 		GSC.Instance.RegisterSkillManager(this);
@@ -38,9 +40,17 @@ public class SkillManager : MonoBehaviour
 	}
 
 
+	public void Add_CurrentAttacks(string _key,AttackRoot _attackRoot)
+	{
+		if(currentAttacks.ContainsKey(_key))
+		{
+			currentAttacks[_key] = _attackRoot;
+		}
+	}
 
-    // 외부에서 “이 스킬 스탯 바뀌었다”고 알리고 싶을 때 쓰는 헬퍼
-    public void NotifyStatsChanged(string key)
+
+	// 외부에서 “이 스킬 스탯 바뀌었다”고 알리고 싶을 때 쓰는 헬퍼
+	public void NotifyStatsChanged(string key)
     {
 		Invoke_Action(key);
     }

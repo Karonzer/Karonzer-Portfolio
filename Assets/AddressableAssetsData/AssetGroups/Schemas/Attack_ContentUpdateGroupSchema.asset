@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bda180a2a179db04a94c606758953a5a, type: 3}
-  m_Name: PlayerDataSetting
+  m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
+  m_Name: Attack_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  moveSpeed: 3.5
-  maxHP: 100
-  pickupRange: 1.2
+  m_Group: {fileID: 11400000, guid: 3619e8facaacefc4492656a660590b45, type: 2}
+  m_StaticContent: 0

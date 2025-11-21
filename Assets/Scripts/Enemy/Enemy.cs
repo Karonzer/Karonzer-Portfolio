@@ -10,6 +10,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
 	[SerializeField] protected string enemyName;
 	[SerializeField] protected EnemyStruct enemyStruct;
+	[SerializeField] protected Type enemyType = Type.Enemy;
 
 
 	[SerializeField] protected GameObject targetNavigation;
@@ -17,7 +18,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
 	public event Action<float, float> OnHealthChanged;
 	public event Action OnDead;
-	public event Action<int, Vector3> OnDamaged;
+	public event Action<int, Vector3, Type> OnDamaged;
 	public float CurrentHP => enemyStruct.currentHP;
 	public float MaxHP => enemyStruct.maxHP;
 
@@ -49,9 +50,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 		OnDead?.Invoke();
 	}
 
-	protected void InvokeDamaged(int damage, Vector3 hitPos)
+	protected void InvokeDamaged(int damage, Vector3 hitPos, Type _type)
 	{
-		OnDamaged?.Invoke(damage, hitPos);
+		OnDamaged?.Invoke(damage, hitPos, _type);
 	}
 
 	public virtual void Setting_Info()

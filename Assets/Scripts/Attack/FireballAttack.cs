@@ -33,9 +33,9 @@ public class FireballAttack : AttackRoot
 		StartCoroutine(Coroutine_FindTargetEnemyAttackTime());
 	}
 
-	protected override void ApplyStatsFromAttackStats()
+	protected override void Apply_StatsFromAttackStats()
 	{
-		base.ApplyStatsFromAttackStats();
+		base.Apply_StatsFromAttackStats();
 
 		if (sphereCollider != null)
 		{

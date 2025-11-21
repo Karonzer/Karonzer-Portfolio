@@ -1,6 +1,12 @@
 using System;
 using UnityEngine;
 
+public enum Type
+{
+	Player,
+	Enemy,
+}
+
 public enum PoolObjectType
 {
 	Projectile,
@@ -31,6 +37,16 @@ public interface IState<T>
 	void Tick(T owner);
 }
 
+[System.Serializable]
+public struct PlayerStruct
+{
+	public string key;
+	public float moveSpeed;
+	public float maxHP;
+	public float currentHP;
+	public int criticalDamage;
+	public int criticalChance;
+}
 
 [System.Serializable]
 public struct EnemyStruct
@@ -61,7 +77,7 @@ public struct AttackStats
 
 public interface IDamageable
 {
-	event Action<int, Vector3> OnDamaged;
+	event Action<int, Vector3,Type> OnDamaged;
 	float CurrentHP { get; }
 	float MaxHP { get; }
 	public void Take_Damage(int damageInfo);
@@ -72,9 +88,13 @@ public static class DBManager
 	private static int projectileSurvivalTime = 30;
 	public static int ProjectileSurvivalTime => projectileSurvivalTime;
 
+	public const string playerName = "Player";
+
+	//공격 오브젝트
+	public const string fireballAttack = "FireballAttack";
+
 	// 발사체
 	public const string fireballProjectile = "FireballProjectile";
-
 
 	// 몬스터
 	public const string enemyType1 = "EnemyType1";

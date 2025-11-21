@@ -1,10 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class StatManager : MonoBehaviour
 {
+	public List<PlayerDataSO> playerStatList = new List<PlayerDataSO>();
+	private Dictionary<string, PlayerStruct> playerStatDict;
+
 	public List<EnemyDataSO> enemyStatList = new List<EnemyDataSO>();
 	private Dictionary<string, EnemyStruct> enemyStatDict;
+
+	public event Action onChangePlayerStruct;
 
 	private void Awake()
 	{
@@ -15,14 +21,29 @@ public class StatManager : MonoBehaviour
 
 	void Build_Dict()
 	{
+		playerStatDict = new Dictionary<string, PlayerStruct>();
 		enemyStatDict = new Dictionary<string, EnemyStruct>();
+
+		foreach (var s in playerStatList)
+		{
+			if (s != null && !string.IsNullOrEmpty(s.playerStruct.key))
+				playerStatDict[s.playerStruct.key] = s.playerStruct;
+		}
+
 		foreach (var s in enemyStatList)
 		{
 			if (s != null && !string.IsNullOrEmpty(s.enemyStruct.key))
 			enemyStatDict[s.enemyStruct.key] = s.enemyStruct;
-			Debug.Log(s);
-			Debug.Log(s.enemyStruct.key);
 		}
+	}
+
+	public PlayerStruct Get_PlayerData(string _key)
+	{
+		if (playerStatDict.TryGetValue(_key, out var stats))
+			return stats;
+
+		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
+		return default;
 	}
 
 	public EnemyStruct Get_EnemyData(string _key)
@@ -32,6 +53,11 @@ public class StatManager : MonoBehaviour
 
 		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
 		return default;
+	}
+
+	public void Invoke_Action()
+	{
+		onChangePlayerStruct?.Invoke();
 	}
 
 	public void TEST()

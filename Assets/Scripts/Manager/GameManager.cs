@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
 
 	private Coroutine spwanTimeRoutine;
 
+
+
+	public bool IsPaused { get; private set; }
+
 	private void Awake()
 	{
 		GSC.Instance.RegisterGameManager(this);
@@ -14,7 +18,8 @@ public class GameManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		if(spwanTimeRoutine != null)
+		IsPaused = false;
+		if (spwanTimeRoutine != null)
 		{
 			StopCoroutine(spwanTimeRoutine);
 			spwanTimeRoutine = null;
@@ -41,6 +46,16 @@ public class GameManager : MonoBehaviour
 			}
 			yield return new WaitForSeconds(2.5f);
 		}
+	}
+
+	public void PauseGame()
+	{
+		IsPaused = true;
+	}
+
+	public void ResumeGame()
+	{
+		IsPaused = false;
 	}
 
 }

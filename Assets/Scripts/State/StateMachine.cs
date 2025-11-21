@@ -30,6 +30,8 @@ public class StateMachine<T>
 
 	public void Tick()
 	{
+		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.IsPaused)
+			return;
 		CurrentState?.Tick(owner);
 	}
 }
