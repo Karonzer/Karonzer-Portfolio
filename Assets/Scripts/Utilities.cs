@@ -52,4 +52,9 @@ public static class Utilities
 	{
 		return (_target.position - _pos.position).normalized;
 	}
+
+	public static Vector3 Get_TargetDir(this GameObject _target, Transform _pos)
+	{
+		return (_target.transform.position - _pos.position).normalized;
+	}
 }

@@ -70,7 +70,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 		{
 			enemyStruct.currentHP = 0;
 			transform.gameObject.SetActive(false);
-			GSC.Instance.spawnManager.DeSpawn_Enemy(enemyName, transform.gameObject);
+			GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, enemyName, transform.gameObject);
+			GameObject obj =  GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, DBManager.xPItem);
+			if(obj.TryGetComponent<Item>(out Item _item))
+			{
+				Vector3 spawnPosition = transform.position += new Vector3(0, 0.2f, 0);
+				_item.Setting_SpwnPos(spawnPosition);
+			}
+				
 		}
 	}
 

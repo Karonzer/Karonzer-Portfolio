@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
 		while(true)
 		{
 			yield return new WaitForSeconds(2.5f);
-			GameObject obj = GSC.Instance.spawnManager.Spawn_EnemySpawn("EnemyType1");
+			GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy,"EnemyType1");
 			if (obj != null && obj.TryGetComponent<Enemy>(out var _component))
 			{
 				obj.gameObject.SetActive(true);

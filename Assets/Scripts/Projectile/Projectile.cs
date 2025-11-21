@@ -2,7 +2,6 @@ using UnityEngine;
 
 public abstract class Projectile : MonoBehaviour
 {
-	[SerializeField] protected PoolObjectType poolObjectType = PoolObjectType.Projectile;
 	[SerializeField] protected string projectileName;
 	[SerializeField] protected int projectileDemage;
 	[SerializeField] protected float projectileRange;

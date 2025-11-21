@@ -9,6 +9,7 @@ public enum Type
 
 public enum PoolObjectType
 {
+	player,
 	Projectile,
 	Enemy,
 	Item,
@@ -100,7 +101,10 @@ public static class DBManager
 	public const string enemyType1 = "EnemyType1";
 
 	//데이지 팝업
-	public const string popupPrefabKey = "DamagePopupPrefab"; 
+	public const string popupPrefabKey = "DamagePopupPrefab";
+
+	//아이템
+	public const string xPItem = "XPitem";
 
 }
 

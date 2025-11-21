@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 public class FireballProjectile : Projectile
 {
@@ -93,7 +92,7 @@ public class FireballProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn_Projectile(projectileName, transform.gameObject);
+		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile,projectileName, transform.gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -166,6 +165,6 @@ public class FireballProjectile : Projectile
 	private void Despawn_Immediately()
 	{
 		gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn_Projectile(projectileName, gameObject);
+		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, gameObject);
 	}
 }

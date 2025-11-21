@@ -15,8 +15,8 @@ TagManager:
   - UI
   - Ground
   - 
-  - 
-  - 
+  - ItemDetect
+  - item
   - Projectile
   - Player
   - 

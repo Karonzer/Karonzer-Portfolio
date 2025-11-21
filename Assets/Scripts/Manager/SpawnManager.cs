@@ -4,44 +4,57 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 public class SpawnManager : MonoBehaviour
 {
-	[SerializeField] private Transform EnemySpawnGroup;
-	[SerializeField] private Transform projectileSpawn;
-
 	Dictionary<string, AsyncOperationHandle<GameObject>> prefabHandles;
-	Dictionary<string, Queue<GameObject>> enemyPool;
-	Dictionary<string, Queue<GameObject>> projectilePool;
 
+	private Dictionary<PoolObjectType, Dictionary<string, Queue<GameObject>>> pools;
+	private Dictionary<PoolObjectType, Transform> parents;
+
+	private void Start()
+	{
+		prefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
+
+		pools = new Dictionary<PoolObjectType, Dictionary<string, Queue<GameObject>>>()
+	{
+		{ PoolObjectType.Enemy, new Dictionary<string, Queue<GameObject>>() },
+		{ PoolObjectType.Projectile, new Dictionary<string, Queue<GameObject>>() },
+		{ PoolObjectType.Item, new Dictionary<string, Queue<GameObject>>() }
+	};
+
+		parents = new Dictionary<PoolObjectType, Transform>()
+	{
+		{ PoolObjectType.Enemy, transform.Find("EnemySpawnGroup") },
+		{ PoolObjectType.Projectile, transform.Find("ProjectileSpawn") },
+		{ PoolObjectType.Item, transform.Find("ItemSpawnGroup") }
+	};
+	}
 
 	private void Awake()
 	{
 		GSC.Instance.RegisterSpawn(this);
 	}
-	private void Start()
-	{
-		prefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
-		enemyPool = new Dictionary<string, Queue<GameObject>>();
-		projectilePool = new Dictionary<string, Queue<GameObject>>();
-
-
-		EnemySpawnGroup = transform.Find("EnemySpawnGroup");
-		projectileSpawn = transform.Find("ProjectileSpawn");
-	}
 	private void OnDestroy()
 	{
-		if (projectilePool != null)
+		// 1) 모든 풀 안의 모든 오브젝트 삭제
+		if (pools != null)
 		{
-			foreach (var kvp in projectilePool)
+			foreach (var typePool in pools) // Enemy / Projectile / Item
 			{
-				while (kvp.Value.Count > 0)
+				foreach (var kvp in typePool.Value) // 이름별 풀
 				{
-					var obj = kvp.Value.Dequeue();
-					if (obj != null)
-						Destroy(obj);
+					while (kvp.Value.Count > 0)
+					{
+						var obj = kvp.Value.Dequeue();
+						if (obj != null)
+						{
+							Destroy(obj);
+						}
+					}
 				}
 			}
 		}
 
+		// 2) Addressables 핸들 해제
 		if (prefabHandles != null)
 		{
 			foreach (var kvp in prefabHandles)
@@ -57,147 +70,57 @@ public class SpawnManager : MonoBehaviour
 		}
 	}
 
-	public GameObject Spawn_ProjectileSpawn(string _projectileName)
+	private GameObject LoadPrefab(string address)
 	{
-		if (projectilePool.ContainsKey(_projectileName))
+		if (!prefabHandles.ContainsKey(address))
 		{
-			return Check_ProjectileSpawnCount(_projectileName);
+			var handle = Addressables.LoadAssetAsync<GameObject>(address);
+			handle.WaitForCompletion();
+			prefabHandles[address] = handle;
 		}
-		else
-		{
-			return Create_Projectile(_projectileName);
-		}
+
+		return prefabHandles[address].Result;
 	}
 
-	private GameObject Check_ProjectileSpawnCount(string _projectileName)
+	private GameObject CreateObject(PoolObjectType type, string name)
 	{
-		if(projectilePool[_projectileName].Count == 0)
+		GameObject prefab = LoadPrefab(name);
+		Transform parent = parents[type];
+
+		GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity, parent);
+		obj.SetActive(false);
+
+		return obj;
+	}
+
+	public GameObject Spawn(PoolObjectType type, string name)
+	{
+		var dict = pools[type];
+
+		// 풀에 해당 이름이 없으면 새로 만든다
+		if (!dict.ContainsKey(name))
+		{
+			dict[name] = new Queue<GameObject>();
+		}
+
+		// 풀에 비어있으면 1~3개 추가 생성
+		if (dict[name].Count == 0)
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				GameObject obj = Create_ProjectileObject(_projectileName);
-				projectilePool[_projectileName].Enqueue(obj);
+				dict[name].Enqueue(CreateObject(type, name));
 			}
-			return projectilePool[_projectileName].Dequeue();
-		}
-		else
-		{
-			return projectilePool[_projectileName].Dequeue();
 		}
 
-
-	}	
-
-	private GameObject Create_Projectile(string _projectileName)
-	{
-		Queue<GameObject> gameObjects = new Queue<GameObject>();
-		for (int i = 0; i < 3; i++)
-		{
-			GameObject obj = Create_ProjectileObject(_projectileName);
-			gameObjects.Enqueue(obj);
-		}
-		projectilePool.Add(_projectileName, gameObjects);
-		return projectilePool[_projectileName].Dequeue();
-	}
-
-	private GameObject Create_ProjectileObject(string _projectileName)
-	{
-		if (!prefabHandles.ContainsKey(_projectileName))
-		{
-			AsyncOperationHandle<GameObject> handle =
-				Addressables.LoadAssetAsync<GameObject>(_projectileName);
-			handle.WaitForCompletion();
-
-			prefabHandles[_projectileName] = handle;
-		}
-
-		var prefab = prefabHandles[_projectileName].Result;
-
-		GameObject obj = Instantiate(
-			prefab,
-			new Vector3(0, 0, 0),
-			Quaternion.identity,
-			projectileSpawn
-		);
-
-		obj.SetActive(false);
+		GameObject obj = dict[name].Dequeue();
+		obj.SetActive(true);
 		return obj;
 	}
 
-	public void DeSpawn_Projectile(string _projectileName,GameObject _gameObject)
+	public void DeSpawn(PoolObjectType type, string name, GameObject obj)
 	{
-		_gameObject.SetActive(false);
-		projectilePool[_projectileName].Enqueue(_gameObject);
-	}
-
-
-
-	public GameObject Spawn_EnemySpawn(string _enemyName)
-	{
-		if (enemyPool.ContainsKey(_enemyName))
-		{
-			return Check_EnemySpawnCount(_enemyName);
-		}
-		else
-		{
-			return Create_Enemy(_enemyName);
-		}
-	}
-
-	private GameObject Check_EnemySpawnCount(string _enemyName)
-	{
-		if (enemyPool[_enemyName].Count == 0)
-		{
-			GameObject obj = Create_EnemyObject(_enemyName);
-			enemyPool[_enemyName].Enqueue(obj);
-			return enemyPool[_enemyName].Dequeue();
-		}
-		else
-		{
-			return enemyPool[_enemyName].Dequeue();
-		}
-
-
-	}
-
-	private GameObject Create_Enemy(string _enemyName)
-	{
-		Queue<GameObject> gameObjects = new Queue<GameObject>();
-		GameObject obj = Create_EnemyObject(_enemyName);
-		gameObjects.Enqueue(obj);
-		enemyPool.Add(_enemyName, gameObjects);
-		return enemyPool[_enemyName].Dequeue();
-	}
-
-	private GameObject Create_EnemyObject(string _enemyName)
-	{
-		if (!prefabHandles.ContainsKey(_enemyName))
-		{
-			AsyncOperationHandle<GameObject> handle =
-				Addressables.LoadAssetAsync<GameObject>(_enemyName);
-			handle.WaitForCompletion();
-
-			prefabHandles[_enemyName] = handle;
-		}
-
-		var prefab = prefabHandles[_enemyName].Result;
-
-		GameObject obj = Instantiate(
-			prefab,
-			new Vector3(0, 0, 0),
-			Quaternion.identity,
-			EnemySpawnGroup
-		);
-
 		obj.SetActive(false);
-		return obj;
+		pools[type][name].Enqueue(obj);
 	}
-
-	public void DeSpawn_Enemy(string _enemyName, GameObject _gameObject)
-	{
-		_gameObject.SetActive(false);
-		enemyPool[_enemyName].Enqueue(_gameObject);
-	}
-
 
 }

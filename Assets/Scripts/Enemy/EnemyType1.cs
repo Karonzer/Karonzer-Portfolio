@@ -30,6 +30,8 @@ public class EnemyType1 : Enemy
 		InvokeDamaged(damageInfo, hitPos,enemyType);
 		InvokeHealthChanged();
 		base.Take_Damage(damageInfo);
+
+
 	}
 
 	public override void DoAttack()
