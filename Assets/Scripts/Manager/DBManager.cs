@@ -15,14 +15,6 @@ public enum PoolObjectType
 	Item,
 }
 
-public enum AttackStatType
-{
-	Damage,
-	AttackInterval,
-	Range,
-	ProjectileSpeed,
-	ExplosionRange
-}
 
 public enum StateID
 {
@@ -74,6 +66,15 @@ public struct AttackStats
 	public float baseExplosionRange;
 }
 
+public enum UpgradeEffectType
+{
+	DamagePercent,          // 데미지 % 증가
+	AttackSpeedPercent,     // 공격 간격 % 감소
+	RangeFlat,              // 사거리 고정 증가
+	ProjectileSpeedPercent, // 투사체 속도 % 증가
+	ExplosionRangeFlat,     // 폭발 범위 고정 증가
+	ExtraProjectileCount,   // 추가 발사 수 등
+}
 
 
 public interface IDamageable

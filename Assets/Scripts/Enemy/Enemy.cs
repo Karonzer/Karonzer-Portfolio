@@ -33,6 +33,22 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
 	protected virtual void Update()
 	{
+		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.IsPaused)
+		{
+			if (navigation != null)
+			{
+				navigation.isStopped = true;
+				navigation.speed = 0f;
+			}
+			return;
+		}
+
+		if (navigation != null)
+		{
+			navigation.isStopped = false;
+			navigation.speed = enemyStruct.moveSpeed;
+		}
+
 		StateMachine.Tick();
 	}
 

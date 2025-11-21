@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
 
 
-	public bool IsPaused { get; private set; }
+	public bool IsPaused;// { get; private set; }
 
 	private void Awake()
 	{
@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
 			yield return new WaitForSeconds(2.5f);
 		}
 	}
+
+
 
 	public void PauseGame()
 	{

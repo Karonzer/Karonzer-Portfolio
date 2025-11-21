@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyTrackingState : IState<Enemy>
 {
@@ -17,7 +18,6 @@ public class EnemyTrackingState : IState<Enemy>
 	{
 		if (enemy.Get_TargetNavigation() == null || enemy.Get_NavMeshAgent() == null)
 			return;
-
 		enemy.Get_NavMeshAgent().destination = enemy.Get_TargetNavigation().transform.position;
 
 		float distance = Vector3.Distance(

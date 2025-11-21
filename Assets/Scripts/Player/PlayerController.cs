@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : Player
 {
 	PlayerMoveController moveController;
+	PlayerCinemachineFreeLook playerCinemachine;
 	protected override void Start()
 	{
 		playerName = DBManager.playerName;
@@ -16,5 +17,6 @@ public class PlayerController : Player
 		}
 
 		Add_AttackObject(DBManager.fireballAttack);
+
 	}
 }
