@@ -1751,6 +1751,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2002024620}
+  currentPlayerKey: 
+  itemData: {fileID: 11400000, guid: 2ad204b8fd639724697e0fe3bc6ff00a, type: 2}
+  popUpData: {fileID: 11400000, guid: c0a43925d9c70d94d8c0152910abed3e, type: 2}
 --- !u!1 &1272855052
 GameObject:
   m_ObjectHideFlags: 0
@@ -2684,7 +2687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3963362027977641a24610c6d1018a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 
+  playerDataSO: {fileID: 11400000, guid: 784cec4e6a3971544a7beb839b34da11, type: 2}
   playerStruct:
     key: 
     moveSpeed: 0
@@ -2692,6 +2695,7 @@ MonoBehaviour:
     currentHP: 0
     criticalDamage: 0
     criticalChance: 0
+    startAttackObj: 
   playerType: 0
 --- !u!114 &2002024627
 MonoBehaviour:

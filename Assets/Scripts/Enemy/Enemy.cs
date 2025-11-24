@@ -6,9 +6,10 @@ using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 {
+	[SerializeField] private EnemyDataSO dataSO;
+	public string EnemyKey => dataSO.enemyStruct.key;
 	public StateMachine<Enemy> StateMachine { get; private set; }
 
-	[SerializeField] protected string enemyName;
 	[SerializeField] protected EnemyStruct enemyStruct;
 	[SerializeField] protected Type enemyType = Type.Enemy;
 
@@ -28,7 +29,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 	protected virtual void Awake()
 	{
 		if (GSC.Instance != null && GSC.Instance.statManager != null)
-			enemyStruct = GSC.Instance.statManager.Get_EnemyData(enemyName);
+			enemyStruct = GSC.Instance.statManager.Get_EnemyData(EnemyKey);
 
 		StateMachine = new StateMachine<Enemy>(this);
 	}
@@ -77,7 +78,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 	public virtual void Setting_Info()
 	{
 		if (GSC.Instance != null && GSC.Instance.statManager != null)
-			enemyStruct = GSC.Instance.statManager.Get_EnemyData(enemyName);
+			enemyStruct = GSC.Instance.statManager.Get_EnemyData(EnemyKey);
 		InvokeHealthChanged();
 	}
 
@@ -95,7 +96,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 	{
 		enemyStruct.currentHP = 0;
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, enemyName, transform.gameObject);
+		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, EnemyKey, transform.gameObject);
 	}
 
 	public abstract void Start_Enemy();

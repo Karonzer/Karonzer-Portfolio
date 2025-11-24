@@ -22,6 +22,21 @@ public enum StateID
 	Attack,
 }
 
+public enum UpgradeOptionType
+{
+	SkillUpgrade,   // 기존 스킬 강화
+	SkillUnlock     // 새로운 스킬 획득
+}
+public enum UpgradeEffectType
+{
+	DamagePercent,          // 데미지 % 증가
+	AttackSpeedPercent,     // 공격 간격 % 감소
+	RangeFlat,              // 사거리 고정 증가
+	ProjectileSpeedPercent, // 투사체 속도 % 증가
+	ExplosionRangeFlat,     // 폭발 범위 고정 증가
+	ExtraProjectileCount,   // 추가 발사 수 등
+}
+
 public interface IState<T>
 {
 	StateID ID { get; }
@@ -49,6 +64,7 @@ public struct PlayerStruct
 	public float currentHP;
 	public int criticalDamage;
 	public int criticalChance;
+	public string startAttackObj;
 }
 
 [System.Serializable]
@@ -75,17 +91,10 @@ public struct AttackStats
 	public float baseRange;
 	public float baseProjectileSpeed;
 	public float baseExplosionRange;
+	public string projectileKey;
 }
 
-public enum UpgradeEffectType
-{
-	DamagePercent,          // 데미지 % 증가
-	AttackSpeedPercent,     // 공격 간격 % 감소
-	RangeFlat,              // 사거리 고정 증가
-	ProjectileSpeedPercent, // 투사체 속도 % 증가
-	ExplosionRangeFlat,     // 폭발 범위 고정 증가
-	ExtraProjectileCount,   // 추가 발사 수 등
-}
+
 
 public interface IHealthChanged
 {
@@ -106,23 +115,5 @@ public static class DBManager
 {
 	private static int projectileSurvivalTime = 30;
 	public static int ProjectileSurvivalTime => projectileSurvivalTime;
-
-	public const string playerName = "Player";
-
-	//공격 오브젝트
-	public const string fireballAttack = "FireballAttack";
-
-	// 발사체
-	public const string fireballProjectile = "FireballProjectile";
-
-	// 몬스터
-	public const string enemyType1 = "EnemyType1";
-
-	//데이지 팝업
-	public const string popupPrefabKey = "DamagePopupPrefab";
-
-	//아이템
-	public const string xPItem = "XPitem";
-
 }
 

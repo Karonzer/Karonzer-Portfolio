@@ -9,7 +9,7 @@ public class SkillManager : MonoBehaviour
 
 	// 특정 스킬 스탯이 바뀔 때 알려주는 이벤트
 	public Dictionary<string, Action<string>> eventTableOnAttackStatsChanged = new Dictionary<string, Action<string>>();
-
+	//현재 보유하고 있는 공격 방식
 	public Dictionary<string, AttackRoot> currentAttacks = new Dictionary<string, AttackRoot>();
 	private void Awake()
 	{

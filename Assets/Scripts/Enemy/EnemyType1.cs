@@ -7,7 +7,6 @@ public class EnemyType1 : Enemy
 
 	protected override void Awake()
 	{
-		enemyName = DBManager.enemyType1;
 		base.Awake();
 
 		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
@@ -49,7 +48,7 @@ public class EnemyType1 : Enemy
 	public override void Die_Enemy()
 	{
 		base.Die_Enemy();
-		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, DBManager.xPItem);
+		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, GSC.Instance.gameManager.Get_ItemDataSO().xPItem);
 		if (obj.TryGetComponent<Item>(out Item _item))
 		{
 			Vector3 spawnPosition = transform.position += new Vector3(0, 0.2f, 0);

@@ -6,7 +6,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 {
-	[SerializeField] protected string playerName;
+	[SerializeField] private PlayerDataSO playerDataSO;
+	public string PlayerKey => playerDataSO.playerStruct.key;
+	public string StartAttackKey => playerDataSO.playerStruct.startAttackObj;
+	public string StartAttackObj => playerDataSO.playerStruct.startAttackObj;
 	[SerializeField] protected PlayerStruct playerStruct;
 	[SerializeField] protected Type playerType = Type.Player;
 
@@ -29,7 +32,7 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 	{
 		if (GSC.Instance != null && GSC.Instance.statManager != null)
 		{
-			playerStruct = GSC.Instance.statManager.Get_PlayerData(playerName);
+			playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
 			GSC.Instance.statManager.onChangePlayerStruct += Handle_AttackStatsChanged;
 		}
 	}
@@ -67,7 +70,7 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 	private void Handle_AttackStatsChanged()
 	{
-		playerStruct = GSC.Instance.statManager.Get_PlayerData(playerName);
+		playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
 	}
 
 	public virtual void Take_Damage(int damageInfo)

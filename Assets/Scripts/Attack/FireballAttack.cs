@@ -8,7 +8,6 @@ public class FireballAttack : AttackRoot
 
 	private void Awake()
 	{
-		attackName = DBManager.fireballProjectile;
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
 		sphereCollider.isTrigger = true;
 	}
@@ -52,14 +51,14 @@ public class FireballAttack : AttackRoot
 			{
 				if (Find_TargetEnemyDir(out Vector3 _direction))
 				{
-					GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, attackName);
+					GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 					if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 					{
 						projectileObj.gameObject.SetActive(true);
 						Vector3 spawnOffset = _direction.normalized * 0.5f;
 						Vector3 spawnPosition = transform.position + spawnOffset;
 						spawnPosition += new Vector3(0, 0.2f, 0);
-						_Component.Set_ProjectileInfo(attackName, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseExplosionRange, DBManager.ProjectileSurvivalTime, spawnPosition);
+						_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseExplosionRange, DBManager.ProjectileSurvivalTime, spawnPosition);
 						_Component.Launch_Projectile();
 					}
 				}

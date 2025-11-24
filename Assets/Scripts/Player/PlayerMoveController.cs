@@ -139,7 +139,7 @@ public class PlayerMoveController : MonoBehaviour
 
 			Vector3 worldMove = camRight * moveDirection.x + camForward * moveDirection.y;
 			if (worldMove.sqrMagnitude > 1f) worldMove.Normalize();
-			horizontalDelta = worldMove * GSC.Instance.statManager.Get_PlayerData(DBManager.playerName).moveSpeed * Time.deltaTime;
+			horizontalDelta = worldMove * GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey).moveSpeed * Time.deltaTime;
 
 
 			if (worldMove.sqrMagnitude > 0.001f)

@@ -9,14 +9,13 @@ public class PlayerController : Player
 	PlayerCinemachineFreeLook playerCinemachine;
 	protected override void Start()
 	{
-		playerName = DBManager.playerName;
 		base.Start();
 		if(moveController == null)
 		{
 			moveController = transform.AddComponent<PlayerMoveController>();
 		}
 
-		Add_AttackObject(DBManager.fireballAttack);
+		Add_AttackObject(StartAttackKey);
 
 	}
 }

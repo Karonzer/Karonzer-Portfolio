@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 public class DamagePopupManager : MonoBehaviour
 {
@@ -18,6 +17,10 @@ public class DamagePopupManager : MonoBehaviour
 	{
 		GSC.Instance.RegisterDamagePopupManager(this);
 		mainCam = Camera.main;
+	}
+
+	private void Start()
+	{
 		LoadPopupPrefab();
 	}
 
@@ -32,7 +35,7 @@ public class DamagePopupManager : MonoBehaviour
 
 	private void LoadPopupPrefab()
 	{
-		Addressables.LoadAssetAsync<GameObject>(DBManager.popupPrefabKey).Completed += OnPrefabLoaded;
+		Addressables.LoadAssetAsync<GameObject>(GSC.Instance.gameManager.Get_PopUpData().DamagePopupPrefab).Completed += OnPrefabLoaded;
 	}
 
 	private void OnPrefabLoaded(AsyncOperationHandle<GameObject> op)

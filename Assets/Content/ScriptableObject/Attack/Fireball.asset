@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43e0f3ef036691e49917c00750fb2573, type: 3}
-  m_Name: FireballProjectile
+  m_Name: Fireball
   m_EditorClassIdentifier: 
   attackStats:
-    key: FireballProjectile
+    key: Fireball
     baseDamage: 10
     baseAttackInterval: 2
     baseRange: 10
     baseProjectileSpeed: 5
     baseExplosionRange: 2
+    projectileKey: FireballProjectile
