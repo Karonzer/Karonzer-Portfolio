@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public abstract class Enemy : MonoBehaviour, IDamageable
+public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 {
 	public StateMachine<Enemy> StateMachine { get; private set; }
 
@@ -19,8 +19,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 	public event Action<float, float> OnHealthChanged;
 	public event Action OnDead;
 	public event Action<int, Vector3, Type> OnDamaged;
-	public float CurrentHP => enemyStruct.currentHP;
-	public float MaxHP => enemyStruct.maxHP;
+
+	public float CurrentHPHealth => enemyStruct.currentHP;
+	public float MaxHPHealth => enemyStruct.maxHP;
+	public float CurrentHPDamege => enemyStruct.currentHP;
+	public float MaxHPDamege => enemyStruct.maxHP;
 
 	protected virtual void Awake()
 	{

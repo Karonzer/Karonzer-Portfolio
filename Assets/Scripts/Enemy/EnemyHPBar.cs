@@ -4,14 +4,14 @@ using UnityEngine.UI;
 public class EnemyHPBar : MonoBehaviour
 {
 	[SerializeField] private Image hpFillImage;
-	[SerializeField] private Enemy enemy;
+	[SerializeField] private IHealthChanged enemy;
 
 	private Camera mainCam;
 
 	void Awake()
 	{
 		if (enemy == null)
-			enemy = GetComponentInParent<Enemy>();
+			enemy = GetComponentInParent<IHealthChanged>();
 
 		mainCam = Camera.main;
 		hpFillImage = transform.Find("HPBarFill").GetComponent<Image>();
@@ -22,7 +22,7 @@ public class EnemyHPBar : MonoBehaviour
 		if (enemy != null)
 		{
 			enemy.OnHealthChanged += HandleHealthChanged;
-			HandleHealthChanged(enemy.CurrentHP, enemy.MaxHP);
+			HandleHealthChanged(enemy.CurrentHPHealth, enemy.MaxHPHealth);
 		}
 	}
 

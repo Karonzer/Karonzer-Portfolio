@@ -4,17 +4,26 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public abstract class Player : MonoBehaviour, IDamageable
+public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 {
 	[SerializeField] protected string playerName;
 	[SerializeField] protected PlayerStruct playerStruct;
 	[SerializeField] protected Type playerType = Type.Player;
-	public float CurrentHP => playerStruct.currentHP;
-	public float MaxHP => playerStruct.maxHP;
+
+
+	public event Action<float, float> OnHealthChanged;
 
 	public event Action<int, Vector3, Type> OnDamaged;
 
 	Dictionary<string, AsyncOperationHandle<GameObject>> attackObjectPrefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
+
+	public float CurrentHPHealth => playerStruct.currentHP;
+
+	public float MaxHPHealth => playerStruct.maxHP;
+
+	public float CurrentHPDamege => playerStruct.currentHP;
+	public float MaxHPDamege => playerStruct.maxHP;
+
 
 	protected virtual void Start()
 	{
@@ -44,6 +53,16 @@ public abstract class Player : MonoBehaviour, IDamageable
 
 			attackObjectPrefabHandles.Clear();
 		}
+	}
+
+	protected void InvokeHealthChanged()
+	{
+		OnHealthChanged?.Invoke(playerStruct.currentHP, playerStruct.maxHP);
+	}
+
+	protected void InvokeDamaged(int damage, Vector3 hitPos, Type _type)
+	{
+		OnDamaged?.Invoke(damage, hitPos, _type);
 	}
 
 	private void Handle_AttackStatsChanged()

@@ -87,12 +87,18 @@ public enum UpgradeEffectType
 	ExtraProjectileCount,   // 추가 발사 수 등
 }
 
+public interface IHealthChanged
+{
+	public event Action<float, float> OnHealthChanged;
+	float CurrentHPHealth { get; }
+	float MaxHPHealth { get; }
+}
 
 public interface IDamageable
 {
 	event Action<int, Vector3,Type> OnDamaged;
-	float CurrentHP { get; }
-	float MaxHP { get; }
+	float CurrentHPDamege { get; }
+	float MaxHPDamege { get; }
 	public void Take_Damage(int damageInfo);
 }
 
