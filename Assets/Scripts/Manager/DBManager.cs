@@ -25,7 +25,8 @@ public enum StateID
 public enum UpgradeOptionType
 {
 	SkillUpgrade,   // 기존 스킬 강화
-	SkillUnlock     // 새로운 스킬 획득
+	SkillUnlock,     // 새로운 스킬 획득
+	Reuse
 }
 public enum UpgradeEffectType
 {
