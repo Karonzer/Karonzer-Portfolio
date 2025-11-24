@@ -17,6 +17,15 @@ public class EnemyType1 : Enemy
 		StateMachine.AddState(new EnemyAttackState());
 	}
 
+	private void OnEnable()
+	{
+		OnDead += Die_Enemy;
+	}
+
+	private void OnDisable()
+	{
+		OnDead -= Die_Enemy;
+	}
 
 	public override void Start_Enemy()
 	{
@@ -30,13 +39,27 @@ public class EnemyType1 : Enemy
 		InvokeDamaged(damageInfo, hitPos,enemyType);
 		InvokeHealthChanged();
 		base.Take_Damage(damageInfo);
-
-
 	}
 
 	public override void DoAttack()
 	{
 		// EnemyType1 전용 공격 로직
+	}
+
+	public override void Die_Enemy()
+	{
+		base.Die_Enemy();
+		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, DBManager.xPItem);
+		if (obj.TryGetComponent<Item>(out Item _item))
+		{
+			Vector3 spawnPosition = transform.position += new Vector3(0, 0.2f, 0);
+			_item.Setting_SpwnPos(spawnPosition);
+		}
+
+		if (obj.TryGetComponent<XPitem>(out XPitem xpItem))
+		{
+			xpItem.SetXP(enemyStruct.xpItmeValue);
+		}
 	}
 
 }

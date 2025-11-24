@@ -83,7 +83,7 @@ public class FireballProjectile : Projectile
 	{
 		while (true)
 		{
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.IsPaused)
+			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
 			{
 				transform.Translate(projectileDir * projectileSpeed * Time.deltaTime);
 				yield return null;

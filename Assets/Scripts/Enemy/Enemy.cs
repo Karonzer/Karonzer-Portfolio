@@ -33,7 +33,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
 	protected virtual void Update()
 	{
-		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.IsPaused)
+		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.isPaused)
 		{
 			if (navigation != null)
 			{
@@ -84,17 +84,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
 		if (enemyStruct.currentHP <= 0)
 		{
-			enemyStruct.currentHP = 0;
-			transform.gameObject.SetActive(false);
-			GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, enemyName, transform.gameObject);
-			GameObject obj =  GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, DBManager.xPItem);
-			if(obj.TryGetComponent<Item>(out Item _item))
-			{
-				Vector3 spawnPosition = transform.position += new Vector3(0, 0.2f, 0);
-				_item.Setting_SpwnPos(spawnPosition);
-			}
-				
+			InvokeDead();
 		}
+	}
+
+	public virtual void Die_Enemy()
+	{
+		enemyStruct.currentHP = 0;
+		transform.gameObject.SetActive(false);
+		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, enemyName, transform.gameObject);
 	}
 
 	public abstract void Start_Enemy();

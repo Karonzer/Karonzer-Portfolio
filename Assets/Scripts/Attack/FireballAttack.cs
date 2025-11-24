@@ -48,7 +48,7 @@ public class FireballAttack : AttackRoot
 		while (true)
 		{
 			yield return new WaitForSeconds(attackIntervalTime);
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.IsPaused)
+			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
 			{
 				if (Find_TargetEnemyDir(out Vector3 _direction))
 				{

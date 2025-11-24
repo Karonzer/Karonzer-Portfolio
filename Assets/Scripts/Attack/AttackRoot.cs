@@ -34,7 +34,7 @@ public abstract class AttackRoot : MonoBehaviour
 
 		attackStats = GSC.Instance.skillManager.GetStats(attackName);
 		Apply_StatsFromAttackStats();
-		// 필요하면 콜라이더 반경 등도 여기서 다시 갱신
+
 	}
 
 	protected virtual void Apply_StatsFromAttackStats()

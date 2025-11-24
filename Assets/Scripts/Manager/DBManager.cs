@@ -30,6 +30,16 @@ public interface IState<T>
 	void Tick(T owner);
 }
 
+public interface IXPTable
+{
+	public int CurrentLevel { get; }
+	public int CurrentXP { get; }
+	public int MaxXP { get; }
+
+	public event Action<int> OnLevelChanged;
+	public event Action<int, int> OnXPChanged;
+}
+
 [System.Serializable]
 public struct PlayerStruct
 {
@@ -51,6 +61,7 @@ public struct EnemyStruct
 	public float attackInterval;
 	public float damage;
 	public float attackRange;
+	public int xpItmeValue;
 }
 [System.Serializable]
 public struct AttackStats

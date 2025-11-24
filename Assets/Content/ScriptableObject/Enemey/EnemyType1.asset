@@ -20,3 +20,4 @@ MonoBehaviour:
     attackInterval: 2
     damage: 10
     attackRange: 2
+    xpItmeValue: 10

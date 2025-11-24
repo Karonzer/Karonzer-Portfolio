@@ -47,7 +47,7 @@ public class PlayerMoveController : MonoBehaviour
 
 	void Update()
 	{
-		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.IsPaused)
+		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.isPaused)
 			return;
 
 		gravityDelta = Vector3.zero;
