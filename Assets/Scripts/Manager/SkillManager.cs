@@ -25,22 +25,27 @@ public class SkillManager : MonoBehaviour
 		{
 			if (s != null && !string.IsNullOrEmpty(s.attackStats.key))
 				statsDict[s.attackStats.key] = s.attackStats;
-			Debug.Log(s);
-			Debug.Log(s.attackStats.key);
 		}
 	}
 
-	public AttackStats GetStats(string _key)
+	public AttackStats Get_Stats(string _key)
 	{
-		if (statsDict.TryGetValue(_key, out var stats))
+		if (statsDict.TryGetValue(_key, out AttackStats stats))
 			return stats;
 
 		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
 		return default;
 	}
 
+	public void Set_Stats(string _key, AttackStats _value)
+	{
+		if (statsDict.ContainsKey(_key))
+		{
+			statsDict[_key] = _value;
+		}
+	}
 
-	public void Add_CurrentAttacks(string _key,AttackRoot _attackRoot)
+	public void Add_CurrentAttacks(string _key, AttackRoot _attackRoot)
 	{
 		if(currentAttacks.ContainsKey(_key))
 		{
@@ -50,31 +55,34 @@ public class SkillManager : MonoBehaviour
 
 
 	// 외부에서 “이 스킬 스탯 바뀌었다”고 알리고 싶을 때 쓰는 헬퍼
-	public void NotifyStatsChanged(string key)
+	public void NotifyStatsChanged(string _key)
     {
-		Invoke_Action(key);
+		Invoke_Action(_key);
     }
 
-	public void AddListener(string key, Action<string> callback)
+	public void AddListener(string _key, Action<string> callback)
 	{
-		if (!eventTableOnAttackStatsChanged.ContainsKey(key))
-			eventTableOnAttackStatsChanged[key] = null;
+		if (!eventTableOnAttackStatsChanged.ContainsKey(_key))
+			eventTableOnAttackStatsChanged[_key] = null;
 
-		eventTableOnAttackStatsChanged[key] += callback;
+		eventTableOnAttackStatsChanged[_key] += callback;
 	}
 
-	public void RemoveListener(string key, Action<string> callback)
+	public void RemoveListener(string _key, Action<string> _callback)
 	{
-		if (!eventTableOnAttackStatsChanged.ContainsKey(key))
+		if (!eventTableOnAttackStatsChanged.ContainsKey(_key))
 			return;
 
-		eventTableOnAttackStatsChanged[key] -= callback;
+		eventTableOnAttackStatsChanged[_key] -= _callback;
 	}
 
-	public void Invoke_Action(string key)
+	public void Invoke_Action(string _key)
 	{
-		if (eventTableOnAttackStatsChanged.TryGetValue(key, out var action))
-			action?.Invoke(key);
+		if (eventTableOnAttackStatsChanged.TryGetValue(_key, out var _action))
+		{
+			_action?.Invoke(_key);
+		}
+
 	}
 
 

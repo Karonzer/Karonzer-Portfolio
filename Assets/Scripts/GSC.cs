@@ -7,6 +7,8 @@ public class GSC : GenericSingletonClass<GSC>
 	public SkillManager skillManager { get; private set; }
 	public SpawnManager spawnManager { get; private set; }
 	public DamagePopupManager damagePopupManager { get; private set; }
+
+	public UpgradeManager upgradeManager { get; private set; }
 	public UIManger uIManger { get; private set; }
 
 
@@ -17,6 +19,8 @@ public class GSC : GenericSingletonClass<GSC>
 	public void RegisterSpawn(SpawnManager _spawn) => spawnManager = _spawn;
 
 	public void RegisterDamagePopupManager(DamagePopupManager _damagePopupManager) => damagePopupManager = _damagePopupManager;
+
+	public void RegisterUpgradeManager(UpgradeManager _upgradeManager) => upgradeManager = _upgradeManager;
 
 	public void RegisterUIManger(UIManger _uIManger) => uIManger = _uIManger;
 }

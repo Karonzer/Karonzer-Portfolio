@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class XPBarUI : MonoBehaviour
+public class XPBarUI : MonoBehaviour, IUIInitializable
 {
 	[SerializeField] private Image fill;
 	[SerializeField] private TextMeshProUGUI levelText;
@@ -12,13 +12,18 @@ public class XPBarUI : MonoBehaviour
 
 	private void Awake()
 	{
-		fill = transform.GetChild(0).Find("XPBarBG").Find("XPBarFill").GetComponent<Image>();
-		levelText = transform.GetChild(0).Find("XPBarBG").Find("LevelText").GetComponent<TextMeshProUGUI>();
+		fill = transform.Find("XPBarFill").GetComponent<Image>();
+		levelText = transform.Find("LevelText").GetComponent<TextMeshProUGUI>();
+	}
+
+	public void Initialize_UI(GameObject player)
+	{
+		if (player.TryGetComponent<IXPTable>(out IXPTable _xp))
+			Initialize(_xp);
 	}
 
 	public void Initialize(IXPTable _system)
 	{
-		Debug.Log(_system);
 		xP = _system;
 
 		xP.OnXPChanged += HandleXPChanged;
@@ -28,14 +33,16 @@ public class XPBarUI : MonoBehaviour
 		HandleLevelUp(xP.CurrentLevel);
 	}
 
-	private void HandleXPChanged(int current, int max)
+	private void HandleXPChanged(int _current, int _max)
 	{
-		fill.fillAmount = (float)current / max;
+		fill.fillAmount = (float)_current / _max;
 	}
 
-	private void HandleLevelUp(int level)
+	private void HandleLevelUp(int _level)
 	{
 		if (levelText != null)
-			levelText.text = $"Lv : {level}";
+			levelText.text = $"Lv : {_level}";
 	}
+
+
 }

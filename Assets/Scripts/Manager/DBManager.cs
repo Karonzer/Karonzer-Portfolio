@@ -35,7 +35,7 @@ public enum UpgradeEffectType
 	RangeFlat,              // 사거리 고정 증가
 	ProjectileSpeedPercent, // 투사체 속도 % 증가
 	ExplosionRangeFlat,     // 폭발 범위 고정 증가
-	ExtraProjectileCount,   // 추가 발사 수 등
+	ExtraProjectileCount    // 추가 발사 수 등
 }
 
 public interface IState<T>
@@ -76,7 +76,7 @@ public struct EnemyStruct
 	public float maxHP;
 	public float currentHP;
 	public float attackInterval;
-	public float damage;
+	public int damage;
 	public float attackRange;
 	public int xpItmeValue;
 }
@@ -93,6 +93,7 @@ public struct AttackStats
 	public float baseProjectileSpeed;
 	public float baseExplosionRange;
 	public string projectileKey;
+	public int ProjectileCount;
 }
 
 
@@ -109,7 +110,12 @@ public interface IDamageable
 	event Action<int, Vector3,Type> OnDamaged;
 	float CurrentHPDamege { get; }
 	float MaxHPDamege { get; }
-	public void Take_Damage(int damageInfo);
+	public void Take_Damage(int _damageInfo);
+}
+
+public interface IUIInitializable
+{
+	void Initialize_UI(GameObject _player);
 }
 
 public static class DBManager

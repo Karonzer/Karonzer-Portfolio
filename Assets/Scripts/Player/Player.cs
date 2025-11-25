@@ -20,10 +20,9 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 	Dictionary<string, AsyncOperationHandle<GameObject>> attackObjectPrefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
+
 	public float CurrentHPHealth => playerStruct.currentHP;
-
 	public float MaxHPHealth => playerStruct.maxHP;
-
 	public float CurrentHPDamege => playerStruct.currentHP;
 	public float MaxHPDamege => playerStruct.maxHP;
 
@@ -34,7 +33,9 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		{
 			playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
 			GSC.Instance.statManager.onChangePlayerStruct += Handle_AttackStatsChanged;
+			InvokeHealthChanged();
 		}
+
 	}
 
 	protected virtual void OnDestroy()
@@ -73,13 +74,19 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
 	}
 
-	public virtual void Take_Damage(int damageInfo)
+	public virtual void Take_Damage(int _damageInfo)
 	{
+		playerStruct.currentHP -= _damageInfo;
+
+		if (playerStruct.currentHP <= 0)
+		{
+
+		}
+		InvokeHealthChanged();
 	}
 
 	public void Add_AttackObject(string _key)
 	{
-		Debug.Log(_key);
 		AsyncOperationHandle<GameObject> handle =
 			Addressables.InstantiateAsync(_key, transform.position, transform.rotation, transform);
 

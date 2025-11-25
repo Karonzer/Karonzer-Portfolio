@@ -23,9 +23,11 @@ public class GameManager : MonoBehaviour
 
 		currentPlayerKey = "Player";// 추후 타이틀 씬에서 선택한 이름을 가지고 올 예정
 	}
-	void Start()
+	private void Start()
 	{
-		GSC.Instance.uIManger.InitializeUI(player);
+		Debug.Log("Initialize_UI");
+		GSC.Instance.uIManger.Initialize_UI(player);
+		Setting_Cursor();
 	}
 
 	private void OnEnable()
@@ -38,6 +40,19 @@ public class GameManager : MonoBehaviour
 		}
 
 		spwanTimeRoutine = StartCoroutine(TEST_Spwn());
+	}
+
+
+
+	private void Setting_Cursor()
+	{
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Confined;
+	}
+
+	public void Set_ShowAndHideCursor(bool _show)
+	{
+		Cursor.visible = _show;
 	}
 
 	public GameObject Get_PlayerObject()
@@ -60,6 +75,12 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+
+	public void Update_ToPlayerAttackObj()
+	{
+		GSC.Instance.upgradeManager.Upgrade_TEST();
+		//PauseGame();
+	}
 
 	public ItemDataSO Get_ItemDataSO()
 	{ return itemData; }

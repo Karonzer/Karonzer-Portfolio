@@ -11,6 +11,7 @@ public class UpgradeOptionSO : ScriptableObject
 
 	[Header("대상 스킬 정보")]
 	public UpgradeOptionType optionType;
+	public string numKey;
 	public string targetKey;        
 
 	[Header("효과")]

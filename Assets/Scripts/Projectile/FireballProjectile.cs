@@ -28,7 +28,7 @@ public class FireballProjectile : Projectile
 		isHit = false;
 	}
 
-	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, float _projectileRange, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 spawnPos)
+	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, float _projectileRange, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 _spawnPos)
 	{
 		projectileName = _projectileName;
 		projectileDemage = _projectileDemage;
@@ -36,7 +36,7 @@ public class FireballProjectile : Projectile
 		projectileDir = _dir;
 		projectileSpeed = _projectileSpeed;
 		projectileSurvivalTime = _projectileSurvivalTime;
-		transform.position = spawnPos;
+		transform.position = _spawnPos;
 
 		Setting_CurrentProjectile();
 	}

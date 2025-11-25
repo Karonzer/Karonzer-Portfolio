@@ -51,16 +51,21 @@ public class FireballAttack : AttackRoot
 			{
 				if (Find_TargetEnemyDir(out Vector3 _direction))
 				{
-					GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
-					if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
+					for(int i = 0; i < attackStats.ProjectileCount;i++)
 					{
-						projectileObj.gameObject.SetActive(true);
-						Vector3 spawnOffset = _direction.normalized * 0.5f;
-						Vector3 spawnPosition = transform.position + spawnOffset;
-						spawnPosition += new Vector3(0, 0.2f, 0);
-						_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseExplosionRange, DBManager.ProjectileSurvivalTime, spawnPosition);
-						_Component.Launch_Projectile();
+						GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
+						if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
+						{
+							projectileObj.gameObject.SetActive(true);
+							Vector3 spawnOffset = _direction.normalized * 0.5f;
+							Vector3 spawnPosition = transform.position + spawnOffset;
+							spawnPosition += new Vector3(0, 0.2f, 0);
+							_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
+							_Component.Launch_Projectile();
+						}
+						yield return new WaitForSeconds(0.2f);
 					}
+
 				}
 			}
 

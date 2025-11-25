@@ -43,6 +43,10 @@ public class EnemyType1 : Enemy
 	public override void DoAttack()
 	{
 		// EnemyType1 전용 공격 로직
+		if(targetNavigation.TryGetComponent<IDamageable>(out IDamageable _player))
+		{
+			_player.Take_Damage(enemyStruct.damage);
+		}
 	}
 
 	public override void Die_Enemy()

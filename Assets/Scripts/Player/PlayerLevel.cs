@@ -44,6 +44,7 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 		maxXP = CalculateNextLevelXP(currentLevel);
 		OnLevelChanged?.Invoke(currentLevel);
 		OnXPChanged?.Invoke(CurrentXP, MaxXP);
+		GSC.Instance.gameManager.Update_ToPlayerAttackObj();
 	}
 
 

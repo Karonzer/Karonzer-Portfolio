@@ -20,3 +20,4 @@ MonoBehaviour:
     baseProjectileSpeed: 5
     baseExplosionRange: 2
     projectileKey: FireballProjectile
+    ProjectileCount: 1

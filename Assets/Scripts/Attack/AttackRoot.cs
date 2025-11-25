@@ -14,7 +14,7 @@ public abstract class AttackRoot : MonoBehaviour
 
 	protected virtual void Start()
 	{
-		attackStats = GSC.Instance.skillManager.GetStats(AttackKey);
+		attackStats = GSC.Instance.skillManager.Get_Stats(AttackKey);
 		Apply_StatsFromAttackStats();
 
 		// 스탯 변경 이벤트 구독
@@ -34,7 +34,8 @@ public abstract class AttackRoot : MonoBehaviour
 		if (_key != AttackKey)
 			return; // 내 스킬이 아니면 무시
 
-		attackStats = GSC.Instance.skillManager.GetStats(AttackKey);
+		attackStats = GSC.Instance.skillManager.Get_Stats(AttackKey);
+		Debug.Log(attackStats.baseDamage);
 		Apply_StatsFromAttackStats();
 
 	}

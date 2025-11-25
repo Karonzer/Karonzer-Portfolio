@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UIManger : MonoBehaviour
 {
 	private Dictionary<string, GameObject> uiTable = new Dictionary<string, GameObject>();
+	private List<IUIInitializable> uiInitializables = new List<IUIInitializable>();
 	public XPBarUI xpBarUI;
 	private void Awake()
 	{
@@ -12,11 +14,21 @@ public class UIManger : MonoBehaviour
 		{
 			uiTable.Add(child.name, child.gameObject);
 		}
+
+		uiInitializables = GetComponentsInChildren<IUIInitializable>(true).ToList();
 	}
 
-	public void InitializeUI(GameObject _player)
+	private void Start()
 	{
-		xpBarUI.Initialize(_player.GetComponent<IXPTable>());
+		Debug.Log("UIManger");
+	}
+
+	public void Initialize_UI(GameObject _player)
+	{
+		foreach (var ui in uiInitializables)
+		{
+			ui.Initialize_UI(_player);
+		}
 	}
 
 	public void Register_UI(string _name, GameObject _uiObject)

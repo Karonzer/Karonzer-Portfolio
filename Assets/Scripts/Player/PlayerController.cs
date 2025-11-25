@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerController : Player
 {
 	PlayerMoveController moveController;
-	PlayerCinemachineFreeLook playerCinemachine;
 	protected override void Start()
 	{
 		base.Start();
@@ -16,6 +15,5 @@ public class PlayerController : Player
 		}
 
 		Add_AttackObject(StartAttackKey);
-
 	}
 }

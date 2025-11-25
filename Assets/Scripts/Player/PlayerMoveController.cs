@@ -19,6 +19,8 @@ public class PlayerMoveController : MonoBehaviour
 	[SerializeField] private Vector3 gravityDelta;
 	[SerializeField] private Vector3 horizontalDelta;
 
+	PlayerCinemachineFreeLook playerCinemachine;
+
 	[SerializeField] private Animator animator;
 
 	private Coroutine moveRoutine;
