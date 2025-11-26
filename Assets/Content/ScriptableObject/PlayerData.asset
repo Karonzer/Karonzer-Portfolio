@@ -17,6 +17,6 @@ MonoBehaviour:
     moveSpeed: 5
     maxHP: 100
     currentHP: 100
-    criticalDamage: 50
-    criticalChance: 100
+    criticalDamage: 100
+    criticalChance: 50
     startAttackObj: FireballAttack

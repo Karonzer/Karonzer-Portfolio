@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-
 public enum Type
 {
 	Player,
@@ -26,7 +25,7 @@ public enum UpgradeOptionType
 {
 	SkillUpgrade,   // 기존 스킬 강화
 	SkillUnlock,     // 새로운 스킬 획득
-	Reuse
+	Global
 }
 public enum UpgradeEffectType
 {
@@ -35,8 +34,14 @@ public enum UpgradeEffectType
 	RangeFlat,              // 사거리 고정 증가
 	ProjectileSpeedPercent, // 투사체 속도 % 증가
 	ExplosionRangeFlat,     // 폭발 범위 고정 증가
-	ExtraProjectileCount    // 추가 발사 수 등
+	ExtraProjectileCount,    // 추가 발사 수 등
+
+	MoveSpeed,          // 이동 % 속도
+	CurrentHPAndMaxHP,  // 체력 % 증가
+	CriticalDamage,     // 치명타 % 증가
+	CriticalChance,     // 치명타 확률 % 증가
 }
+
 
 public interface IState<T>
 {
@@ -122,5 +127,23 @@ public static class DBManager
 {
 	private static int projectileSurvivalTime = 30;
 	public static int ProjectileSurvivalTime => projectileSurvivalTime;
+
+	private static System.Random rand = new System.Random();
+	public static int CalculateCriticalDamage(this PlayerStruct stats, int baseDamage, out bool isCritical)
+	{
+		int chance = rand.Next(0, 100);
+
+		isCritical = chance < stats.criticalChance;
+
+		if (isCritical)
+		{
+			float multiplier = 1f + (stats.criticalDamage / 100f);
+			return Mathf.RoundToInt(baseDamage * multiplier);
+		}
+		else
+		{
+			return baseDamage;
+		}
+	}
 }
 

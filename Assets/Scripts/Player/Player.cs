@@ -31,13 +31,15 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		if (GSC.Instance != null && GSC.Instance.statManager != null)
 		{
 			playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
-			GSC.Instance.statManager.onChangePlayerStruct += Handle_AttackStatsChanged;
 		}
 	}
 
 	protected virtual void Start()
 	{
-
+		if (GSC.Instance != null && GSC.Instance.statManager != null)
+		{
+			GSC.Instance.statManager.onChangePlayerStruct += Handle_AttackStatsChanged;
+		}
 	}
 
 	protected virtual void OnDestroy()
@@ -73,7 +75,10 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 	private void Handle_AttackStatsChanged()
 	{
+		float _currentHP = playerStruct.currentHP;
 		playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
+		playerStruct.currentHP = _currentHP;
+		InvokeHealthChanged();
 	}
 
 	public virtual void Take_Damage(int _damageInfo)

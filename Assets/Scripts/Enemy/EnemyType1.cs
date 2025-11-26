@@ -37,12 +37,9 @@ public class EnemyType1 : Enemy
 		StateMachine.ChangeState(StateID.tracking);
 	}
 
-	public override void Take_Damage(int damageInfo)
+	public override void Take_Damage(int _damageInfo)
 	{
-		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
-		InvokeDamaged(damageInfo, hitPos,enemyType);
-		InvokeHealthChanged();
-		base.Take_Damage(damageInfo);
+		base.Take_Damage(_damageInfo);
 	}
 
 	public override void DoAttack()

@@ -75,7 +75,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 		OnDead?.Invoke();
 	}
 
-	protected void InvokeDamaged(int damage, Vector3 hitPos, Type _type)
+	protected void Invoke_Damaged(int damage, Vector3 hitPos, Type _type)
 	{
 		OnDamaged?.Invoke(damage, hitPos, _type);
 	}
@@ -87,8 +87,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 		InvokeHealthChanged();
 	}
 
-	public virtual void Take_Damage(int damageInfo)
+	public virtual void Take_Damage(int _damageInfo)
 	{
+		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
+
+		int damageInfo = DBManager.CalculateCriticalDamage(GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey), _damageInfo, out bool _isCritical);
+		Invoke_Damaged(damageInfo, hitPos, enemyType);
+		InvokeHealthChanged();
 		enemyStruct.currentHP -= damageInfo;
 
 		if (enemyStruct.currentHP <= 0)

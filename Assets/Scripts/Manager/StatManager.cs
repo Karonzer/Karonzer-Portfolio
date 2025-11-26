@@ -46,6 +46,14 @@ public class StatManager : MonoBehaviour
 		return default;
 	}
 
+	public void Set_PlayerData(string _key, PlayerStruct _value)
+	{
+		if (playerStatDict.ContainsKey(_key))
+		{
+			playerStatDict[_key] = _value;
+		}
+	}
+
 	public EnemyStruct Get_EnemyData(string _key)
 	{
 		if (enemyStatDict.TryGetValue(_key, out var stats))
@@ -55,14 +63,10 @@ public class StatManager : MonoBehaviour
 		return default;
 	}
 
-	public void Invoke_Action()
+	public void InvokeAction_ChangePlayerStruct()
 	{
 		onChangePlayerStruct?.Invoke();
 	}
 
-	public void TEST()
-	{
-
-	}
 
 }
