@@ -1,9 +1,11 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class GameManager : MonoBehaviour
 {
-	public GameObject player;
+	[SerializeField] private GameObject player;
 	[SerializeField] private string currentPlayerKey;
 	public string CurrentPlayerKey => currentPlayerKey;
 
@@ -20,8 +22,8 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		GSC.Instance.RegisterGameManager(this);
-
 		currentPlayerKey = "Player";// 추후 타이틀 씬에서 선택한 이름을 가지고 올 예정
+		Initialize_Player();
 	}
 	private void Start()
 	{
@@ -41,7 +43,23 @@ public class GameManager : MonoBehaviour
 		spwanTimeRoutine = StartCoroutine(TEST_Spwn());
 	}
 
+	private void OnDestroy()
+	{
+		Addressables.ReleaseInstance(player);
+	}
 
+	private void Initialize_Player()
+	{
+		Spawn_Player(currentPlayerKey, Vector3.zero,Quaternion.identity);
+	}
+
+	public void Spawn_Player(string address, Vector3 pos, Quaternion rot)
+	{
+		AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, pos, rot);
+		handle.WaitForCompletion();
+		player = handle.Result;
+
+	}
 
 	private void Setting_Cursor()
 	{

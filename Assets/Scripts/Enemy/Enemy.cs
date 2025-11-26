@@ -34,6 +34,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged
 		StateMachine = new StateMachine<Enemy>(this);
 	}
 
+	protected virtual void Start()
+	{
+
+	}
+
 
 	protected virtual void Update()
 	{

@@ -9,12 +9,17 @@ public class EnemyType1 : Enemy
 	{
 		base.Awake();
 
-		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
 		navigation = GetComponent<NavMeshAgent>();
 
 		StateMachine.AddState(new EnemyTrackingState());
 		StateMachine.AddState(new EnemyAttackState());
 	}
+	protected override void Start()
+	{
+		base.Start();
+		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
+	}
+
 
 	private void OnEnable()
 	{
