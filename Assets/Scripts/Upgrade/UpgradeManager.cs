@@ -60,15 +60,15 @@ public class UpgradeManager : MonoBehaviour
 		return result;
 	}
 
-	public void Select_Upgrade(UpgradeOptionSO option)
+	public void Select_Upgrade(UpgradeOptionSO _option)
 	{
-		if (option == null) return;
+		if (_option == null) return;
 
-		if(option.optionType == UpgradeOptionType.SkillUnlock)
+		if(_option.optionType == UpgradeOptionType.SkillUnlock)
 		{
-			optionsDict.Remove(option.numKey);
+			optionsDict.Remove(_option.numKey);
 		}
-		UpgradeApplier.Apply_Upgrade(option);
+		UpgradeApplier.Apply_Upgrade(_option);
 	}
 
 	public void Upgrade_TEST()
