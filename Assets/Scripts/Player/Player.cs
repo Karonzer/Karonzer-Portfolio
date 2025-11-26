@@ -26,15 +26,17 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 	public float CurrentHPDamege => playerStruct.currentHP;
 	public float MaxHPDamege => playerStruct.maxHP;
 
-
-	protected virtual void Start()
+	protected virtual void Awake()
 	{
 		if (GSC.Instance != null && GSC.Instance.statManager != null)
 		{
 			playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
 			GSC.Instance.statManager.onChangePlayerStruct += Handle_AttackStatsChanged;
-			InvokeHealthChanged();
 		}
+	}
+
+	protected virtual void Start()
+	{
 
 	}
 

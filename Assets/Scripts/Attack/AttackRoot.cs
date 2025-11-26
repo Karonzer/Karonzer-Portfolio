@@ -35,7 +35,6 @@ public abstract class AttackRoot : MonoBehaviour
 			return; // 내 스킬이 아니면 무시
 
 		attackStats = GSC.Instance.skillManager.Get_Stats(AttackKey);
-		Debug.Log(attackStats.baseDamage);
 		Apply_StatsFromAttackStats();
 
 	}

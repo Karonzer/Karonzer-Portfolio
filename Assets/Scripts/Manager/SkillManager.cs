@@ -47,9 +47,9 @@ public class SkillManager : MonoBehaviour
 
 	public void Add_CurrentAttacks(string _key, AttackRoot _attackRoot)
 	{
-		if(currentAttacks.ContainsKey(_key))
+		if(statsDict.ContainsKey(_key))
 		{
-			currentAttacks[_key] = _attackRoot;
+			currentAttacks[_attackRoot.AttackKey] = _attackRoot;
 		}
 	}
 

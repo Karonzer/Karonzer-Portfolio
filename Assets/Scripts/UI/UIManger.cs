@@ -20,7 +20,7 @@ public class UIManger : MonoBehaviour
 
 	private void Start()
 	{
-		Debug.Log("UIManger");
+
 	}
 
 	public void Initialize_UI(GameObject _player)

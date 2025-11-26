@@ -35,12 +35,9 @@ public class FireballAttack : AttackRoot
 	protected override void Apply_StatsFromAttackStats()
 	{
 		base.Apply_StatsFromAttackStats();
-
-		if (sphereCollider != null)
-		{
-			sphereCollider.radius = attackStats.baseExplosionRange;
-		}
 	}
+
+
 
 	private IEnumerator Coroutine_FindTargetEnemyAttackTime()
 	{

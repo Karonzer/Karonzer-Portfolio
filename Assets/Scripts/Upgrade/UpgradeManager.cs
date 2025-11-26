@@ -42,6 +42,8 @@ public class UpgradeManager : MonoBehaviour
 				if (!hasSkill)
 					candidates.Add(option.Value);
 			}
+
+			candidates.Add(option.Value);
 		}
 
 		// 랜덤 셔플
@@ -66,10 +68,7 @@ public class UpgradeManager : MonoBehaviour
 		{
 			optionsDict.Remove(option.numKey);
 		}
-		else
-		{
-			UpgradeApplier.Apply_Upgrade(option);
-		}
+		UpgradeApplier.Apply_Upgrade(option);
 	}
 
 	public void Upgrade_TEST()

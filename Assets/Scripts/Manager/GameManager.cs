@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
 	}
 	private void Start()
 	{
-		Debug.Log("Initialize_UI");
 		GSC.Instance.uIManger.Initialize_UI(player);
 		Setting_Cursor();
 	}
@@ -78,8 +77,10 @@ public class GameManager : MonoBehaviour
 
 	public void Update_ToPlayerAttackObj()
 	{
-		GSC.Instance.upgradeManager.Upgrade_TEST();
-		//PauseGame();
+		//GSC.Instance.upgradeManager.Upgrade_TEST();
+		PauseGame();
+		Set_ShowAndHideCursor(true);
+		GSC.Instance.uIManger.Show_UI("UpgradePopUp");
 	}
 
 	public ItemDataSO Get_ItemDataSO()
