@@ -87,7 +87,7 @@ public class DamagePopupManager : MonoBehaviour
 		pool.Enqueue(popup);
 	}
 
-	public void Show_Damage(int damage, Vector3 worldPos ,Type _type)
+	public void Show_Damage(int damage, Vector3 worldPos ,Type _type,bool _critical)
 	{
 		var popup = Get_FromPool();
 
@@ -105,7 +105,14 @@ public class DamagePopupManager : MonoBehaviour
 					_component.Init_Player(damage);
 					break;
 				case Type.Enemy:
-					_component.Init_Enemy(damage);
+					if(_critical)
+					{
+						_component.Init_CriticalEnemy(damage);
+					}
+					else
+					{
+						_component.Init_Enemy(damage);
+					}
 					break;
 			}
 

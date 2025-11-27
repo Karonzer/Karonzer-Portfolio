@@ -5,7 +5,7 @@ public class FireballAttack : AttackRoot
 {
 	private SphereCollider sphereCollider;
 	private Coroutine attackTimeRoutine;
-
+	private readonly Collider[] enemyBuffer = new Collider[20];
 	private void Awake()
 	{
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
@@ -73,14 +73,14 @@ public class FireballAttack : AttackRoot
 	private bool Find_TargetEnemyDir(out Vector3 _direction)
 	{
 		_direction = Vector3.zero;
+		int enemyLayerMask = LayerMask.GetMask("Enemy");
 
-		Transform target = null;
-		Collider[] results = Physics.OverlapSphere(transform.position, attackRange);
-		target = results.Get_CloseEnemy(transform);
+		int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, enemyBuffer, enemyLayerMask);
+		Transform target = enemyBuffer.Get_CloseEnemy(transform, count);
 
 		if (target != null)
 		{
-			_direction = target.Get_TargetDir(transform);
+			_direction = (target.position - transform.position).normalized;
 			return true;
 		}
 

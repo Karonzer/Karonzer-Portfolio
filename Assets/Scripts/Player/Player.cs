@@ -16,7 +16,7 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 	public event Action<float, float> OnHealthChanged;
 
-	public event Action<int, Vector3, Type> OnDamaged;
+	public event Action<int, Vector3, Type,bool> OnDamaged;
 
 	Dictionary<string, AsyncOperationHandle<GameObject>> attackObjectPrefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
@@ -63,33 +63,35 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		}
 	}
 
-	protected void InvokeHealthChanged()
+	protected void Invoke_HealthChanged()
 	{
 		OnHealthChanged?.Invoke(playerStruct.currentHP, playerStruct.maxHP);
 	}
 
-	protected void InvokeDamaged(int damage, Vector3 hitPos, Type _type)
+	protected void Invoke_Damaged(int damage, Vector3 hitPos, Type _type, bool _critical)
 	{
-		OnDamaged?.Invoke(damage, hitPos, _type);
+		OnDamaged?.Invoke(damage, hitPos, _type, _critical);
 	}
 
 	private void Handle_AttackStatsChanged()
 	{
 		float _currentHP = playerStruct.currentHP;
+		float _maxHP = playerStruct.maxHP;
 		playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
-		playerStruct.currentHP = _currentHP;
-		InvokeHealthChanged();
+		playerStruct.currentHP = _currentHP + playerStruct.maxHP - _maxHP;
+		Invoke_HealthChanged();
 	}
 
 	public virtual void Take_Damage(int _damageInfo)
 	{
+		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
 		playerStruct.currentHP -= _damageInfo;
-
+		Invoke_Damaged(_damageInfo, hitPos, playerType,false);
 		if (playerStruct.currentHP <= 0)
 		{
 
 		}
-		InvokeHealthChanged();
+		Invoke_HealthChanged();
 	}
 
 	public void Add_AttackObject(string _key)

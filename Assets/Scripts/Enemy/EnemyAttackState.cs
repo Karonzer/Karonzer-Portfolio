@@ -1,16 +1,20 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyAttackState : IState<Enemy>
 {
 	public StateID ID => StateID.Attack;
 
 	private float attackTimer;
-
 	public void OnEnter(Enemy enemy)
 	{
 		attackTimer = 0f;
 		if (enemy.Get_NavMeshAgent() != null)
+		{
 			enemy.Get_NavMeshAgent().isStopped = true;
+			enemy.Get_NavMeshAgent().speed = 0;
+		}
 	}
 
 	public void Tick(Enemy enemy)
@@ -24,22 +28,23 @@ public class EnemyAttackState : IState<Enemy>
 
 		if (distance > enemy.Get_EnemyStruct().attackRange)
 		{
-			enemy.StateMachine.ChangeState(StateID.tracking);
+			enemy.stateMachine.ChangeState(StateID.tracking);
 			return;
 		}
 
 		attackTimer -= Time.deltaTime;
 		if (attackTimer <= 0f)
 		{
-			Debug.Log("공격 테스트");
 			enemy.DoAttack();
 
 			attackTimer = enemy.Get_EnemyStruct().attackInterval;
 		}
 	}
 
+
 	public void OnExit(Enemy enemy)
 	{
+		enemy.Get_Animator().ResetTrigger("Attack");
 		// 필요시 정리
 	}
 }

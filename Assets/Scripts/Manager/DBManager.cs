@@ -19,6 +19,7 @@ public enum StateID
 {
 	tracking,
 	Attack,
+	die,
 }
 
 public enum UpgradeOptionType
@@ -112,10 +113,16 @@ public interface IHealthChanged
 
 public interface IDamageable
 {
-	event Action<int, Vector3,Type> OnDamaged;
+	event Action<int, Vector3,Type,bool> OnDamaged;
 	float CurrentHPDamege { get; }
 	float MaxHPDamege { get; }
 	public void Take_Damage(int _damageInfo);
+}
+
+public interface IEnemyDoAttack
+{
+	public void DoAttack();
+	public EnemyStruct EnemyStruct { get; }
 }
 
 public interface IUIInitializable

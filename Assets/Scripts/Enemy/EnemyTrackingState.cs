@@ -11,6 +11,7 @@ public class EnemyTrackingState : IState<Enemy>
 		{
 			enemy.Get_NavMeshAgent().isStopped = false;
 			enemy.Get_NavMeshAgent().speed = enemy.Get_EnemyStruct().moveSpeed;
+			enemy.Get_Animator().SetBool("Tracking", true);
 		}
 	}
 
@@ -26,12 +27,13 @@ public class EnemyTrackingState : IState<Enemy>
 
 		if (distance <= enemy.Get_EnemyStruct().attackRange)
 		{
-			enemy.StateMachine.ChangeState(StateID.Attack);
+			enemy.stateMachine.ChangeState(StateID.Attack);
 		}
 	}
 
 	public void OnExit(Enemy enemy)
 	{
+		enemy.Get_Animator().SetBool("Tracking", false);
 		// 필요하면 정리 로직
 	}
 }

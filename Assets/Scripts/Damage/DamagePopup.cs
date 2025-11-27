@@ -34,11 +34,20 @@ public class DamagePopup : MonoBehaviour
 		canvasGroup.alpha = 1f;
 	}
 
+	public void Init_CriticalEnemy(int damage)
+	{
+		text.text = damage.ToString();
+		text.color = Color.yellow;
+		text.fontSize = 45;
+		timer = lifeTime;
+		canvasGroup.alpha = 1f;
+	}
+
 	public void Init_Player(int damage)
 	{
 		text.text = $"-{damage.ToString()}";
 		text.color = Color.red;
-		text.fontSize = 40;
+		text.fontSize = 50;
 		timer = lifeTime;
 		canvasGroup.alpha = 1f;
 	}

@@ -125,7 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataSO: {fileID: 11400000, guid: f20cb462179ca634ebb41e307f4f5b2e, type: 2}
-  enemyName: 
   enemyStruct:
     key: 
     moveSpeed: 0
@@ -263,6 +262,10 @@ PrefabInstance:
     - target: {fileID: 3439812083843836821, guid: 7a815618ebbb94d4f9f13c17b98464e9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5786501080352294540, guid: 7a815618ebbb94d4f9f13c17b98464e9, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -15,13 +15,41 @@ public static class Utilities
 
 	public static Transform Get_CloseEnemy(this Collider[] _results, Transform _from)
 	{
+		if(_results == null)
+			return null;
+
 		float minDist = float.MaxValue;
 		Transform target = null;
 
 		foreach (var c in _results)
 		{
+			if (!c.gameObject.CompareTag("Enemy"))
+				continue;
+			float dist = (c.transform.position - _from.position).sqrMagnitude;
+
+			if (dist < minDist)
+			{
+				minDist = dist;
+				target = c.transform;
+			}
+		}
+		return target;
+	}
+
+	public static Transform Get_CloseEnemy(this Collider[] _results, Transform _from, int count)
+	{
+		if (_results == null || count <= 0)
+			return null;
+
+		float minDist = float.MaxValue;
+		Transform target = null;
+
+		for (int i = 0; i < count; i++)
+		{
+			Collider c = _results[i];
 			if (!c.CompareTag("Enemy"))
 				continue;
+
 			float dist = (c.transform.position - _from.position).sqrMagnitude;
 
 			if (dist < minDist)
