@@ -6,6 +6,12 @@ using UnityEngine;
 public class PlayerController : Player
 {
 	PlayerMoveController moveController;
+	protected override void Awake()
+	{
+		base.Awake();
+		if (meshRenderer != null)
+			hitMatInstance = meshRenderer.material;
+	}
 	protected override void Start()
 	{
 		base.Start();

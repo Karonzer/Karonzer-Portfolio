@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,17 +11,19 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 	public string PlayerKey => playerDataSO.playerStruct.key;
 	public string StartAttackKey => playerDataSO.playerStruct.startAttackObj;
 	public string StartAttackObj => playerDataSO.playerStruct.startAttackObj;
+
 	[SerializeField] protected PlayerStruct playerStruct;
 	[SerializeField] protected Type playerType = Type.Player;
 
-
 	public event Action<float, float> OnHealthChanged;
-
 	public event Action<DamageInfo> OnDamaged;
 	public event Action<IDamageable> OnDead;
 
 	Dictionary<string, AsyncOperationHandle<GameObject>> attackObjectPrefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
+	[SerializeField] protected SkinnedMeshRenderer meshRenderer;
+	protected Material hitMatInstance;
+	protected Coroutine hitFlashRoutine;
 
 	public float CurrentHPHealth => playerStruct.currentHP;
 	public float MaxHPHealth => playerStruct.maxHP;
@@ -86,7 +89,9 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 	public virtual void Take_Damage(DamageInfo _damageInfo)
 	{
-		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
+		if (playerStruct.currentHP > 0)
+			HitFlash();
+
 		playerStruct.currentHP -= _damageInfo.damage;
 		Invoke_Damaged(_damageInfo);
 		if (playerStruct.currentHP <= 0)
@@ -94,6 +99,30 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 		}
 		Invoke_HealthChanged();
+	}
+
+	private void HitFlash()
+	{
+		if (hitFlashRoutine != null)
+		{
+			StopCoroutine(hitFlashRoutine);
+			hitFlashRoutine = null;
+		}
+
+		hitFlashRoutine = StartCoroutine(Co_HitFlashEmission());
+	}
+
+	private IEnumerator Co_HitFlashEmission()
+	{
+		if (hitMatInstance == null)
+			yield break;
+
+		hitMatInstance.EnableKeyword("_EMISSION");
+		hitMatInstance.SetColor("_EmissionColor", Color.red * 2f); // 번쩍
+
+		yield return new WaitForSeconds(0.1f);
+
+		hitMatInstance.SetColor("_EmissionColor", Color.black); // 원래대로
 	}
 
 	public void Add_AttackObject(string _key)
@@ -107,4 +136,6 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 		GSC.Instance.skillManager.Add_CurrentAttacks(_key, obj.GetComponent<AttackRoot>());
 	}
+
+
 }

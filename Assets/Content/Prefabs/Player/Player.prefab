@@ -1901,6 +1901,7 @@ MonoBehaviour:
     criticalChance: 0
     startAttackObj: 
   playerType: 0
+  meshRenderer: {fileID: 8156744211284498074}
 --- !u!114 &3788403918590546700
 MonoBehaviour:
   m_ObjectHideFlags: 0
