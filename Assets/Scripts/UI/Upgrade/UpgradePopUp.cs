@@ -1,14 +1,11 @@
-using NUnit.Framework;
+
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UpgradePopUp : MonoBehaviour
 {
 	[SerializeField] private List<UpgradeCardUI> cardUIList;
-	private void Awake()
-	{
-		transform.gameObject.SetActive(false);
-	}
+
 	private void OnEnable()
 	{
 		if(GSC.Instance != null && GSC.Instance.upgradeManager != null)

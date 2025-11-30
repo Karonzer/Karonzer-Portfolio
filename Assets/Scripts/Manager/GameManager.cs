@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -5,6 +6,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class GameManager : MonoBehaviour
 {
+	[SerializeField] private Transform playerPos;
 	[SerializeField] private GameObject player;
 	[SerializeField] private string currentPlayerKey;
 	public string CurrentPlayerKey => currentPlayerKey;
@@ -16,7 +18,8 @@ public class GameManager : MonoBehaviour
 	private Coroutine spwanTimeRoutine;
 
 
-
+	public event Action OnPause;
+	public event Action OnResume;
 	public bool isPaused { get; private set; }
 
 	private void Awake()
@@ -55,7 +58,7 @@ public class GameManager : MonoBehaviour
 
 	public void Spawn_Player(string address, Vector3 pos, Quaternion rot)
 	{
-		AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, pos, rot);
+		AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, pos, rot, playerPos);
 		handle.WaitForCompletion();
 		player = handle.Result;
 
@@ -79,16 +82,16 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator TEST_Spwn()
 	{
-		while(true)
+		yield return new WaitForSeconds(1f);
+		while (true)
 		{
-			yield return new WaitForSeconds(2.5f);
 			GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy,"EnemyType1");
 			if (obj != null && obj.TryGetComponent<Enemy>(out var _component))
 			{
 				obj.gameObject.SetActive(true);
 				_component.Start_Enemy();
 			}
-			yield return new WaitForSeconds(2.5f);
+			yield return new WaitForSeconds(0.1f);
 		}
 	}
 
@@ -110,12 +113,29 @@ public class GameManager : MonoBehaviour
 
 	public void PauseGame()
 	{
+		OnPause?.Invoke();
 		isPaused = true;
 	}
 
 	public void ResumeGame()
 	{
+		OnResume?.Invoke();
 		isPaused = false;
+	}
+
+	public DamageInfo Get_PlayerDamageInfo(int damage, GameObject hitPoint, Type attacker)
+	{
+		Vector3 hitPos = hitPoint.transform.position + Vector3.up * 1.8f;
+		int damageInfo = DBManager.CalculateCriticalDamage(GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey), damage, out bool _isCritical);
+		DamageInfo info = new DamageInfo(damageInfo, hitPos, attacker, _isCritical);
+		return info;
+	}
+
+	public DamageInfo Get_EnemyDamageInfo(int damage, string _key ,GameObject hitPoint, Type attacker)
+	{
+		Vector3 hitPos = hitPoint.transform.position + Vector3.up * 1.8f;
+		DamageInfo info = new DamageInfo(damage, hitPos, attacker, false);
+		return info;
 	}
 
 }

@@ -131,7 +131,8 @@ public class FireballProjectile : Projectile
 			{
 				if (e.TryGetComponent<IDamageable>(out IDamageable _damageable))
 				{
-					_damageable.Take_Damage(projectileDemage);
+					DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, _damageable.CurrentObj, Type.Enemy);
+					_damageable.Take_Damage(info);
 				}
 			}
 		}

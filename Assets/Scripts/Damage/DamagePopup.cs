@@ -55,7 +55,8 @@ public class DamagePopup : MonoBehaviour
 
 	void Update()
 	{
-
+		transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward,
+				 Camera.main.transform.rotation * Vector3.up);
 		transform.position += Vector3.up * moveSpeed * Time.deltaTime;
 
 		timer -= Time.deltaTime;

@@ -6,7 +6,7 @@ public class EnemyDieState : IState<Enemy>
 
 	public void OnEnter(Enemy enemy)
 	{
-		if (enemy.Get_NavMeshAgent() != null)
+		if (enemy.Get_NavMeshAgent() != null && enemy.Get_NavMeshAgent().isOnNavMesh)
 		{
 			enemy.Get_NavMeshAgent().isStopped = true;
 			enemy.Get_NavMeshAgent().speed = 0;

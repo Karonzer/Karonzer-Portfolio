@@ -16,13 +16,15 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 	public event Action<float, float> OnHealthChanged;
 
-	public event Action<int, Vector3, Type,bool> OnDamaged;
+	public event Action<DamageInfo> OnDamaged;
+	public event Action<IDamageable> OnDead;
 
 	Dictionary<string, AsyncOperationHandle<GameObject>> attackObjectPrefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
 
 	public float CurrentHPHealth => playerStruct.currentHP;
 	public float MaxHPHealth => playerStruct.maxHP;
+	public GameObject CurrentObj => this.gameObject;
 	public float CurrentHPDamege => playerStruct.currentHP;
 	public float MaxHPDamege => playerStruct.maxHP;
 
@@ -68,9 +70,9 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		OnHealthChanged?.Invoke(playerStruct.currentHP, playerStruct.maxHP);
 	}
 
-	protected void Invoke_Damaged(int damage, Vector3 hitPos, Type _type, bool _critical)
+	protected void Invoke_Damaged(DamageInfo _damageInfo)
 	{
-		OnDamaged?.Invoke(damage, hitPos, _type, _critical);
+		OnDamaged?.Invoke(_damageInfo);
 	}
 
 	private void Handle_AttackStatsChanged()
@@ -82,11 +84,11 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		Invoke_HealthChanged();
 	}
 
-	public virtual void Take_Damage(int _damageInfo)
+	public virtual void Take_Damage(DamageInfo _damageInfo)
 	{
 		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
-		playerStruct.currentHP -= _damageInfo;
-		Invoke_Damaged(_damageInfo, hitPos, playerType,false);
+		playerStruct.currentHP -= _damageInfo.damage;
+		Invoke_Damaged(_damageInfo);
 		if (playerStruct.currentHP <= 0)
 		{
 

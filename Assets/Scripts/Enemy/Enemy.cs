@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,11 +18,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	[SerializeField] protected NavMeshAgent navigation;
 
 	public event Action<float, float> OnHealthChanged;
-	public event Action OnDead;
-	public event Action<int, Vector3, Type,bool> OnDamaged;
+	public event Action<DamageInfo> OnDamaged;
+	public event Action<IDamageable> OnDead;
 
 	public float CurrentHPHealth => enemyStruct.currentHP;
 	public float MaxHPHealth => enemyStruct.maxHP;
+	public GameObject CurrentObj => this.gameObject;
 	public float CurrentHPDamege => enemyStruct.currentHP;
 	public float MaxHPDamege => enemyStruct.maxHP;
 	public EnemyStruct EnemyStruct => enemyStruct;
@@ -39,7 +39,32 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	protected virtual void Start()
 	{
+		GSC.Instance.gameManager.OnPause += HandlePause;
+		GSC.Instance.gameManager.OnResume += HandleResume;
+	}
 
+	private void OnDisable()
+	{
+		GSC.Instance.gameManager.OnPause -= HandlePause;
+		GSC.Instance.gameManager.OnResume -= HandleResume;
+	}
+
+	private void HandlePause()
+	{
+		if (navigation != null && navigation.isOnNavMesh)
+		{
+			navigation.isStopped = true;
+			navigation.speed = 0f;
+		}
+	}
+
+	private void HandleResume()
+	{
+		if (navigation != null && navigation.isOnNavMesh)
+		{
+			navigation.isStopped = false;
+			navigation.speed = enemyStruct.moveSpeed;
+		}
 	}
 
 
@@ -47,15 +72,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	{
 		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.isPaused)
 		{
-			if (navigation != null)
-			{
-				navigation.isStopped = true;
-				navigation.speed = 0f;
-			}
 			return;
 		}
-
-
 		stateMachine.Tick();
 	}
 
@@ -68,14 +86,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	{
 		OnHealthChanged?.Invoke(enemyStruct.currentHP, enemyStruct.maxHP);
 	}
-	protected void InvokeDead()
+	protected void InvokeDead(Enemy _enemy)
 	{
-		OnDead?.Invoke();
+		OnDead?.Invoke(_enemy);
 	}
 
-	protected void Invoke_Damaged(int damage, Vector3 hitPos, Type _type, bool _critical)
+	protected void Invoke_Damaged(DamageInfo _damageInfo)
 	{
-		OnDamaged?.Invoke(damage, hitPos, _type, _critical);
+		OnDamaged?.Invoke(_damageInfo);
 	}
 
 	public virtual void Setting_Info()
@@ -85,21 +103,21 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		InvokeHealthChanged();
 	}
 
-	public virtual void Take_Damage(int _damageInfo)
+	public virtual void Take_Damage(DamageInfo _damageInfo)
 	{
-		Vector3 hitPos = transform.position + Vector3.up * 1.8f;
-		int damageInfo = DBManager.CalculateCriticalDamage(GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey), _damageInfo, out bool _isCritical);
-		Invoke_Damaged(damageInfo, hitPos, enemyType, _isCritical);
-		enemyStruct.currentHP -= damageInfo;
+		//Vector3 hitPos = transform.position + Vector3.up * 1.8f;
+		//int damageInfo = DBManager.CalculateCriticalDamage(GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey), _damageInfo, out bool _isCritical);
+		Invoke_Damaged(_damageInfo);
+		enemyStruct.currentHP -= _damageInfo.damage;
 		InvokeHealthChanged();
 		if (enemyStruct.currentHP <= 0)
 		{
 			stateMachine.ChangeState(StateID.die);
-			InvokeDead();
+			InvokeDead(this);
 		}
 	}
 
-	public virtual void Die_Enemy()
+	public virtual void Die_Enemy(IDamageable _damageable)
 	{
 		enemyStruct.currentHP = 0;
 		transform.gameObject.SetActive(false);

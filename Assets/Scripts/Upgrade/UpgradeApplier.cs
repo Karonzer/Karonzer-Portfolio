@@ -48,7 +48,10 @@ public static class UpgradeApplier
 		{
 			if (!hasSkill)
 			{
-
+				if(GSC.Instance.gameManager.Get_PlayerObject().TryGetComponent<Player>(out Player _player))
+				{
+					_player.Add_AttackObject(option.numKey);
+				}
 			}
 			return;
 		}
@@ -70,7 +73,7 @@ public static class UpgradeApplier
 					break;
 
 				case UpgradeEffectType.RangeFlat:
-					stats.baseRange += option.value;
+					stats.baseRange *= (1f + option.value / 100f);
 					break;
 
 				case UpgradeEffectType.ProjectileSpeedPercent:
@@ -78,7 +81,7 @@ public static class UpgradeApplier
 					break;
 
 				case UpgradeEffectType.ExplosionRangeFlat:
-					stats.baseExplosionRange += option.value;
+					stats.baseExplosionRange *= (1f + option.value / 100f);
 					break;
 
 				case UpgradeEffectType.ExtraProjectileCount:

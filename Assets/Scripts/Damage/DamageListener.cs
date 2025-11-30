@@ -19,11 +19,11 @@ public class DamageListener : MonoBehaviour
 		target.OnDamaged -= HandleDamaged;
 	}
 
-	private void HandleDamaged(int damage, Vector3 hitPos, Type _type, bool _critical)
+	private void HandleDamaged(DamageInfo _damageInfo)
 	{
 		if (GSC.Instance.damagePopupManager == null)
 			return;
 
-		GSC.Instance.damagePopupManager.Show_Damage(damage, hitPos, _type, _critical);
+		GSC.Instance.damagePopupManager.Show_Damage(_damageInfo.damage, _damageInfo.hitPoint, _damageInfo.attacker, _damageInfo.isCritical);
 	}
 }

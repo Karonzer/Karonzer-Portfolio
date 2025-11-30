@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class FireballAttack : AttackRoot
+public class LightningAttack : AttackRoot
 {
 	private SphereCollider sphereCollider;
 	private Coroutine attackTimeRoutine;
@@ -11,6 +12,7 @@ public class FireballAttack : AttackRoot
 		sphereCollider = gameObject.GetComponent<SphereCollider>();
 		sphereCollider.isTrigger = true;
 	}
+
 	protected override void Start()
 	{
 		base.Start();
@@ -21,6 +23,7 @@ public class FireballAttack : AttackRoot
 	{
 		Attack();
 	}
+
 	protected override void Attack()
 	{
 		if (attackTimeRoutine != null)
@@ -28,7 +31,7 @@ public class FireballAttack : AttackRoot
 			StopCoroutine(attackTimeRoutine);
 			attackTimeRoutine = null;
 		}
-		StartCoroutine(Coroutine_FindTargetEnemyAttackTime());
+		StartCoroutine(Coroutine_FindRandomTargetEnemyAttackTime());
 	}
 
 	protected override void Apply_StatsFromAttackStats()
@@ -36,56 +39,57 @@ public class FireballAttack : AttackRoot
 		base.Apply_StatsFromAttackStats();
 	}
 
-
-
-	private IEnumerator Coroutine_FindTargetEnemyAttackTime()
+	private IEnumerator Coroutine_FindRandomTargetEnemyAttackTime()
 	{
 		while (true)
 		{
 			yield return new WaitForSeconds(attackIntervalTime);
 			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
 			{
-				if (Find_TargetEnemyDir(out Vector3 _direction))
+				if (Find_TargetEnemyRandomList(out List<GameObject> _list))
 				{
-					for(int i = 0; i < attackStats.ProjectileCount;i++)
+					for (int i = 0; i < attackStats.ProjectileCount; i++)
 					{
+						GameObject obj = _list[Random.Range(0, _list.Count)];
 						GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 						if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 						{
 							projectileObj.gameObject.SetActive(true);
-							Vector3 spawnOffset = _direction.normalized * 0.5f;
-							Vector3 spawnPosition = transform.position + spawnOffset;
-							spawnPosition += new Vector3(0, 0.2f, 0);
-							_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
+							Vector3 spawnPosition = obj.transform.position;
+							spawnPosition += new Vector3(0, 3.5f, 0);
+							_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, Vector3.zero, attackStats.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 							_Component.Launch_Projectile();
 						}
 						yield return new WaitForSeconds(0.2f);
 					}
-
 				}
+
 			}
 
 		}
 
 	}
 
-	private bool Find_TargetEnemyDir(out Vector3 _direction)
+	private bool Find_TargetEnemyRandomList(out List<GameObject> _list)
 	{
-		_direction = Vector3.zero;
+		_list = new List<GameObject>(); 
+
 		int enemyLayerMask = LayerMask.GetMask("Enemy");
 
 		int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, enemyBuffer, enemyLayerMask);
-		Transform target = enemyBuffer.Get_CloseEnemy(transform, count);
+		if (count == 0)
+			return false;
 
-		if (target != null)
+		for(int i = 0; i < count;i++)
 		{
-			_direction = (target.position - transform.position).normalized;
-			return true;
+			var col = enemyBuffer[i];
+			if (col != null && col.CompareTag("Enemy"))
+			{
+				_list.Add(col.gameObject);
+			}
 		}
 
-		return false;
+
+		return count > 0;
 	}
-
-
-
 }

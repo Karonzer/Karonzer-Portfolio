@@ -71,9 +71,4 @@ public class UpgradeManager : MonoBehaviour
 		UpgradeApplier.Apply_Upgrade(_option);
 	}
 
-	public void Upgrade_TEST()
-	{
-		UpgradeOptionSO option = allOptions[2];
-		UpgradeApplier.Apply_Upgrade(option);
-	}
 }

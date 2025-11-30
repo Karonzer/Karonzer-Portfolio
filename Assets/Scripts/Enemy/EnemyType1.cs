@@ -18,8 +18,8 @@ public class EnemyType1 : Enemy
 	}
 	protected override void Start()
 	{
-		base.Start();
 		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
+		base.Start();
 	}
 
 
@@ -39,7 +39,7 @@ public class EnemyType1 : Enemy
 		stateMachine.ChangeState(StateID.tracking);
 	}
 
-	public override void Take_Damage(int _damageInfo)
+	public override void Take_Damage(DamageInfo _damageInfo)
 	{
 		base.Take_Damage(_damageInfo);
 	}
@@ -52,7 +52,9 @@ public class EnemyType1 : Enemy
 		{
 			if (targetNavigation.TryGetComponent<IDamageable>(out IDamageable _player))
 			{
-				_player.Take_Damage(enemyStruct.damage);
+
+				DamageInfo info = GSC.Instance.gameManager.Get_EnemyDamageInfo(enemyStruct.damage, enemyStruct.key, _player.CurrentObj, Type.Player);
+				_player.Take_Damage(info);
 			}
 		}
 	}
@@ -66,7 +68,6 @@ public class EnemyType1 : Enemy
 			if (enemyBuffer[i].gameObject.CompareTag("Player"))
 			{
 				float dist = Vector3.Distance(enemyBuffer[i].transform.position, transform.transform.position);
-				Debug.Log(dist);
 				if (dist <= enemyStruct.attackRange)
 				{
 					return true;
@@ -76,7 +77,7 @@ public class EnemyType1 : Enemy
 		return false;
 	}
 
-	public override void Die_Enemy()
+	public override void Die_Enemy(IDamageable _damageable)
 	{
 		navigation.isStopped = true;
 		navigation.speed = 0f;
@@ -95,7 +96,7 @@ public class EnemyType1 : Enemy
 
 	private void Spawn_XPItem()
 	{
-		base.Die_Enemy();
+		base.Die_Enemy(this);
 
 		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, GSC.Instance.gameManager.Get_ItemDataSO().xPItem);
 

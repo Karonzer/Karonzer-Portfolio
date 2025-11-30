@@ -15,8 +15,13 @@ MonoBehaviour:
   m_GroupName: Attack
   m_GUID: d8ba413cc1eab9845923b9ef6091e97f
   m_SerializeEntries:
+  - m_GUID: 4e808ab45d831854ea27f6cf5d8809d1
+    m_Address: Lightning
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed284eae301d9ac449a34a6964ecbfa3
-    m_Address: FireballAttack
+    m_Address: Fireball
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

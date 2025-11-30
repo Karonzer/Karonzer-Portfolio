@@ -19,4 +19,4 @@ MonoBehaviour:
     currentHP: 100
     criticalDamage: 100
     criticalChance: 50
-    startAttackObj: FireballAttack
+    startAttackObj: Fireball

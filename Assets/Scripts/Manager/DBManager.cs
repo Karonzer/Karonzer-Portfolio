@@ -102,6 +102,22 @@ public struct AttackStats
 	public int ProjectileCount;
 }
 
+public struct DamageInfo
+{
+	public int damage;
+	public Vector3 hitPoint;
+	public Type attacker;
+	public bool isCritical;
+
+	public DamageInfo(int damage, Vector3 hitPoint, Type attacker, bool isCritical)
+	{
+		this.damage = damage;
+		this.hitPoint = hitPoint;
+		this.attacker = attacker;
+		this.isCritical = isCritical;
+	}
+}
+
 
 
 public interface IHealthChanged
@@ -113,10 +129,13 @@ public interface IHealthChanged
 
 public interface IDamageable
 {
-	event Action<int, Vector3,Type,bool> OnDamaged;
 	float CurrentHPDamege { get; }
 	float MaxHPDamege { get; }
-	public void Take_Damage(int _damageInfo);
+	GameObject CurrentObj { get; }
+	event Action<DamageInfo> OnDamaged;
+	event Action<IDamageable> OnDead;
+
+	void Take_Damage(DamageInfo info);
 }
 
 public interface IEnemyDoAttack
@@ -152,5 +171,7 @@ public static class DBManager
 			return baseDamage;
 		}
 	}
+
+
 }
 
