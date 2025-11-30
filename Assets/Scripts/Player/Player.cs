@@ -22,7 +22,7 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 	Dictionary<string, AsyncOperationHandle<GameObject>> attackObjectPrefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
 	[SerializeField] protected SkinnedMeshRenderer meshRenderer;
-	protected Material hitMatInstance;
+	[SerializeField] protected Material hitMatInstance;
 	protected Coroutine hitFlashRoutine;
 
 	public float CurrentHPHealth => playerStruct.currentHP;
