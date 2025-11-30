@@ -1112,6 +1112,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   targetNavigation: {fileID: 0}
   navigation: {fileID: 0}
+  meshRenderer: {fileID: 2144951083095117035}
 --- !u!114 &703154749722255511
 MonoBehaviour:
   m_ObjectHideFlags: 0

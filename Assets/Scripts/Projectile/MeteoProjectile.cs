@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class FireballProjectile : Projectile
+public class MeteoProjectile : Projectile
 {
 	private Coroutine moveRoutine;
 	private Coroutine projectileSurvivalTimeCoroutine;
@@ -22,21 +22,12 @@ public class FireballProjectile : Projectile
 		sphereCollider.isTrigger = true;
 
 		visualRoot = transform.GetChild(0).gameObject;
-		hitParticle = transform.GetChild(1).GetComponent<ParticleSystem>() ;
+		hitParticle = transform.GetChild(1).GetComponent<ParticleSystem>();
 	}
 
 	private void OnEnable()
 	{
 		isHit = false;
-	}
-
-	private void OnDisable()
-	{
-		if (projectileSurvivalTimeCoroutine != null)
-		{
-			StopCoroutine(projectileSurvivalTimeCoroutine);
-			projectileSurvivalTimeCoroutine = null;
-		}
 	}
 
 	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, float _projectileRange, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 _spawnPos)
@@ -68,13 +59,13 @@ public class FireballProjectile : Projectile
 
 	public override void Launch_Projectile()
 	{
-		if(moveRoutine != null)
+		if (moveRoutine != null)
 		{
 			StopCoroutine(moveRoutine);
 			moveRoutine = null;
 		}
 
-		if(projectileSurvivalTimeCoroutine != null)
+		if (projectileSurvivalTimeCoroutine != null)
 		{
 			StopCoroutine(projectileSurvivalTimeCoroutine);
 			projectileSurvivalTimeCoroutine = null;
@@ -96,7 +87,7 @@ public class FireballProjectile : Projectile
 		{
 			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
 			{
-				transform.Translate(projectileDir * projectileSpeed * Time.deltaTime);
+				transform.Translate(Vector3.down * projectileSpeed * Time.deltaTime);
 				yield return null;
 			}
 			else
@@ -110,7 +101,7 @@ public class FireballProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile,projectileName, transform.gameObject);
+		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -126,29 +117,15 @@ public class FireballProjectile : Projectile
 			StopCoroutine(moveRoutine);
 			moveRoutine = null;
 		}
-
+		if (projectileSurvivalTimeCoroutine != null)
+		{
+			StopCoroutine(projectileSurvivalTimeCoroutine);
+			projectileSurvivalTimeCoroutine = null;
+		}
 
 		sphereCollider.enabled = false;
 
-
-		int enemyLayerMask = LayerMask.GetMask("Enemy");
-
-		int count = Physics.OverlapSphereNonAlloc(transform.position, projectileRange, enemyBuffer, enemyLayerMask);
-		if (count == 0)
-			return;
-
-		for (int i = 0; i < count; i++)
-		{
-			var col = enemyBuffer[i];
-			if (col != null && col.CompareTag("Enemy"))
-			{
-				if (col.TryGetComponent<IDamageable>(out IDamageable _damageable))
-				{
-					DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, _damageable.CurrentObj, Type.Enemy);
-					_damageable.Take_Damage(info);
-				}
-			}
-		}
+		ApplyShockwaveDamage();
 
 
 		if (visualRoot != null)
@@ -161,6 +138,21 @@ public class FireballProjectile : Projectile
 		else
 		{
 			Despawn_Immediately();
+		}
+	}
+
+	private void ApplyShockwaveDamage()
+	{
+		int enemyLayerMask = LayerMask.GetMask("Enemy");
+		Collider[] hits = Physics.OverlapSphere(transform.position, projectileRange, enemyLayerMask);
+
+		foreach (var hit in hits)
+		{
+			if (hit.TryGetComponent<IDamageable>(out var _enemy))
+			{
+				DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, _enemy.CurrentObj, Type.Enemy);
+				_enemy.Take_Damage(info);
+			}
 		}
 	}
 

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
-
+using System.Collections;
 
 public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemyDoAttack
 {
@@ -20,6 +20,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	public event Action<float, float> OnHealthChanged;
 	public event Action<DamageInfo> OnDamaged;
 	public event Action<IDamageable> OnDead;
+
+
+	[SerializeField] protected SkinnedMeshRenderer meshRenderer;
+	protected Material hitMatInstance;
+	protected Coroutine hitFlashRoutine;
 
 	public float CurrentHPHealth => enemyStruct.currentHP;
 	public float MaxHPHealth => enemyStruct.maxHP;
@@ -105,8 +110,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	public virtual void Take_Damage(DamageInfo _damageInfo)
 	{
-		//Vector3 hitPos = transform.position + Vector3.up * 1.8f;
-		//int damageInfo = DBManager.CalculateCriticalDamage(GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey), _damageInfo, out bool _isCritical);
+		if (enemyStruct.currentHP > 0)
+			HitFlash();
+
 		Invoke_Damaged(_damageInfo);
 		enemyStruct.currentHP -= _damageInfo.damage;
 		InvokeHealthChanged();
@@ -122,6 +128,28 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		enemyStruct.currentHP = 0;
 		transform.gameObject.SetActive(false);
 		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, EnemyKey, transform.gameObject);
+	}
+
+
+	private void HitFlash()
+	{
+		if (hitFlashRoutine != null)
+			StopCoroutine(hitFlashRoutine);
+
+		hitFlashRoutine = StartCoroutine(Co_HitFlashEmission());
+	}
+
+	private IEnumerator Co_HitFlashEmission()
+	{
+		if (hitMatInstance == null)
+			yield break;
+
+		hitMatInstance.EnableKeyword("_EMISSION");
+		hitMatInstance.SetColor("_EmissionColor", Color.red * 2f); // 번쩍
+
+		yield return new WaitForSeconds(0.1f);
+
+		hitMatInstance.SetColor("_EmissionColor", Color.black); // 원래대로
 	}
 
 	public abstract void Start_Enemy();

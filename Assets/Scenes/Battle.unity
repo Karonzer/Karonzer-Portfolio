@@ -1478,6 +1478,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cfb55dd0cbb3bb6489397e9acbfafbb8, type: 2}
   - {fileID: 11400000, guid: ed6121d1a3734d345a65707ef66bc284, type: 2}
   - {fileID: 11400000, guid: ac4414e2c12f7444487c2ab1d6b6cb69, type: 2}
+  - {fileID: 11400000, guid: 0517487a8a073d34c834956d02a411b6, type: 2}
+  - {fileID: 11400000, guid: 1c69584125aaa9c4598dfbedd58f4545, type: 2}
 --- !u!1 &1075973497
 GameObject:
   m_ObjectHideFlags: 0
@@ -3209,6 +3211,8 @@ MonoBehaviour:
   attackStatsList:
   - {fileID: 11400000, guid: a7a2ca5b8d809154296f9f5c3e2ae204, type: 2}
   - {fileID: 11400000, guid: c0b7971dc15d6fc46ba7eee910778bdd, type: 2}
+  - {fileID: 11400000, guid: ebd7ba5d6f9177a4cabe9ab2f9c5713e, type: 2}
+  - {fileID: 11400000, guid: afa2164374cdf244381d1db2fb589bc9, type: 2}
 --- !u!1 &2156280217649906972
 GameObject:
   m_ObjectHideFlags: 0

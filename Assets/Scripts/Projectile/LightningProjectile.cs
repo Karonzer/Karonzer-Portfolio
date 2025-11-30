@@ -98,6 +98,11 @@ public class LightningProjectile : Projectile
 		{
 			yield return new WaitForSeconds(tickInterval);
 
+			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			{
+				yield return null;
+			}
+
 			var snapshot = new List<IDamageable>(targets);
 
 			foreach (var t in snapshot)

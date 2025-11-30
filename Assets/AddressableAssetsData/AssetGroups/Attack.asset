@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: Attack
   m_GUID: d8ba413cc1eab9845923b9ef6091e97f
   m_SerializeEntries:
+  - m_GUID: 260d90ed76c893f4395e6370ec6ad780
+    m_Address: Meteo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4e808ab45d831854ea27f6cf5d8809d1
     m_Address: Lightning
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74cb791055601714a96101bb2d161524
+    m_Address: Shockwave
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Projectile
   m_GUID: 61bf50b45b5c6e044b0c412e1d699ce5
   m_SerializeEntries:
+  - m_GUID: 21c2df76474695c4ba00be9e942bd44f
+    m_Address: MeteoProjectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4535863532764a24cab1784b3a38f7f5
     m_Address: FireballProjectile
     m_ReadOnly: 0

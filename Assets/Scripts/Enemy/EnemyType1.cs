@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.AI;
 public class EnemyType1 : Enemy
@@ -14,6 +13,10 @@ public class EnemyType1 : Enemy
 		stateMachine.AddState(new EnemyTrackingState());
 		stateMachine.AddState(new EnemyAttackState());
 		stateMachine.AddState(new EnemyDieState());
+
+
+		if (meshRenderer != null)
+			hitMatInstance = meshRenderer.material;
 
 	}
 	protected override void Start()
