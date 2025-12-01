@@ -24,26 +24,32 @@ public class UpgradeManager : MonoBehaviour
 
 	public List<UpgradeOptionSO> Get_RandomOptions(int count)
 	{
-		List<UpgradeOptionSO> candidates = new List<UpgradeOptionSO>();
-
+		var candidates = new List<UpgradeOptionSO>();
 		var skillMgr = GSC.Instance.skillManager;
 
-		foreach (var option in optionsDict)
+		foreach (var option in optionsDict.Values)
 		{
-			bool hasSkill = skillMgr.currentAttacks.ContainsKey(option.Value.targetKey);
+			bool hasSkill = skillMgr.currentAttacks.ContainsKey(option.targetKey);
 
-			if (option.Value.optionType == UpgradeOptionType.SkillUpgrade)
+			switch (option.optionType)
 			{
-				if (hasSkill)
-					candidates.Add(option.Value);
-			}
-			else if (option.Value.optionType == UpgradeOptionType.SkillUnlock)
-			{
-				if (!hasSkill)
-					candidates.Add(option.Value);
-			}
+				case UpgradeOptionType.SkillUnlock:
+					// 스킬이 없을 때만 Unlock 카드 등장
+					if (!hasSkill)
+						candidates.Add(option);
+					break;
 
-			candidates.Add(option.Value);
+				case UpgradeOptionType.SkillUpgrade:
+					// 스킬을 가지고 있을 때만 Upgrade 카드 등장
+					if (hasSkill)
+						candidates.Add(option);
+					break;
+
+				default:
+					// 나머지 옵션은 무조건 포함
+					candidates.Add(option);
+					break;
+			}
 		}
 
 		// 랜덤 셔플

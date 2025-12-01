@@ -9,7 +9,7 @@ public class HpBarFollower : MonoBehaviour,IUIInitializable
 
 	[SerializeField] private RectTransform rect;
 	[SerializeField] private Image hpFillImage;
-
+	public GameObject UIObject => transform.gameObject;
 	private void Awake()
 	{
 		if (mainCam == null) mainCam = Camera.main;

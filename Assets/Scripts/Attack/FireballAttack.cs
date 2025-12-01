@@ -45,9 +45,9 @@ public class FireballAttack : AttackRoot
 			yield return new WaitForSeconds(attackIntervalTime);
 			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
 			{
-				if (Find_TargetEnemyDir(out Vector3 _direction))
+				for (int i = 0; i < attackStats.ProjectileCount; i++)
 				{
-					for(int i = 0; i < attackStats.ProjectileCount;i++)
+					if (Find_TargetEnemyDir(out Vector3 _direction))
 					{
 						GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 						if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
@@ -59,10 +59,12 @@ public class FireballAttack : AttackRoot
 							_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 							_Component.Launch_Projectile();
 						}
-						yield return new WaitForSeconds(0.2f);
-					}
+						yield return new WaitForSeconds(0.1f);
 
+					}
 				}
+
+	
 			}
 
 		}

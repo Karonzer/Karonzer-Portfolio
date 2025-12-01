@@ -102,6 +102,23 @@ public struct AttackStats
 	public int ProjectileCount;
 }
 
+[System.Serializable]
+public struct BossSkill
+{
+	public BossProjectile projectile;
+}
+[System.Serializable]
+public struct BossProjectile
+{
+	[Header("Key (스킬 이름)")]
+	public string key;
+	public int keyCount;
+	public float baseProjectileSpeed;
+	public float baseExplosionRange;
+}
+
+
+
 public struct DamageInfo
 {
 	public int damage;
@@ -147,6 +164,7 @@ public interface IEnemyDoAttack
 public interface IUIInitializable
 {
 	void Initialize_UI(GameObject _player);
+	public GameObject UIObject { get; }
 }
 
 public static class DBManager

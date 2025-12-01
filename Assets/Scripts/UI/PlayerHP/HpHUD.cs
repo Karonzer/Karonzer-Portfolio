@@ -8,6 +8,8 @@ public class HpHUD : MonoBehaviour, IUIInitializable
 	[SerializeField] private Image hpFillImage;
 	[SerializeField] private TextMeshProUGUI textMeshProUGUI;
 
+	public GameObject UIObject => transform.gameObject;
+
 	private void Awake()
 	{
 		hpFillImage = transform.Find("HPBarFill").GetComponent<Image>();

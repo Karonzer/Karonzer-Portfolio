@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43e0f3ef036691e49917c00750fb2573, type: 3}
-  m_Name: Shockwave
+  m_Script: {fileID: 11500000, guid: 5c3a0c486ca23d44dad4b7571bcaac94, type: 3}
+  m_Name: BOSSType1
   m_EditorClassIdentifier: 
-  attackStats:
-    key: Shockwave
-    baseDamage: 1
-    baseAttackInterval: 1
-    baseRange: 4
-    baseProjectileSpeed: 0
-    baseExplosionRange: 0
-    projectileKey: null
-    ProjectileCount: 0
+  enemyStruct:
+    key: BOSSEnemyType1
+    moveSpeed: 5
+    maxHP: 1000
+    currentHP: 1000
+    attackInterval: 10
+    damage: 20
+    attackRange: 50
+    xpItmeValue: 20

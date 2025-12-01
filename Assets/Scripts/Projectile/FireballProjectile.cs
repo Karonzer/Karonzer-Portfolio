@@ -127,9 +127,19 @@ public class FireballProjectile : Projectile
 			moveRoutine = null;
 		}
 
-
 		sphereCollider.enabled = false;
 
+		if (hitParticle != null)
+		{
+			hitRoutine = StartCoroutine(Wait_HitParticle());
+		}
+		else
+		{
+			Despawn_Immediately();
+		}
+
+		if (visualRoot != null)
+			visualRoot.SetActive(false);
 
 		int enemyLayerMask = LayerMask.GetMask("Enemy");
 
@@ -144,24 +154,12 @@ public class FireballProjectile : Projectile
 			{
 				if (col.TryGetComponent<IDamageable>(out IDamageable _damageable))
 				{
-					DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, _damageable.CurrentObj, Type.Enemy);
+					DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, transform.gameObject, Type.Enemy);
 					_damageable.Take_Damage(info);
 				}
 			}
 		}
 
-
-		if (visualRoot != null)
-			visualRoot.SetActive(false);
-
-		if (hitParticle != null)
-		{
-			hitRoutine = StartCoroutine(Wait_HitParticle());
-		}
-		else
-		{
-			Despawn_Immediately();
-		}
 	}
 
 

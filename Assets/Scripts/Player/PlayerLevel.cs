@@ -9,6 +9,7 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 
 	public event Action<int> OnLevelChanged;
 	public event Action<int, int> OnXPChanged;
+	public event Action OnLevelUp;
 
 	[SerializeField] private AnimationCurve xpCurve;
 
@@ -40,7 +41,7 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 	{
 		currentXP -= maxXP;
 		currentLevel += 1;
-
+		OnLevelUp?.Invoke();
 		maxXP = CalculateNextLevelXP(currentLevel);
 		OnLevelChanged?.Invoke(currentLevel);
 		OnXPChanged?.Invoke(CurrentXP, MaxXP);

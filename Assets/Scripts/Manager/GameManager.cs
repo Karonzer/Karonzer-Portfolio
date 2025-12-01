@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEngine.AI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -16,6 +17,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private PopUpDataSO popUpData;
 
 	private Coroutine spwanTimeRoutine;
+	[SerializeField] private float enemySpawnInterval = 5f; // 초기 5초
+	public float EnemySpawnInterval => enemySpawnInterval;
 
 
 	public event Action OnPause;
@@ -32,6 +35,8 @@ public class GameManager : MonoBehaviour
 	{
 		GSC.Instance.uIManger.Initialize_UI(player);
 		Setting_Cursor();
+
+		player.GetComponent<PlayerLevel>().OnLevelUp += Handle_PlayerLevelUp;
 	}
 
 	private void OnEnable()
@@ -43,7 +48,7 @@ public class GameManager : MonoBehaviour
 			spwanTimeRoutine = null;
 		}
 
-		spwanTimeRoutine = StartCoroutine(TEST_Spwn());
+		spwanTimeRoutine = StartCoroutine(Enemy_SpawnRoutine());
 	}
 
 	private void OnDestroy()
@@ -78,27 +83,89 @@ public class GameManager : MonoBehaviour
 	public GameObject Get_PlayerObject()
 	{
 		return player;
-	}	
+	}
 
-	IEnumerator TEST_Spwn()
+	IEnumerator Enemy_SpawnRoutine()
 	{
 		yield return new WaitForSeconds(1f);
+
 		while (true)
 		{
-			GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy,"EnemyType1");
-			if (obj != null && obj.TryGetComponent<Enemy>(out var _component))
+			if(!isPaused)
 			{
-				obj.gameObject.SetActive(true);
-				_component.Start_Enemy();
+				int count = UnityEngine.Random.Range(3, 6); // 3~5마리
+				for (int i = 0; i < count; i++)
+				{
+					Vector3 spawnPos = GetRandomSpawnPosition();
+					if (spawnPos != Vector3.zero)
+						SpawnEnemyAt(spawnPos, "EnemyType1");  // 스폰할 적 key
+				}
+
+				yield return new WaitForSeconds(EnemySpawnInterval); // 주기
 			}
-			yield return new WaitForSeconds(0.1f);
+			else
+			{
+				yield return null;
+			}
+
+		}
+	}
+
+	private void Handle_PlayerLevelUp()
+	{
+		// 감소값: 레벨업마다 0.2초씩 감소
+		if (enemySpawnInterval < 0.5f)
+		{
+			enemySpawnInterval = 0.5f;
+		}
+		else
+		{
+			enemySpawnInterval -= 0.2f;
+		}
+
+		// 최소값 제한 (너무 빨라지는 것 방지)
+		enemySpawnInterval = Mathf.Clamp(enemySpawnInterval, 1.0f, 10f);
+
+		Debug.Log("Spawn Interval Changed: " + enemySpawnInterval);
+	}
+
+	Vector3 GetRandomSpawnPosition()
+	{
+		Vector3 playerPos = GSC.Instance.gameManager.Get_PlayerObject().transform.position;
+
+		for (int i = 0; i < 10; i++) // 10번까지 시도
+		{
+			Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
+			float distance = UnityEngine.Random.Range(15f, 30f);
+
+			Vector3 randomPos =
+				playerPos +
+				new Vector3(circle.x, 0f, circle.y) * distance;
+
+			if (NavMesh.SamplePosition(randomPos, out var hit, 3f, NavMesh.AllAreas))
+			{
+				return hit.position;
+			}
+		}
+
+		return Vector3.zero; // 실패
+	}
+
+	void SpawnEnemyAt(Vector3 pos, string key)
+	{
+		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
+
+		if (obj != null && obj.TryGetComponent<Enemy>(out var enemy))
+		{
+			obj.transform.position = pos;
+			obj.gameObject.SetActive(true);
+			enemy.Start_Enemy();
 		}
 	}
 
 
 	public void Update_ToPlayerAttackObj()
 	{
-		//GSC.Instance.upgradeManager.Upgrade_TEST();
 		PauseGame();
 		Set_ShowAndHideCursor(true);
 		GSC.Instance.uIManger.Show_UI("UpgradePopUp");

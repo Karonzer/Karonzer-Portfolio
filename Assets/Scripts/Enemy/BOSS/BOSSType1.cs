@@ -1,9 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-public class EnemyType1 : Enemy
+
+public class BOSSType1 : Enemy
 {
+	[SerializeField] private BossSkillSO BossSkillSO;
+	[SerializeField] protected BossSkill bossSkill;
 	private readonly Collider[] enemyBuffer = new Collider[1];
+	private Coroutine attackTime;
 	protected override void Awake()
 	{
 		base.Awake();
@@ -30,6 +34,12 @@ public class EnemyType1 : Enemy
 	{
 		base.OnEnable();
 		OnDead += Die_Enemy;
+
+		if(attackTime != null)
+		{
+			StopCoroutine(attackTime);
+			attackTime = null;
+		}
 	}
 
 	protected override void OnDisable()
@@ -51,43 +61,35 @@ public class EnemyType1 : Enemy
 
 	public override void DoAttack()
 	{
-		animator.SetTrigger("Attack");
-		// EnemyType1 전용 공격 로직
-		if (Check_WhetherThereIsPlayerInTheRange())
+		if (attackTime != null)
 		{
-			if (targetNavigation.TryGetComponent<IDamageable>(out IDamageable _player))
-			{
-
-				DamageInfo info = GSC.Instance.gameManager.Get_EnemyDamageInfo(enemyStruct.damage, enemyStruct.key, _player.CurrentObj, Type.Player);
-				_player.Take_Damage(info);
-			}
+			StopCoroutine(attackTime);
+			attackTime = null;
 		}
+		attackTime = StartCoroutine(Create_BossAttackIndicator());
 	}
 
-	private bool Check_WhetherThereIsPlayerInTheRange()
+	private IEnumerator Create_BossAttackIndicator()
 	{
-		int playerLayerMask = LayerMask.GetMask("Player");
-		int count = Physics.OverlapSphereNonAlloc(transform.position, enemyStruct.attackRange, enemyBuffer, playerLayerMask);
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < BossSkillSO.bossSkill.projectile.keyCount; i++)
 		{
-			if (enemyBuffer[i].gameObject.CompareTag("Player"))
+			GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, BossSkillSO.bossSkill.projectile.key);
+			if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 			{
-				float dist = Vector3.Distance(enemyBuffer[i].transform.position, transform.transform.position);
-				if (dist <= enemyStruct.attackRange)
-				{
-					return true;
-				}
+				projectileObj.gameObject.SetActive(true);
+				Vector3 spawnPosition = Get_TargetNavigation().transform.position;
+				_Component.Set_ProjectileInfo(BossSkillSO.bossSkill.projectile.key, enemyStruct.damage, BossSkillSO.bossSkill.projectile.baseExplosionRange, 
+					Vector3.zero, BossSkillSO.bossSkill.projectile.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 			}
+			yield return new WaitForSeconds(0.75f);
 		}
-		return false;
+		attackTime = null;
 	}
+
+
 
 	public override void Die_Enemy(IDamageable _damageable)
 	{
-		gameObject.layer = LayerMask.NameToLayer("Dead");
-		foreach (var col in GetComponentsInChildren<Collider>())
-			col.enabled = false;
-
 		navigation.isStopped = true;
 		navigation.speed = 0f;
 		animator.SetTrigger("Die");
@@ -120,7 +122,4 @@ public class EnemyType1 : Enemy
 			xpItem.SetXP(enemyStruct.xpItmeValue);
 		}
 	}
-
-
 }
-

@@ -20,7 +20,10 @@ public class UIManger : MonoBehaviour
 
 	private void Start()
 	{
-
+		foreach (var obj in uiTable)
+		{
+			obj.Value.SetActive(false);
+		}
 	}
 
 	public void Initialize_UI(GameObject _player)
@@ -29,6 +32,11 @@ public class UIManger : MonoBehaviour
 		{
 			ui.Initialize_UI(_player);
 		}
+	}
+
+	public void Start_UI()
+	{
+
 	}
 
 	public void Register_UI(string _name, GameObject _uiObject)

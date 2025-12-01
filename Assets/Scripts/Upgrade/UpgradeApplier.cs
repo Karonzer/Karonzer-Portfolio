@@ -50,7 +50,7 @@ public static class UpgradeApplier
 			{
 				if(GSC.Instance.gameManager.Get_PlayerObject().TryGetComponent<Player>(out Player _player))
 				{
-					_player.Add_AttackObject(option.numKey);
+					_player.Add_AttackObject(option.targetKey);
 				}
 			}
 			return;

@@ -21,6 +21,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	public event Action<DamageInfo> OnDamaged;
 	public event Action<IDamageable> OnDead;
 
+	[SerializeField] protected bool isDead = true;
 
 	[SerializeField] protected SkinnedMeshRenderer meshRenderer;
 	protected Material hitMatInstance;
@@ -48,13 +49,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		GSC.Instance.gameManager.OnResume += HandleResume;
 	}
 
-	private void OnDisable()
+	protected virtual void OnEnable()
 	{
-		GSC.Instance.gameManager.OnPause -= HandlePause;
-		GSC.Instance.gameManager.OnResume -= HandleResume;
+		isDead = false;
+		gameObject.layer = LayerMask.NameToLayer("Enemy");
+		foreach (var col in GetComponentsInChildren<Collider>())
+			col.enabled = true;
 	}
 
-	private void HandlePause()
+	protected virtual void OnDisable()
+	{
+
+	}
+
+	protected void HandlePause()
 	{
 		if (navigation != null && navigation.isOnNavMesh)
 		{
@@ -63,7 +71,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		}
 	}
 
-	private void HandleResume()
+	protected void HandleResume()
 	{
 		if (navigation != null && navigation.isOnNavMesh)
 		{
@@ -125,6 +133,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	public virtual void Die_Enemy(IDamageable _damageable)
 	{
+
 		enemyStruct.currentHP = 0;
 		transform.gameObject.SetActive(false);
 		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, EnemyKey, transform.gameObject);

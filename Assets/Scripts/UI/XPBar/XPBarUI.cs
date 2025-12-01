@@ -9,7 +9,7 @@ public class XPBarUI : MonoBehaviour, IUIInitializable
 	[SerializeField] private TextMeshProUGUI levelText;
 
 	private IXPTable xP;
-
+	public GameObject UIObject => transform.gameObject;
 	private void Awake()
 	{
 		fill = transform.Find("XPBarFill").GetComponent<Image>();
