@@ -90,6 +90,10 @@ public class BOSSType1 : Enemy
 
 	public override void Die_Enemy(IDamageable _damageable)
 	{
+		gameObject.layer = LayerMask.NameToLayer("Dead");
+		foreach (var col in GetComponentsInChildren<Collider>())
+			col.enabled = false;
+
 		navigation.isStopped = true;
 		navigation.speed = 0f;
 		animator.SetTrigger("Die");
@@ -109,17 +113,23 @@ public class BOSSType1 : Enemy
 	{
 		base.Die_Enemy(this);
 
-		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, GSC.Instance.gameManager.Get_ItemDataSO().xPItem);
-
-		if (obj.TryGetComponent<Item>(out Item _item))
+		for(int i = 0; i < 5;i++)
 		{
-			Vector3 spawnPosition = transform.position + new Vector3(0, 0.2f, 0);
-			_item.Setting_SpwnPos(spawnPosition);
+			GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, GSC.Instance.gameManager.Get_ItemDataSO().xPItem);
+
+			if (obj.TryGetComponent<Item>(out Item _item))
+			{
+				float x = Random.Range(-1f, 1.1f);
+				float z = Random.Range(-1f, 1.1f);
+				Vector3 spawnPosition = transform.position + new Vector3(x, 0.2f, z);
+				_item.Setting_SpwnPos(spawnPosition);
+			}
+
+			if (obj.TryGetComponent<XPitem>(out XPitem xpItem))
+			{
+				xpItem.SetXP(enemyStruct.xpItmeValue);
+			}
 		}
 
-		if (obj.TryGetComponent<XPitem>(out XPitem xpItem))
-		{
-			xpItem.SetXP(enemyStruct.xpItmeValue);
-		}
 	}
 }

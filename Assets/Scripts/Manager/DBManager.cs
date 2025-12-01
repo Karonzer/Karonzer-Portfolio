@@ -141,6 +141,7 @@ public struct DamageInfo
 public interface IHealthChanged
 {
 	public event Action<float, float> OnHealthChanged;
+	public event Action<IDamageable> OnDead;
 	float CurrentHPHealth { get; }
 	float MaxHPHealth { get; }
 }
@@ -150,8 +151,8 @@ public interface IDamageable
 	float CurrentHPDamege { get; }
 	float MaxHPDamege { get; }
 	GameObject CurrentObj { get; }
-	event Action<DamageInfo> OnDamaged;
-	event Action<IDamageable> OnDead;
+	public event Action<DamageInfo> OnDamaged;
+	public event Action<IDamageable> OnDead;
 
 	void Take_Damage(DamageInfo info);
 }

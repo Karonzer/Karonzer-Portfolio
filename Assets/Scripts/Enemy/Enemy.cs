@@ -99,7 +99,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	{
 		OnHealthChanged?.Invoke(enemyStruct.currentHP, enemyStruct.maxHP);
 	}
-	protected void InvokeDead(Enemy _enemy)
+	protected void InvokeDead(IDamageable _enemy)
 	{
 		OnDead?.Invoke(_enemy);
 	}
@@ -133,7 +133,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	public virtual void Die_Enemy(IDamageable _damageable)
 	{
-
 		enemyStruct.currentHP = 0;
 		transform.gameObject.SetActive(false);
 		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, EnemyKey, transform.gameObject);

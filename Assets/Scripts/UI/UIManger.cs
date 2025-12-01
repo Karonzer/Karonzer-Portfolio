@@ -36,8 +36,7 @@ public class UIManger : MonoBehaviour
 
 	public void Register_UI(string _name, GameObject _uiObject)
 	{
-		if (!uiTable.ContainsKey(_name))
-			uiTable.Add(name, _uiObject);
+		uiTable.Add(_name, _uiObject);
 	}
 
 	public void Show_UI(string _name)
@@ -50,6 +49,14 @@ public class UIManger : MonoBehaviour
 	{
 		if (uiTable.TryGetValue(_name, out var ui))
 			ui.SetActive(false);
+	}
+
+	[SerializeField] private BossHPHUD bossHPHUD;
+
+	public void Show_BossHPUI(IHealthChanged boss)
+	{
+		bossHPHUD.gameObject.SetActive(true);
+		bossHPHUD.Setting_BossUIBar(boss);
 	}
 
 

@@ -91,14 +91,14 @@ public class GameManager : MonoBehaviour
 
 		while (true)
 		{
-			if(!isPaused)
+			if (!isPaused)
 			{
 				int count = UnityEngine.Random.Range(3, 6); // 3~5마리
 				for (int i = 0; i < count; i++)
 				{
 					Vector3 spawnPos = GetRandomSpawnPosition();
 					if (spawnPos != Vector3.zero)
-						SpawnEnemyAt(spawnPos, "EnemyType1");  // 스폰할 적 key
+						Spawn_EnemyAt(spawnPos, "EnemyType1");  // 스폰할 적 key
 				}
 
 				yield return new WaitForSeconds(EnemySpawnInterval); // 주기
@@ -109,6 +109,19 @@ public class GameManager : MonoBehaviour
 			}
 
 		}
+
+		//if (!isPaused)
+		//{
+		//	Vector3 spawnPos = GetRandomSpawnPosition();
+		//	if (spawnPos != Vector3.zero)
+		//		Spawn_BossAt(spawnPos, "BOSSEnemyType1");  // 스폰할 적 key
+
+		//	yield return new WaitForSeconds(EnemySpawnInterval); // 주기
+		//}
+		//else
+		//{
+		//	yield return null;
+		//}
 	}
 
 	private void Handle_PlayerLevelUp()
@@ -151,7 +164,7 @@ public class GameManager : MonoBehaviour
 		return Vector3.zero; // 실패
 	}
 
-	void SpawnEnemyAt(Vector3 pos, string key)
+	private void Spawn_EnemyAt(Vector3 pos, string key)
 	{
 		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
 
@@ -163,8 +176,23 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	private void Spawn_BossAt(Vector3 pos, string key)
+	{
+		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
 
-	public void Update_ToPlayerAttackObj()
+		if (obj != null && obj.TryGetComponent<Enemy>(out var enemy))
+		{
+			obj.transform.position = pos;
+			obj.gameObject.SetActive(true);
+			enemy.Start_Enemy();
+			GSC.Instance.uIManger.Show_BossHPUI(enemy);
+		}
+	}
+
+
+
+
+public void Update_ToPlayerAttackObj()
 	{
 		PauseGame();
 		Set_ShowAndHideCursor(true);
