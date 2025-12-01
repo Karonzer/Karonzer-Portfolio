@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15d92d9c180d3a543bfab71f6fa8e7e9, type: 3}
+  m_Name: Shockwave_Damage
+  m_EditorClassIdentifier: 
+  title: "\uCDA9\uACA9 \uB370\uBBF8\uC9C0 \uC99D\uAC00"
+  description: "\uCDA9\uACA9 \uB370\uBBF8\uC9C0 10 % \uC99D\uAC00"
+  icon: {fileID: 0}
+  optionType: 0
+  numKey: Shockwave_1
+  targetKey: Shockwave
+  effectType: 0
+  value: 10

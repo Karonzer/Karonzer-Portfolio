@@ -6,7 +6,6 @@ public class UIManger : MonoBehaviour
 {
 	private Dictionary<string, GameObject> uiTable = new Dictionary<string, GameObject>();
 	private List<IUIInitializable> uiInitializables = new List<IUIInitializable>();
-	public XPBarUI xpBarUI;
 	private void Awake()
 	{
 		GSC.Instance.RegisterUIManger(this);
@@ -20,10 +19,6 @@ public class UIManger : MonoBehaviour
 
 	private void Start()
 	{
-		foreach (var obj in uiTable)
-		{
-			obj.Value.SetActive(false);
-		}
 	}
 
 	public void Initialize_UI(GameObject _player)

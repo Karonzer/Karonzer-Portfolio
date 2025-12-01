@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackStats:
     key: Shockwave
-    baseDamage: 1
+    rawDamage: 1
     baseAttackInterval: 1
     baseRange: 4
     baseProjectileSpeed: 0

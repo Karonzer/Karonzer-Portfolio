@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackStats:
     key: Meteo
-    baseDamage: 100
+    rawDamage: 100
     baseAttackInterval: 10
     baseRange: 20
     baseProjectileSpeed: 10

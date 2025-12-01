@@ -64,7 +64,7 @@ public static class UpgradeApplier
 			switch (option.effectType)
 			{
 				case UpgradeEffectType.DamagePercent:
-					stats.baseDamage = Mathf.RoundToInt(stats.baseDamage * (1f + option.value / 100f));
+					stats.rawDamage *= (1f + option.value / 100f);
 					break;
 
 				case UpgradeEffectType.AttackSpeedPercent:

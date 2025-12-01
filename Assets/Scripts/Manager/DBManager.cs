@@ -93,7 +93,8 @@ public struct AttackStats
 	public string key;
 
 	[Header("Base")]
-	public int baseDamage;
+	public float rawDamage;
+	public int baseDamage => Mathf.RoundToInt(rawDamage);
 	public float baseAttackInterval;
 	public float baseRange;
 	public float baseProjectileSpeed;

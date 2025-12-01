@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackStats:
     key: Fireball
-    baseDamage: 10
+    rawDamage: 10
     baseAttackInterval: 2
     baseRange: 10
     baseProjectileSpeed: 5

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackStats:
     key: Lightning
-    baseDamage: 1
+    rawDamage: 5
     baseAttackInterval: 10
     baseRange: 10
     baseProjectileSpeed: 0

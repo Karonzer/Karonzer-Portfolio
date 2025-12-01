@@ -68,5 +68,21 @@ public class StatManager : MonoBehaviour
 		onChangePlayerStruct?.Invoke();
 	}
 
+	public void IncreaseAllEnemyStats(float percent)
+	{
+		var keys = new List<string>(enemyStatDict.Keys);
+
+		foreach (var key in keys)
+		{
+			EnemyStruct s = enemyStatDict[key];
+
+			s.maxHP *= (1f + percent);
+			s.currentHP = s.maxHP;
+			s.damage = Mathf.RoundToInt(s.damage * (1f + percent));
+
+			enemyStatDict[key] = s;
+		}
+	}
+
 
 }
