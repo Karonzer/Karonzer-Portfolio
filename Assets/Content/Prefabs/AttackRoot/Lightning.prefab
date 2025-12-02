@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9158845944382490467}
   - component: {fileID: 2405610036164248980}
-  - component: {fileID: 3463957904448566050}
   m_Layer: 11
   m_Name: Lightning
   m_TagString: Untagged
@@ -51,31 +50,10 @@ MonoBehaviour:
   attackIntervalTime: 0
   attackStats:
     key: 
-    baseDamage: 0
+    rawDamage: 0
     baseAttackInterval: 0
     baseRange: 0
     baseProjectileSpeed: 0
     baseExplosionRange: 0
     projectileKey: 
     ProjectileCount: 0
---- !u!135 &3463957904448566050
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7895635945727104376}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 10
-  m_Center: {x: 0, y: 0, z: 0}

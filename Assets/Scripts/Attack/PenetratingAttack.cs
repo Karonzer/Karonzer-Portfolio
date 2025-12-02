@@ -1,13 +1,13 @@
-using UnityEngine;
+using System;
 using System.Collections;
+using UnityEngine;
 
-public class FireballAttack : AttackRoot
+public class PenetratingAttack : AttackRoot
 {
 	private Coroutine attackTimeRoutine;
-	private readonly Collider[] enemyBuffer = new Collider[20];
+	private Vector3 cachedCamForward;
 	private void Awake()
 	{
-
 	}
 	protected override void Start()
 	{
@@ -18,6 +18,7 @@ public class FireballAttack : AttackRoot
 	{
 		Attack();
 	}
+
 	protected override void Attack()
 	{
 		if (attackTimeRoutine != null)
@@ -25,7 +26,7 @@ public class FireballAttack : AttackRoot
 			StopCoroutine(attackTimeRoutine);
 			attackTimeRoutine = null;
 		}
-		StartCoroutine(Coroutine_FindTargetEnemyAttackTime());
+		StartCoroutine(Coroutine_PenetratingAttackTime());
 	}
 
 	protected override void Apply_StatsFromAttackStats()
@@ -35,7 +36,7 @@ public class FireballAttack : AttackRoot
 
 
 
-	private IEnumerator Coroutine_FindTargetEnemyAttackTime()
+	private IEnumerator Coroutine_PenetratingAttackTime()
 	{
 		while (true)
 		{
@@ -44,7 +45,7 @@ public class FireballAttack : AttackRoot
 			{
 				for (int i = 0; i < attackStats.ProjectileCount; i++)
 				{
-					if (Find_TargetEnemyDir(out Vector3 _direction))
+					if (Find_PenetratingDir(i, attackStats.ProjectileCount, out Vector3 _direction))
 					{
 						GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 						if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
@@ -52,7 +53,7 @@ public class FireballAttack : AttackRoot
 							projectileObj.gameObject.SetActive(true);
 							Vector3 spawnOffset = _direction.normalized * 0.5f;
 							Vector3 spawnPosition = transform.position + spawnOffset;
-							spawnPosition += new Vector3(0, 0.2f, 0);
+							spawnPosition += new Vector3(0, 0.1f, 0);
 							_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 							_Component.Launch_Projectile();
 						}
@@ -61,30 +62,38 @@ public class FireballAttack : AttackRoot
 					}
 				}
 
-	
+
 			}
 
 		}
 
 	}
 
-	private bool Find_TargetEnemyDir(out Vector3 _direction)
+	private bool Find_PenetratingDir(int index, int totalCount, out Vector3 _direction)
 	{
-		_direction = Vector3.zero;
-		int enemyLayerMask = LayerMask.GetMask("Enemy");
+		Vector3 camForward = Camera.main.transform.forward;
+		camForward.y = 0f;
+		camForward.Normalize();
 
-		int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, enemyBuffer, enemyLayerMask);
-		Transform target = enemyBuffer.Get_CloseEnemy(transform, count);
+		// 부채꼴 각도 설정 (예: 60도)
+		float angleRange = 60f;
+		float halfRange = angleRange / 2f;
 
-		if (target != null)
+		// 발사체가 1개일 경우 정면으로
+		if (totalCount == 1)
 		{
-			_direction = (target.position - transform.position).normalized;
+			_direction = camForward;
 			return true;
 		}
 
-		return false;
+		// 발사체 수에 따라 각도 분배
+		float angleStep = angleRange / (totalCount - 1);
+		float angle = -halfRange + angleStep * index;
+
+		// 회전 계산
+		Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
+		_direction = rotation * camForward;
+
+		return true;
 	}
-
-
-
 }

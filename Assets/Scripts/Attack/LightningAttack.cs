@@ -4,19 +4,17 @@ using System.Collections.Generic;
 
 public class LightningAttack : AttackRoot
 {
-	private SphereCollider sphereCollider;
 	private Coroutine attackTimeRoutine;
 	private readonly Collider[] enemyBuffer = new Collider[20];
 	private void Awake()
 	{
-		sphereCollider = gameObject.GetComponent<SphereCollider>();
-		sphereCollider.isTrigger = true;
+
 	}
 
 	protected override void Start()
 	{
 		base.Start();
-		sphereCollider.radius = attackRange;
+
 	}
 
 	private void OnEnable()

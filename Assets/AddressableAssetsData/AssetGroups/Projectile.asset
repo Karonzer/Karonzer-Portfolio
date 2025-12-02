@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e44f3cf67563da041a03164a5c836bc1
+    m_Address: PenetratingProjectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fd168b67cd4022c4c85a0c5711fa5e52
     m_Address: LightningProjectile
     m_ReadOnly: 0

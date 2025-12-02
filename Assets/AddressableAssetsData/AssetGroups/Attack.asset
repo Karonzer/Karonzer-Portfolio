@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb73f36f2de706e4e8c9ecf97a2e58cb
+    m_Address: Penetrating
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed284eae301d9ac449a34a6964ecbfa3
     m_Address: Fireball
     m_ReadOnly: 0
