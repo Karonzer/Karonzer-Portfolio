@@ -43,6 +43,24 @@ public enum UpgradeEffectType
 	CriticalChance,     // 치명타 확률 % 증가
 }
 
+public enum UIType
+{
+	None,
+	XPBar,
+	BossHP,
+	PlayerHP,
+	PlayerHPFollow,
+	UpgradePopUp,
+}
+
+public interface IUIHandler
+{
+	UIType Type { get; }
+	void Show();
+	void Show(GameObject _obj = null);
+	void Hide();
+}
+
 
 public interface IState<T>
 {

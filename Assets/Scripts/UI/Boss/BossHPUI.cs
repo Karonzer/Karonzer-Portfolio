@@ -10,7 +10,7 @@ public class BossHPUI : MonoBehaviour
 
 	public event Action OnDead;
 	 
-	void Awake()
+	private void Awake()
 	{
 		hpFillImage = transform.Find("HPBarBG").GetChild(0).GetComponent<Image>();
 		textMeshProUGUI = transform.GetChild(1).GetComponent<TextMeshProUGUI>();

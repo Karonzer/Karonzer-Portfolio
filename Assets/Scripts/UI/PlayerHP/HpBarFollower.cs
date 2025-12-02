@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HpBarFollower : MonoBehaviour,IUIInitializable
+public class HpBarFollower : MonoBehaviour, IUIHandler
 {
 	private IHealthChanged healthChanged;
 	[SerializeField] private Transform target;  
@@ -10,6 +10,9 @@ public class HpBarFollower : MonoBehaviour,IUIInitializable
 	[SerializeField] private RectTransform rect;
 	[SerializeField] private Image hpFillImage;
 	public GameObject UIObject => transform.gameObject;
+
+	public UIType Type => UIType.PlayerHPFollow;
+
 	private void Awake()
 	{
 		if (mainCam == null) mainCam = Camera.main;
@@ -18,12 +21,23 @@ public class HpBarFollower : MonoBehaviour,IUIInitializable
 	}
 
 
-
-	public void Initialize_UI(GameObject _player)
+	public void Show()
 	{
-		if (_player.TryGetComponent<IHealthChanged>(out IHealthChanged _healthChanged))
-			Initialize(_healthChanged, _player.transform);
+		transform.gameObject.SetActive(true);
 	}
+
+	public void Show(GameObject _obj = null)
+	{
+		transform.gameObject.SetActive(true);
+		if (_obj.TryGetComponent<IHealthChanged>(out IHealthChanged _healthChanged))
+			Initialize(_healthChanged, _obj.transform);
+	}
+
+	public void Hide()
+	{
+		transform.gameObject.SetActive(false);
+	}
+
 
 	public void Initialize(IHealthChanged _healthChanged, Transform _target)
 	{
@@ -54,6 +68,5 @@ public class HpBarFollower : MonoBehaviour,IUIInitializable
 		float ratio = (float)current / max;
 		hpFillImage.fillAmount = Mathf.Clamp01(ratio);
 	}
-
 
 }

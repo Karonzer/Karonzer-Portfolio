@@ -33,9 +33,9 @@ public class GameManager : MonoBehaviour
 	}
 	private void Start()
 	{
-		GSC.Instance.uIManger.Initialize_UI(player);
-		Setting_Cursor();
 
+		Setting_Cursor();
+		Setting_StartUI();
 		player.GetComponent<PlayerLevel>().OnLevelUp += Handle_PlayerLevelUp;
 	}
 
@@ -61,6 +61,12 @@ public class GameManager : MonoBehaviour
 		Spawn_Player(currentPlayerKey, Vector3.zero,Quaternion.identity);
 	}
 
+	private void Setting_StartUI()
+	{
+		GSC.Instance.uIManger.Show(UIType.XPBar, player);
+		GSC.Instance.uIManger.Show(UIType.PlayerHP, player);
+		GSC.Instance.uIManger.Show(UIType.PlayerHPFollow, player);
+	}
 	public void Spawn_Player(string address, Vector3 pos, Quaternion rot)
 	{
 		AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, pos, rot, playerPos);
@@ -89,6 +95,19 @@ public class GameManager : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1f);
 
+		if (!isPaused)
+		{
+			Vector3 spawnPos = GetRandomSpawnPosition();
+			if (spawnPos != Vector3.zero)
+				Spawn_BossAt(spawnPos, "BOSSEnemyType1");  // 스폰할 적 key
+
+			yield return new WaitForSeconds(EnemySpawnInterval); // 주기
+		}
+		else
+		{
+			yield return null;
+		}
+
 		while (true)
 		{
 			if (!isPaused)
@@ -110,18 +129,7 @@ public class GameManager : MonoBehaviour
 
 		}
 
-		//if (!isPaused)
-		//{
-		//	Vector3 spawnPos = GetRandomSpawnPosition();
-		//	if (spawnPos != Vector3.zero)
-		//		Spawn_BossAt(spawnPos, "BOSSEnemyType1");  // 스폰할 적 key
 
-		//	yield return new WaitForSeconds(EnemySpawnInterval); // 주기
-		//}
-		//else
-		//{
-		//	yield return null;
-		//}
 	}
 
 	private void Handle_PlayerLevelUp()
@@ -185,7 +193,7 @@ public class GameManager : MonoBehaviour
 			obj.transform.position = pos;
 			obj.gameObject.SetActive(true);
 			enemy.Start_Enemy();
-			GSC.Instance.uIManger.Show_BossHPUI(enemy);
+			GSC.Instance.uIManger.Show(UIType.BossHP, obj);
 		}
 	}
 
@@ -196,7 +204,7 @@ public void Update_ToPlayerAttackObj()
 	{
 		PauseGame();
 		Set_ShowAndHideCursor(true);
-		GSC.Instance.uIManger.Show_UI("UpgradePopUp");
+		GSC.Instance.uIManger.Show(UIType.UpgradePopUp);
 	}
 
 	public ItemDataSO Get_ItemDataSO()

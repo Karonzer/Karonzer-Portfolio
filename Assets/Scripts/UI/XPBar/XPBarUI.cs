@@ -2,23 +2,38 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class XPBarUI : MonoBehaviour, IUIInitializable
+public class XPBarUI : MonoBehaviour, IUIHandler
 {
 	[SerializeField] private Image fill;
 	[SerializeField] private TextMeshProUGUI levelText;
 
 	private IXPTable xP;
 	public GameObject UIObject => transform.gameObject;
+
+	public UIType Type => UIType.XPBar;
+
 	private void Awake()
 	{
 		fill = transform.Find("XPBarFill").GetComponent<Image>();
 		levelText = transform.Find("LevelText").GetComponent<TextMeshProUGUI>();
 	}
 
-	public void Initialize_UI(GameObject player)
+
+	public void Show()
 	{
-		if (player.TryGetComponent<IXPTable>(out IXPTable _xp))
+		transform.gameObject.SetActive(true);
+	}
+
+	public void Show(GameObject _obj = null)
+	{
+		transform.gameObject.SetActive(true);
+		if (_obj.TryGetComponent<IXPTable>(out IXPTable _xp))
 			Initialize(_xp);
+	}
+
+	public void Hide()
+	{
+		transform.gameObject.SetActive(false);
 	}
 
 	public void Initialize(IXPTable _system)

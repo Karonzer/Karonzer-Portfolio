@@ -9,7 +9,7 @@ public class EnemyAttackState : IState<Enemy>
 	private float attackTimer;
 	public void OnEnter(Enemy enemy)
 	{
-		attackTimer = 0f;
+		attackTimer = enemy.Get_EnemyStruct().attackInterval;
 		if (enemy.Get_NavMeshAgent() != null)
 		{
 			enemy.Get_NavMeshAgent().isStopped = true;

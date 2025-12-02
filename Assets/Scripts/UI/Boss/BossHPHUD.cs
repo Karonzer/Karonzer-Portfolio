@@ -1,20 +1,37 @@
-using System;
+
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class BossHPHUD : MonoBehaviour
+public class BossHPHUD : MonoBehaviour, IUIHandler
 {
 	public GameObject BossPrefab;
 	[SerializeField] private Transform area;
 	private List<GameObject> BossUIList; 
 	private Dictionary<IHealthChanged, BossHPUI> bossUIMap;
 
+	public UIType Type => UIType.BossHP;
+
 	private void Awake()
 	{
 		area = transform.GetChild(0);
 		BossUIList = new List<GameObject>();
 		bossUIMap = new Dictionary<IHealthChanged, BossHPUI>();
+	}
+
+	public void Show()
+	{
+
+	}
+
+	public void Show(GameObject _obj = null)
+	{
+		if (_obj.TryGetComponent<IHealthChanged>(out IHealthChanged _healthChanged))
+			Setting_BossUIBar(_healthChanged);
+	}
+
+	public void Hide()
+	{
+
 	}
 
 
@@ -61,4 +78,5 @@ public class BossHPHUD : MonoBehaviour
 			hpUI.Clear_BossReference();
 		}
 	}
+
 }

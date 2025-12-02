@@ -1,8 +1,9 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class HpHUD : MonoBehaviour, IUIInitializable
+
+public class HpHUD : MonoBehaviour, IUIHandler
 {
 	private IHealthChanged healthChanged;
 	[SerializeField] private Image hpFillImage;
@@ -10,16 +11,30 @@ public class HpHUD : MonoBehaviour, IUIInitializable
 
 	public GameObject UIObject => transform.gameObject;
 
+	public UIType Type => UIType.PlayerHP;
+
 	private void Awake()
 	{
+
 		hpFillImage = transform.Find("HPBarFill").GetComponent<Image>();
 		textMeshProUGUI = transform.Find("HPText").GetComponent<TextMeshProUGUI>();
 	}
 
-	public void Initialize_UI(GameObject _player)
+	public void Show()
 	{
-		if (_player.TryGetComponent<IHealthChanged>(out IHealthChanged _healthChanged))
+		transform.gameObject.SetActive(true);
+	}
+
+	public void Show(GameObject _obj = null)
+	{
+		transform.gameObject.SetActive(true);
+		if (_obj.TryGetComponent<IHealthChanged>(out IHealthChanged _healthChanged))
 			Initialize(_healthChanged);
+	}
+
+	public void Hide()
+	{
+		transform.gameObject.SetActive(false);
 	}
 
 	public void Initialize(IHealthChanged _healthChanged)

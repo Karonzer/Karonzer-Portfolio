@@ -1,62 +1,41 @@
 using System.Collections.Generic;
-using System.Linq;
+
 using UnityEngine;
 
 public class UIManger : MonoBehaviour
 {
-	private Dictionary<string, GameObject> uiTable = new Dictionary<string, GameObject>();
-	private List<IUIInitializable> uiInitializables = new List<IUIInitializable>();
+	private Dictionary<UIType, IUIHandler> handlers = new Dictionary<UIType, IUIHandler>();
+
 	private void Awake()
 	{
 		GSC.Instance.RegisterUIManger(this);
-		foreach (Transform child in transform)
-		{
-			uiTable.Add(child.name, child.gameObject);
-		}
 
-		uiInitializables = GetComponentsInChildren<IUIInitializable>(true).ToList();
+		var handlersInChildren = GetComponentsInChildren<IUIHandler>(true);
+		foreach (var h in handlersInChildren)
+			RegisterHandler(h);
 	}
 
-	private void Start()
+	public void RegisterHandler(IUIHandler handler)
 	{
+		handlers[handler.Type] = handler;
 	}
 
-	public void Initialize_UI(GameObject _player)
+	public void Show(UIType type)
 	{
-		foreach (var ui in uiInitializables)
-		{
-			ui.Initialize_UI(_player);
-		}
+		if (handlers.TryGetValue(type, out var handler))
+			handler.Show();
 	}
 
-	public void Start_UI()
+	public void Show(UIType type, GameObject _obj = null)
 	{
-
+		if (handlers.TryGetValue(type, out var handler))
+			handler.Show(_obj);
 	}
 
-	public void Register_UI(string _name, GameObject _uiObject)
+	public void Hide(UIType type)
 	{
-		uiTable.Add(_name, _uiObject);
-	}
-
-	public void Show_UI(string _name)
-	{
-		if (uiTable.TryGetValue(_name, out var ui))
-			ui.SetActive(true);
-	}
-
-	public void Hide_UI(string _name)
-	{
-		if (uiTable.TryGetValue(_name, out var ui))
-			ui.SetActive(false);
-	}
-
-	[SerializeField] private BossHPHUD bossHPHUD;
-
-	public void Show_BossHPUI(IHealthChanged boss)
-	{
-		bossHPHUD.gameObject.SetActive(true);
-		bossHPHUD.Setting_BossUIBar(boss);
+		if (handlers.TryGetValue(type, out var handler))
+			handler.Hide();
 	}
 
 
