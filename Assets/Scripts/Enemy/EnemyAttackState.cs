@@ -21,6 +21,11 @@ public class EnemyAttackState : IState<Enemy>
 		if (enemy.Get_TargetNavigation() == null)
 			return;
 
+		Vector3 _direction = (enemy.Get_TargetNavigation().transform.position - enemy.transform.position).normalized;
+		_direction.y = 0;
+		_direction.Normalize();
+		enemy.transform.rotation = Quaternion.LookRotation(_direction);
+
 		float distance = Vector3.Distance(
 			enemy.transform.position,
 			enemy.Get_TargetNavigation().transform.position);
@@ -34,7 +39,7 @@ public class EnemyAttackState : IState<Enemy>
 		attackTimer -= Time.deltaTime;
 		if (attackTimer <= 0f)
 		{
-			enemy.DoAttack();
+			enemy.Do_EnemyAttack();
 
 			attackTimer = enemy.Get_EnemyStruct().attackInterval;
 		}

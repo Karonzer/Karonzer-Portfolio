@@ -162,13 +162,6 @@ public class FireballProjectile : Projectile
 
 	}
 
-
-	void OnCollisionEnter(Collision collision)
-	{
-		if (collision.gameObject.CompareTag("Player"))
-			return;
-	}
-
 	private IEnumerator Wait_HitParticle()
 	{
 		hitParticle.Play();

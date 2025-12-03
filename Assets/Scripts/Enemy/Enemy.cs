@@ -67,7 +67,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		if (navigation != null && navigation.isOnNavMesh)
 		{
 			navigation.isStopped = true;
-			navigation.speed = 0f;
 		}
 	}
 
@@ -76,7 +75,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		if (navigation != null && navigation.isOnNavMesh)
 		{
 			navigation.isStopped = false;
-			navigation.speed = enemyStruct.moveSpeed;
 		}
 	}
 
@@ -90,9 +88,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		stateMachine.Tick();
 	}
 
-	public virtual void DoAttack()
+	public virtual void Do_EnemyAttack()
 	{
 
+	}
+
+	public virtual void Do_EnemyAttackEvent()
+	{
 	}
 
 	protected void InvokeHealthChanged()

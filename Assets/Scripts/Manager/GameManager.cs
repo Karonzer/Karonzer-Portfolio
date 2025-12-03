@@ -93,21 +93,21 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator Enemy_SpawnRoutine()
 	{
+		//yield return new WaitForSeconds(1f);
+
+		//if (!isPaused)
+		//{
+		//	Vector3 spawnPos = GetRandomSpawnPosition();
+		//	if (spawnPos != Vector3.zero)
+		//		Spawn_BossAt(spawnPos, "BOSSEnemyType1");  // 스폰할 적 key
+
+		//	yield return new WaitForSeconds(EnemySpawnInterval); // 주기
+		//}
+		//else
+		//{
+		//	yield return null;
+		//}
 		yield return new WaitForSeconds(1f);
-
-		if (!isPaused)
-		{
-			Vector3 spawnPos = GetRandomSpawnPosition();
-			if (spawnPos != Vector3.zero)
-				Spawn_BossAt(spawnPos, "BOSSEnemyType1");  // 스폰할 적 key
-
-			yield return new WaitForSeconds(EnemySpawnInterval); // 주기
-		}
-		else
-		{
-			yield return null;
-		}
-
 		while (true)
 		{
 			if (!isPaused)
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
 				{
 					Vector3 spawnPos = GetRandomSpawnPosition();
 					if (spawnPos != Vector3.zero)
-						Spawn_EnemyAt(spawnPos, "EnemyType1");  // 스폰할 적 key
+						Spawn_EnemyAt(spawnPos, "IceMan");  // 스폰할 적 key
 				}
 
 				yield return new WaitForSeconds(EnemySpawnInterval); // 주기
@@ -146,8 +146,6 @@ public class GameManager : MonoBehaviour
 
 		// 최소값 제한 (너무 빨라지는 것 방지)
 		enemySpawnInterval = Mathf.Clamp(enemySpawnInterval, 1.0f, 10f);
-
-		Debug.Log("Spawn Interval Changed: " + enemySpawnInterval);
 	}
 
 	Vector3 GetRandomSpawnPosition()

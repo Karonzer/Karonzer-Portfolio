@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Enemy
   m_GUID: 08c7629a2614204479963df8dafe897c
   m_SerializeEntries:
-  - m_GUID: 0fd94fa893f2ed942a694dfc490e0f29
-    m_Address: EnemyType2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 69bf0a303b8a0f041a5628e0d4b0ea47
     m_Address: BOSSEnemyType1
     m_ReadOnly: 0
@@ -27,6 +22,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 83c5e8fc338a42249b3d63c910f77263
     m_Address: EnemyType1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b49ed94b8bad0ce4ca8e8650d8f85267
+    m_Address: IceMan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7e83fc9238879d468a7fccb86355d64
+    m_Address: EnemyType2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

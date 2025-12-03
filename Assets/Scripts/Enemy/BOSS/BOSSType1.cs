@@ -6,7 +6,6 @@ public class BOSSType1 : Enemy
 {
 	[SerializeField] private BossSkillSO BossSkillSO;
 	[SerializeField] protected BossSkill bossSkill;
-	private readonly Collider[] enemyBuffer = new Collider[1];
 	private Coroutine attackTime;
 	protected override void Awake()
 	{
@@ -59,7 +58,7 @@ public class BOSSType1 : Enemy
 		base.Take_Damage(_damageInfo);
 	}
 
-	public override void DoAttack()
+	public override void Do_EnemyAttack()
 	{
 		if (attackTime != null)
 		{

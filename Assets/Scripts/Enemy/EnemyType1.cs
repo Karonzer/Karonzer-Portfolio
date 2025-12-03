@@ -49,7 +49,7 @@ public class EnemyType1 : Enemy
 		base.Take_Damage(_damageInfo);
 	}
 
-	public override void DoAttack()
+	public override void Do_EnemyAttack()
 	{
 		animator.SetTrigger("Attack");
 		// EnemyType1 전용 공격 로직

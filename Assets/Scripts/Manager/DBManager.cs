@@ -177,7 +177,7 @@ public interface IDamageable
 
 public interface IEnemyDoAttack
 {
-	public void DoAttack();
+	public void Do_EnemyAttackEvent();
 	public EnemyStruct EnemyStruct { get; }
 }
 

@@ -1,11 +1,10 @@
-using System;
+
 using System.Collections;
 using UnityEngine;
 
 public class PenetratingAttack : AttackRoot
 {
 	private Coroutine attackTimeRoutine;
-	private Vector3 cachedCamForward;
 	private void Awake()
 	{
 	}

@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 323387ae5a470a941a7a3e8ba84a5566
+    m_Address: EnemyProjectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4535863532764a24cab1784b3a38f7f5
     m_Address: FireballProjectile
     m_ReadOnly: 0
