@@ -15,28 +15,39 @@ public class UIManger : MonoBehaviour
 			RegisterHandler(h);
 	}
 
-	public void RegisterHandler(IUIHandler handler)
+	public void RegisterHandler(IUIHandler _handler)
 	{
-		handlers[handler.Type] = handler;
+		handlers[_handler.Type] = _handler;
 	}
 
 	public void Show(UIType type)
 	{
-		if (handlers.TryGetValue(type, out var handler))
-			handler.Show();
+		if (handlers.TryGetValue(type, out var _handler))
+			_handler.Show();
 	}
 
 	public void Show(UIType type, GameObject _obj = null)
 	{
-		if (handlers.TryGetValue(type, out var handler))
-			handler.ShowAndInitialie(_obj);
+		if (handlers.TryGetValue(type, out var _handler))
+			_handler.ShowAndInitialie(_obj);
 	}
 
-	public void Hide(UIType type)
+	public void Hide(UIType _uIType)
 	{
-		if (handlers.TryGetValue(type, out var handler))
-			handler.Hide();
+		if (handlers.TryGetValue(_uIType, out var _handler))
+			_handler.Hide();
 	}
 
+	public bool IsUIOpen(UIType _uIType)
+	{
+		if (handlers.TryGetValue(_uIType, out var handler))
+		{
+			return handler.IsOpen;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 }

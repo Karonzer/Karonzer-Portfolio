@@ -9,10 +9,8 @@ public class HpBarFollower : MonoBehaviour, IUIHandler
 
 	[SerializeField] private RectTransform rect;
 	[SerializeField] private Image hpFillImage;
-	public GameObject UIObject => transform.gameObject;
-
 	public UIType Type => UIType.PlayerHPFollow;
-
+	public bool IsOpen => transform.gameObject.activeSelf;
 	private void Awake()
 	{
 		if (mainCam == null) mainCam = Camera.main;

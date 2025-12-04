@@ -8,9 +8,8 @@ public class XPBarUI : MonoBehaviour, IUIHandler
 	[SerializeField] private TextMeshProUGUI levelText;
 
 	private IXPTable xP;
-	public GameObject UIObject => transform.gameObject;
-
 	public UIType Type => UIType.XPBar;
+	public bool IsOpen => transform.gameObject.activeSelf;
 
 	private void Awake()
 	{

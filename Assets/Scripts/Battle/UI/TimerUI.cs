@@ -7,6 +7,8 @@ public class TimerUI : MonoBehaviour, IUIHandler
 	public UIType Type => UIType.Timer;
 	[SerializeField] private TextMeshProUGUI uITextMeshPro;
 
+	public bool IsOpen => uITextMeshPro.gameObject.activeSelf;
+
 	private void Awake()
 	{
 		uITextMeshPro = transform.GetChild(0).GetComponent<TextMeshProUGUI>();

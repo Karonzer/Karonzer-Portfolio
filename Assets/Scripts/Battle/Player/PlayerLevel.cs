@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerLevel : MonoBehaviour, IXPTable
 {
+	[SerializeField] private int pendingLevelUp;
 	[SerializeField] private int currentLevel;
 	[SerializeField] private int currentXP;
 	[SerializeField] private int maxXP;
@@ -23,6 +24,7 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 	{
 		currentLevel = 1;
 		currentXP = 0;
+		pendingLevelUp = 0;
 		maxXP = Mathf.RoundToInt(xpCurve.Evaluate(currentLevel));
 	}
 
@@ -46,12 +48,29 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 		maxXP = CalculateNextLevelXP(currentLevel);
 		OnLevelChanged?.Invoke(currentLevel);
 		OnXPChanged?.Invoke(CurrentXP, MaxXP);
-		BattleGSC.Instance.gameManager.Update_ToPlayerAttackObj();
+		pendingLevelUp++;
+		TryProcessLevelUpUI();
 	}
 
+	private void TryProcessLevelUpUI()
+	{
+		if (!BattleGSC.Instance.uIManger.IsUIOpen(UIType.UpgradePopUp))
+		{
+			BattleGSC.Instance.gameManager.Update_ToPlayerAttackObj();
+			pendingLevelUp--;
+		}
+	}
 
 	int CalculateNextLevelXP(int level)
 	{
 		return Mathf.RoundToInt(xpCurve.Evaluate(level));
+	}
+
+	public void Handle_CloseUpgradePopup()
+	{
+		if (pendingLevelUp > 0)
+		{
+			TryProcessLevelUpUI();
+		}
 	}
 }

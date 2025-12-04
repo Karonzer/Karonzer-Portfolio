@@ -52,6 +52,7 @@ public enum UIType
 	PlayerHPFollow,
 	UpgradePopUp,
 	Timer,
+	GameOver,
 }
 
 public interface IUIHandler
@@ -60,6 +61,7 @@ public interface IUIHandler
 	void Show();
 	void ShowAndInitialie(GameObject _obj = null);
 	void Hide();
+	public bool IsOpen { get; }
 }
 
 

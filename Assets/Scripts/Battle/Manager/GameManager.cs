@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
 	private void OnDestroy()
 	{ 
 		Addressables.ReleaseInstance(player);
+		player.GetComponent<Player>().OnDead -= Game_Over;
 	}
 
 	private void Setting_GameManagerValue()
@@ -277,6 +278,11 @@ public class GameManager : MonoBehaviour
 		BattleGSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
 	}
 
+	public void Check_PendingLevelUp()
+	{
+		player.GetComponent<PlayerLevel>().Handle_CloseUpgradePopup();
+	}
+
 	public ItemDataSO Get_ItemDataSO()
 	{ return itemData; }
 
@@ -299,7 +305,9 @@ public class GameManager : MonoBehaviour
 	public void Game_Over(IDamageable _damageable)
 	{
 		isPaused = true;
+		Set_ShowAndHideCursor(true);
 		BattleGSC.Instance.spawnManager.Despawn_All();
+		BattleGSC.Instance.uIManger.Show(UIType.GameOver);
 	}	
 
 	public DamageInfo Get_PlayerDamageInfo(int damage, GameObject hitPoint, Type attacker)

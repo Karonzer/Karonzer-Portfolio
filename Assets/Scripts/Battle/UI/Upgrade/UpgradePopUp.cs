@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UpgradePopUp : MonoBehaviour, IUIHandler
@@ -8,6 +9,7 @@ public class UpgradePopUp : MonoBehaviour, IUIHandler
 	[SerializeField] private List<UpgradeCardUI> cardUIList;
 
 	public UIType Type => UIType.UpgradePopUp;
+	public bool IsOpen => popUp.gameObject.activeSelf;
 	private void Awake()
 	{
 		popUp = transform.GetChild(0);

@@ -63,6 +63,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	{
 
 	}
+	protected void OnDestroy()
+	{
+		BattleGSC.Instance.gameManager.OnPause -= HandlePause;
+		BattleGSC.Instance.gameManager.OnResume -= HandleResume;
+	}
 
 	protected void HandlePause()
 	{

@@ -10,7 +10,7 @@ public class BossHPHUD : MonoBehaviour, IUIHandler
 	private Dictionary<IHealthChanged, BossHPUI> bossUIMap;
 
 	public UIType Type => UIType.BossHP;
-
+	public bool IsOpen => area.gameObject.activeSelf;
 	private void Awake()
 	{
 		area = transform.GetChild(0);

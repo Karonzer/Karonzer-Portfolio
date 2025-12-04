@@ -1,10 +1,19 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Title : MonoBehaviour
 {
-	public void OnStartButton()
+	[SerializeField] private GameObject gscPrefab;
+
+	private void Awake()
 	{
-		SceneManager.LoadScene("LoadingScene");
+		if (GlobalGSC.Instance == null)
+			Instantiate(gscPrefab);
 	}
+
+	public void Click_StartGame()
+	{
+		GlobalGSC.Instance.sceneManager.LoadBattle_WithLoading();
+	}	
+
+
 }

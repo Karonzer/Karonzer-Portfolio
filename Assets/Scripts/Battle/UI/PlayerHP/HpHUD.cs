@@ -8,11 +8,8 @@ public class HpHUD : MonoBehaviour, IUIHandler
 	private IHealthChanged healthChanged;
 	[SerializeField] private Image hpFillImage;
 	[SerializeField] private TextMeshProUGUI textMeshProUGUI;
-
-	public GameObject UIObject => transform.gameObject;
-
 	public UIType Type => UIType.PlayerHP;
-
+	public bool IsOpen => transform.gameObject.activeSelf;
 	private void Awake()
 	{
 
