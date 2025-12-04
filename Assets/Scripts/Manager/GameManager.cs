@@ -48,11 +48,9 @@ public class GameManager : MonoBehaviour
 	}
 	private void Start()
 	{
-
 		Setting_Cursor();
 		Setting_StartUI();
 		Settting_PlayerEvnet();
-
 		Start_Game();
 	}
 
@@ -121,7 +119,6 @@ public class GameManager : MonoBehaviour
 		AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, pos, rot, playerPos);
 		handle.WaitForCompletion();
 		player = handle.Result;
-
 	}
 
 	private void Setting_Cursor()
@@ -272,10 +269,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-
-
-
-public void Update_ToPlayerAttackObj()
+	public void Update_ToPlayerAttackObj()
 	{
 		PauseGame();
 		Set_ShowAndHideCursor(true);

@@ -189,6 +189,11 @@ public interface IUIInitializable
 	public GameObject UIObject { get; }
 }
 
+public interface IDisposable
+{
+	public void Dispose();
+}
+
 public static class DBManager
 {
 	private static int projectileSurvivalTime = 30;
