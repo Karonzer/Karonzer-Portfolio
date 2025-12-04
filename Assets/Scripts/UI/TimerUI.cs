@@ -18,7 +18,7 @@ public class TimerUI : MonoBehaviour, IUIHandler
 
 	private void OnDisable()
 	{
-		if (GSC.Instance.gameManager.TryGetComponent<GameManager>(out var manager))
+		if (BattleGSC.Instance.gameManager.TryGetComponent<GameManager>(out var manager))
 		{
 			manager.TimerAction -= On_Notify;
 		}

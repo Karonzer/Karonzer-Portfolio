@@ -14,18 +14,18 @@ public abstract class AttackRoot : MonoBehaviour
 
 	protected virtual void Start()
 	{
-		attackStats = GSC.Instance.skillManager.Get_Stats(AttackKey);
+		attackStats = BattleGSC.Instance.skillManager.Get_Stats(AttackKey);
 		Apply_StatsFromAttackStats();
 
 		// 스탯 변경 이벤트 구독
-		GSC.Instance.skillManager.AddListener(AttackKey, Handle_AttackStatsChanged);
+		BattleGSC.Instance.skillManager.AddListener(AttackKey, Handle_AttackStatsChanged);
 	}
 
 	protected virtual void OnDestroy()
 	{
 		// 씬 전환/오브젝트 삭제 시 이벤트 해제
-		if (GSC.Instance != null && GSC.Instance.skillManager != null)
-			GSC.Instance.skillManager.RemoveListener(AttackKey, Handle_AttackStatsChanged);
+		if (BattleGSC.Instance != null && BattleGSC.Instance.skillManager != null)
+			BattleGSC.Instance.skillManager.RemoveListener(AttackKey, Handle_AttackStatsChanged);
 	}
 
 	// SkillManager에서 스탯이 바뀌었다고 알려줄 때 호출
@@ -34,7 +34,7 @@ public abstract class AttackRoot : MonoBehaviour
 		if (_key != AttackKey)
 			return; // 내 스킬이 아니면 무시
 
-		attackStats = GSC.Instance.skillManager.Get_Stats(AttackKey);
+		attackStats = BattleGSC.Instance.skillManager.Get_Stats(AttackKey);
 		Apply_StatsFromAttackStats();
 
 	}

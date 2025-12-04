@@ -47,7 +47,7 @@ public class ShockwaveAttack : AttackRoot
 		while (true)
 		{
 			yield return new WaitForSeconds(attackIntervalTime);
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				ApplyShockwaveDamage();
 			}
@@ -64,7 +64,7 @@ public class ShockwaveAttack : AttackRoot
 		{
 			if (hit.TryGetComponent<IDamageable>(out var _enemy))
 			{
-				DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(attackDamage, _enemy.CurrentObj, Type.Enemy);
+				DamageInfo info = BattleGSC.Instance.gameManager.Get_PlayerDamageInfo(attackDamage, _enemy.CurrentObj, Type.Enemy);
 				_enemy.Take_Damage(info);
 			}
 		}

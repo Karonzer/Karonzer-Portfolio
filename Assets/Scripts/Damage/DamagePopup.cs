@@ -21,8 +21,8 @@ public class DamagePopup : MonoBehaviour
 
 	void OnDisable()
 	{
-		if (GSC.Instance.damagePopupManager != null)
-			GSC.Instance.damagePopupManager.Return_ToDamagePopUpPool(transform.gameObject);
+		if (BattleGSC.Instance.damagePopupManager != null)
+			BattleGSC.Instance.damagePopupManager.Return_ToDamagePopUpPool(transform.gameObject);
 	}
 
 	public void Init_Enemy(int damage)

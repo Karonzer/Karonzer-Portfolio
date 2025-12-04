@@ -139,7 +139,7 @@ public struct BossProjectile
 }
 
 
-
+[System.Serializable]
 public struct DamageInfo
 {
 	public int damage;

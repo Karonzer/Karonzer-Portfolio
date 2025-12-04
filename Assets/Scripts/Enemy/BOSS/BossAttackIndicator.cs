@@ -88,7 +88,7 @@ public class BossAttackIndicator : Projectile
 		Vector3 targetScale = warningSphere.localScale;
 		while (timer < chargeTime)
 		{
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				timer += Time.deltaTime;
 				float t = timer / chargeTime;
@@ -122,7 +122,7 @@ public class BossAttackIndicator : Projectile
 		{
 			if (col.TryGetComponent<Player>(out Player _player))
 			{
-				DamageInfo _dmg = GSC.Instance.gameManager.Get_EnemyDamageInfo(projectileDemage, projectileName, _player.CurrentObj, Type.Player);
+				DamageInfo _dmg = BattleGSC.Instance.gameManager.Get_EnemyDamageInfo(projectileDemage, projectileName, _player.CurrentObj, Type.Player);
 				_player.Take_Damage(_dmg);
 			}
 		}
@@ -144,7 +144,7 @@ public class BossAttackIndicator : Projectile
 	private void Despawn_Immediately()
 	{
 		gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, gameObject);
+		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, gameObject);
 	}
 
 }

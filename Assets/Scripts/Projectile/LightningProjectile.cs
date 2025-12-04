@@ -98,7 +98,7 @@ public class LightningProjectile : Projectile
 		{
 			yield return new WaitForSeconds(tickInterval);
 
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				yield return null;
 			}
@@ -109,7 +109,7 @@ public class LightningProjectile : Projectile
 			{
 				if (t == null) continue;
 
-				DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, t.CurrentObj, Type.Enemy);
+				DamageInfo info = BattleGSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, t.CurrentObj, Type.Enemy);
 				t.Take_Damage(info);
 			}
 		}
@@ -119,7 +119,7 @@ public class LightningProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime -20);
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
+		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
 	}
 	private void HandleEnemyDead(IDamageable __target)
 	{

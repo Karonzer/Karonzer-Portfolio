@@ -15,7 +15,7 @@ public class DamagePopupManager : MonoBehaviour
 
 	void Awake()
 	{
-		GSC.Instance.RegisterDamagePopupManager(this);
+		BattleGSC.Instance.RegisterDamagePopupManager(this);
 		mainCam = Camera.main;
 	}
 
@@ -35,7 +35,7 @@ public class DamagePopupManager : MonoBehaviour
 
 	private void LoadPopupPrefab()
 	{
-		Addressables.LoadAssetAsync<GameObject>(GSC.Instance.gameManager.Get_PopUpData().DamagePopupPrefab).Completed += OnPrefabLoaded;
+		Addressables.LoadAssetAsync<GameObject>(BattleGSC.Instance.gameManager.Get_PopUpData().DamagePopupPrefab).Completed += OnPrefabLoaded;
 	}
 
 	private void OnPrefabLoaded(AsyncOperationHandle<GameObject> op)

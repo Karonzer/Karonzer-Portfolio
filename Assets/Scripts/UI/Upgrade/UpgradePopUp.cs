@@ -39,9 +39,9 @@ public class UpgradePopUp : MonoBehaviour, IUIHandler
 
 	private void Open_UpgradeCard()
 	{
-		if (GSC.Instance != null && GSC.Instance.upgradeManager != null)
+		if (BattleGSC.Instance != null && BattleGSC.Instance.upgradeManager != null)
 		{
-			List<UpgradeOptionSO> list = GSC.Instance.upgradeManager.Get_RandomOptions(3);
+			List<UpgradeOptionSO> list = BattleGSC.Instance.upgradeManager.Get_RandomOptions(3);
 			for (int i = 0; i < list.Count; i++)
 			{
 				cardUIList[i].gameObject.SetActive(true);

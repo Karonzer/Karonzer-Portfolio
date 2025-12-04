@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GSC : GenericSingletonClass<GSC>
+public class BattleGSC : GenericSingletonClass<BattleGSC>
 {
 	public GameManager gameManager {  get; private set; }
 	public StatManager statManager { get; private set; }

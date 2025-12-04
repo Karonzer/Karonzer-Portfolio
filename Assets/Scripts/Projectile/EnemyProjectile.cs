@@ -92,7 +92,7 @@ public class EnemyProjectile : Projectile
 	{
 		while (true)
 		{
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				transform.rotation = Quaternion.LookRotation(projectileDir);
 				transform.Translate(projectileDir * projectileSpeed * Time.deltaTime, Space.World);
@@ -109,7 +109,7 @@ public class EnemyProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
+		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -145,7 +145,7 @@ public class EnemyProjectile : Projectile
 
 			if (other.TryGetComponent<IDamageable>(out IDamageable _damageable))
 			{
-				DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, transform.gameObject, Type.Enemy);
+				DamageInfo info = BattleGSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, transform.gameObject, Type.Enemy);
 				_damageable.Take_Damage(info);
 			}
 		}
@@ -174,6 +174,6 @@ public class EnemyProjectile : Projectile
 	private void Despawn_Immediately()
 	{
 		gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, gameObject);
+		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, gameObject);
 	}
 }

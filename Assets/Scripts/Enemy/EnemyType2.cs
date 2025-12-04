@@ -22,7 +22,7 @@ public class EnemyType2 : Enemy
 	}
 	protected override void Start()
 	{
-		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
+		targetNavigation = BattleGSC.Instance.gameManager.Get_PlayerObject();
 		base.Start();
 	}
 
@@ -59,7 +59,7 @@ public class EnemyType2 : Enemy
 			if (targetNavigation.TryGetComponent<IDamageable>(out IDamageable _player))
 			{
 
-				DamageInfo info = GSC.Instance.gameManager.Get_EnemyDamageInfo(enemyStruct.damage, enemyStruct.key, _player.CurrentObj, Type.Player);
+				DamageInfo info = BattleGSC.Instance.gameManager.Get_EnemyDamageInfo(enemyStruct.damage, enemyStruct.key, _player.CurrentObj, Type.Player);
 				_player.Take_Damage(info);
 			}
 		}
@@ -101,24 +101,9 @@ public class EnemyType2 : Enemy
 		AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
 		yield return new WaitForSeconds(info.length);
 
+		base.Die_Enemy(this);
 		Spawn_XPItem();
 	}
 
-	private void Spawn_XPItem()
-	{
-		base.Die_Enemy(this);
 
-		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, GSC.Instance.gameManager.Get_ItemDataSO().xPItem);
-
-		if (obj.TryGetComponent<Item>(out Item _item))
-		{
-			Vector3 spawnPosition = transform.position + new Vector3(0, 0.2f, 0);
-			_item.Setting_SpwnPos(spawnPosition);
-		}
-
-		if (obj.TryGetComponent<XPitem>(out XPitem xpItem))
-		{
-			xpItem.SetXP(enemyStruct.xpItmeValue);
-		}
-	}
 }

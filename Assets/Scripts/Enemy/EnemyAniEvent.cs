@@ -11,7 +11,7 @@ public class EnemyAniEvent : MonoBehaviour
 
 	public void Do_EnemyDoAttack()
 	{
-		if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+		if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 		{
 			if (enemyDoAttack != null)
 			{

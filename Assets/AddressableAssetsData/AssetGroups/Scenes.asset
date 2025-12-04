@@ -10,18 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Item
+  m_Name: Scenes
   m_EditorClassIdentifier: 
-  m_GroupName: Item
-  m_GUID: 11669e6d2caa4ae42a59f60cc2b68b7e
+  m_GroupName: Scenes
+  m_GUID: 6c828b94667aac6428215b3d0e96978c
   m_SerializeEntries:
-  - m_GUID: 3a318a5d36719e14f8ed2e1df35707db
-    m_Address: HealingItem
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9303279428d7aed488817012b6f8c314
-    m_Address: XPitem
+  - m_GUID: f3330ea5e10eb7741a400330fd73589a
+    m_Address: Battle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -29,5 +24,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: e0657a797f4c80f4a973253eba7689b9, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 29d1bd8ebf608e6418987d2501d62321, type: 2}
-    - {fileID: 11400000, guid: a635009a270a45944b0bcb4bf86615fa, type: 2}
+    - {fileID: 11400000, guid: 4e42553425af4814aa9cd6df350ef016, type: 2}
+    - {fileID: 11400000, guid: 962dbe0fae9d5d649a6933e11a6e8a6d, type: 2}

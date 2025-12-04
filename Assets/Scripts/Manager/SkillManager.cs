@@ -13,7 +13,7 @@ public class SkillManager : MonoBehaviour
 	public Dictionary<string, AttackRoot> currentAttacks = new Dictionary<string, AttackRoot>();
 	private void Awake()
 	{
-		GSC.Instance.RegisterSkillManager(this);
+		BattleGSC.Instance.RegisterSkillManager(this);
 		Build_Dict();
 
 	}

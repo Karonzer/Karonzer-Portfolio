@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
 	private void Awake()
 	{
-		GSC.Instance.RegisterGameManager(this);
+		BattleGSC.Instance.RegisterGameManager(this);
 		currentPlayerKey = "Player";// 추후 타이틀 씬에서 선택한 이름을 가지고 올 예정
 		Initialize_Player();
 	}
@@ -111,10 +111,10 @@ public class GameManager : MonoBehaviour
 
 	private void Setting_StartUI()
 	{
-		GSC.Instance.uIManger.Show(UIType.XPBar, player);
-		GSC.Instance.uIManger.Show(UIType.PlayerHP, player);
-		GSC.Instance.uIManger.Show(UIType.PlayerHPFollow, player);
-		GSC.Instance.uIManger.Show(UIType.Timer, gameObject);
+		BattleGSC.Instance.uIManger.Show(UIType.XPBar, player);
+		BattleGSC.Instance.uIManger.Show(UIType.PlayerHP, player);
+		BattleGSC.Instance.uIManger.Show(UIType.PlayerHPFollow, player);
+		BattleGSC.Instance.uIManger.Show(UIType.Timer, gameObject);
 	}
 	public void Spawn_Player(string address, Vector3 pos, Quaternion rot)
 	{
@@ -227,7 +227,7 @@ public class GameManager : MonoBehaviour
 
 	Vector3 GetRandomSpawnPosition()
 	{
-		Vector3 playerPos = GSC.Instance.gameManager.Get_PlayerObject().transform.position;
+		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
 
 		for (int i = 0; i < 10; i++)
 		{
@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
 
 	private void Spawn_EnemyAt(Vector3 pos, string key)
 	{
-		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
+		GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
 
 		if (obj != null && obj.TryGetComponent<Enemy>(out var enemy))
 		{
@@ -261,14 +261,14 @@ public class GameManager : MonoBehaviour
 
 	private void Spawn_BossAt(Vector3 pos, string key)
 	{
-		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
+		GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
 
 		if (obj != null && obj.TryGetComponent<Enemy>(out var enemy))
 		{
 			obj.transform.position = pos;
 			obj.gameObject.SetActive(true);
 			enemy.Start_Enemy();
-			GSC.Instance.uIManger.Show(UIType.BossHP, obj);
+			BattleGSC.Instance.uIManger.Show(UIType.BossHP, obj);
 		}
 	}
 
@@ -279,8 +279,8 @@ public void Update_ToPlayerAttackObj()
 	{
 		PauseGame();
 		Set_ShowAndHideCursor(true);
-		GSC.Instance.uIManger.Show(UIType.UpgradePopUp);
-		GSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
+		BattleGSC.Instance.uIManger.Show(UIType.UpgradePopUp);
+		BattleGSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
 	}
 
 	public ItemDataSO Get_ItemDataSO()
@@ -305,13 +305,13 @@ public void Update_ToPlayerAttackObj()
 	public void Game_Over(IDamageable _damageable)
 	{
 		isPaused = true;
-		GSC.Instance.spawnManager.Despawn_All();
+		BattleGSC.Instance.spawnManager.Despawn_All();
 	}	
 
 	public DamageInfo Get_PlayerDamageInfo(int damage, GameObject hitPoint, Type attacker)
 	{
 		Vector3 hitPos = hitPoint.transform.position + Vector3.up * 1.8f;
-		int damageInfo = DBManager.CalculateCriticalDamage(GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey), damage, out bool _isCritical);
+		int damageInfo = DBManager.CalculateCriticalDamage(BattleGSC.Instance.statManager.Get_PlayerData(BattleGSC.Instance.gameManager.CurrentPlayerKey), damage, out bool _isCritical);
 		DamageInfo info = new DamageInfo(damageInfo, hitPos, attacker, _isCritical);
 		return info;
 	}

@@ -30,7 +30,7 @@ public class SpawnManager : MonoBehaviour
 
 	private void Awake()
 	{
-		GSC.Instance.RegisterSpawn(this);
+		BattleGSC.Instance.RegisterSpawn(this);
 	}
 
 	private void OnDestroy()

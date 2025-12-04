@@ -33,25 +33,25 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 	protected virtual void Awake()
 	{
-		if (GSC.Instance != null && GSC.Instance.statManager != null)
+		if (BattleGSC.Instance != null && BattleGSC.Instance.statManager != null)
 		{
-			playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
+			playerStruct = BattleGSC.Instance.statManager.Get_PlayerData(PlayerKey);
 		}
 	}
 
 	protected virtual void Start()
 	{
-		if (GSC.Instance != null && GSC.Instance.statManager != null)
+		if (BattleGSC.Instance != null && BattleGSC.Instance.statManager != null)
 		{
-			GSC.Instance.statManager.onChangePlayerStruct += Handle_AttackStatsChanged;
+			BattleGSC.Instance.statManager.onChangePlayerStruct += Handle_AttackStatsChanged;
 		}
 	}
 
 	protected virtual void OnDestroy()
 	{
 		// 씬 전환/오브젝트 삭제 시 이벤트 해제
-		if (GSC.Instance != null && GSC.Instance.statManager != null)
-			GSC.Instance.statManager.onChangePlayerStruct -= Handle_AttackStatsChanged;
+		if (BattleGSC.Instance != null && BattleGSC.Instance.statManager != null)
+			BattleGSC.Instance.statManager.onChangePlayerStruct -= Handle_AttackStatsChanged;
 
 		if (attackObjectPrefabHandles != null)
 		{
@@ -65,6 +65,15 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 			}
 
 			attackObjectPrefabHandles.Clear();
+		}
+	}
+
+	public void Healing_CurrentHP(int _value)
+	{
+		if (playerStruct.currentHP < MaxHPHealth)
+		{
+			playerStruct.currentHP += _value;
+			Invoke_HealthChanged();
 		}
 	}
 
@@ -82,7 +91,7 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 	{
 		float _currentHP = playerStruct.currentHP;
 		float _maxHP = playerStruct.maxHP;
-		playerStruct = GSC.Instance.statManager.Get_PlayerData(PlayerKey);
+		playerStruct = BattleGSC.Instance.statManager.Get_PlayerData(PlayerKey);
 		playerStruct.currentHP = _currentHP + playerStruct.maxHP - _maxHP;
 		Invoke_HealthChanged();
 	}
@@ -134,7 +143,7 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		attackObjectPrefabHandles[_key] = handle;
 		GameObject obj = handle.Result;
 
-		GSC.Instance.skillManager.Add_CurrentAttacks(_key, obj.GetComponent<AttackRoot>());
+		BattleGSC.Instance.skillManager.Add_CurrentAttacks(_key, obj.GetComponent<AttackRoot>());
 	}
 
 

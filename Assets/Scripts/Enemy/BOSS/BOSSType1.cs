@@ -24,7 +24,7 @@ public class BOSSType1 : Enemy
 	}
 	protected override void Start()
 	{
-		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
+		targetNavigation = BattleGSC.Instance.gameManager.Get_PlayerObject();
 		base.Start();
 	}
 
@@ -72,7 +72,7 @@ public class BOSSType1 : Enemy
 	{
 		for (int i = 0; i < BossSkillSO.bossSkill.projectile.keyCount; i++)
 		{
-			GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, BossSkillSO.bossSkill.projectile.key);
+			GameObject projectileObj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, BossSkillSO.bossSkill.projectile.key);
 			if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 			{
 				projectileObj.gameObject.SetActive(true);
@@ -108,13 +108,13 @@ public class BOSSType1 : Enemy
 		Spawn_XPItem();
 	}
 
-	private void Spawn_XPItem()
+	public override void Spawn_XPItem()
 	{
 		base.Die_Enemy(this);
 
 		for(int i = 0; i < 5;i++)
 		{
-			GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, GSC.Instance.gameManager.Get_ItemDataSO().xPItem);
+			GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Item, BattleGSC.Instance.gameManager.Get_ItemDataSO().xPItem);
 
 			if (obj.TryGetComponent<Item>(out Item _item))
 			{

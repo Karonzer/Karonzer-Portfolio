@@ -4,14 +4,14 @@ public static class UpgradeApplier
 {
 	public static void Apply_Upgrade(UpgradeOptionSO option)
 	{
-		var skillMgr = GSC.Instance.skillManager;
+		var skillMgr = BattleGSC.Instance.skillManager;
 
 		bool hasSkill = skillMgr.currentAttacks.ContainsKey(option.targetKey);
 
 		if (option.optionType == UpgradeOptionType.Global)
 		{
-			var stat = GSC.Instance.statManager;
-			var data = stat.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey);
+			var stat = BattleGSC.Instance.statManager;
+			var data = stat.Get_PlayerData(BattleGSC.Instance.gameManager.CurrentPlayerKey);
 
 			switch (option.effectType)
 			{
@@ -34,7 +34,7 @@ public static class UpgradeApplier
 
 			}
 
-			stat.Set_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey,data);
+			stat.Set_PlayerData(BattleGSC.Instance.gameManager.CurrentPlayerKey,data);
 			stat.InvokeAction_ChangePlayerStruct();
 
 			// 전체 강화라면 여기서 별도 처리 (예: PlayerHP 등)
@@ -47,7 +47,7 @@ public static class UpgradeApplier
 		{
 			if (!hasSkill)
 			{
-				if(GSC.Instance.gameManager.Get_PlayerObject().TryGetComponent<Player>(out Player _player))
+				if(BattleGSC.Instance.gameManager.Get_PlayerObject().TryGetComponent<Player>(out Player _player))
 				{
 					_player.Add_AttackObject(option.targetKey);
 				}

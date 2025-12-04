@@ -40,13 +40,13 @@ public class FireballAttack : AttackRoot
 		while (true)
 		{
 			yield return new WaitForSeconds(attackIntervalTime);
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				for (int i = 0; i < attackStats.ProjectileCount; i++)
 				{
 					if (Find_TargetEnemyDir(out Vector3 _direction))
 					{
-						GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
+						GameObject projectileObj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 						if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 						{
 							projectileObj.gameObject.SetActive(true);

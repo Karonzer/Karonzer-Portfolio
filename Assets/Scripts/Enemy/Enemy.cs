@@ -21,6 +21,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	public event Action<DamageInfo> OnDamaged;
 	public event Action<IDamageable> OnDead;
 
+	public static event Action OnDeadGlobal;
+
 	[SerializeField] protected bool isDead = true;
 
 	[SerializeField] protected SkinnedMeshRenderer meshRenderer;
@@ -36,8 +38,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	protected virtual void Awake()
 	{
-		if (GSC.Instance != null && GSC.Instance.statManager != null)
-			enemyStruct = GSC.Instance.statManager.Get_EnemyData(EnemyKey);
+		if (BattleGSC.Instance != null && BattleGSC.Instance.statManager != null)
+			enemyStruct = BattleGSC.Instance.statManager.Get_EnemyData(EnemyKey);
 
 		stateMachine = new StateMachine<Enemy>(this);
 		animator = transform.GetComponent<Animator>();
@@ -45,8 +47,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	protected virtual void Start()
 	{
-		GSC.Instance.gameManager.OnPause += HandlePause;
-		GSC.Instance.gameManager.OnResume += HandleResume;
+		BattleGSC.Instance.gameManager.OnPause += HandlePause;
+		BattleGSC.Instance.gameManager.OnResume += HandleResume;
 	}
 
 	protected virtual void OnEnable()
@@ -81,7 +83,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	protected virtual void Update()
 	{
-		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.isPaused)
+		if (BattleGSC.Instance.gameManager != null && BattleGSC.Instance.gameManager.isPaused)
 		{
 			return;
 		}
@@ -113,8 +115,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 	public virtual void Setting_Info()
 	{
-		if (GSC.Instance != null && GSC.Instance.statManager != null)
-			enemyStruct = GSC.Instance.statManager.Get_EnemyData(EnemyKey);
+		if (BattleGSC.Instance != null && BattleGSC.Instance.statManager != null)
+			enemyStruct = BattleGSC.Instance.statManager.Get_EnemyData(EnemyKey);
 		InvokeHealthChanged();
 	}
 
@@ -130,6 +132,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		{
 			stateMachine.ChangeState(StateID.die);
 			InvokeDead(this);
+			OnDeadGlobal?.Invoke();
 		}
 	}
 
@@ -137,7 +140,24 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	{
 		enemyStruct.currentHP = 0;
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, EnemyKey, transform.gameObject);
+		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, EnemyKey, transform.gameObject);
+	}
+
+	public virtual void Spawn_XPItem()
+	{
+
+		GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Item, BattleGSC.Instance.gameManager.Get_ItemDataSO().xPItem);
+
+		if (obj.TryGetComponent<Item>(out Item _item))
+		{
+			Vector3 spawnPosition = transform.position + new Vector3(0, 0.2f, 0);
+			_item.Setting_SpwnPos(spawnPosition);
+		}
+
+		if (obj.TryGetComponent<XPitem>(out XPitem xpItem))
+		{
+			xpItem.SetXP(enemyStruct.xpItmeValue);
+		}
 	}
 
 

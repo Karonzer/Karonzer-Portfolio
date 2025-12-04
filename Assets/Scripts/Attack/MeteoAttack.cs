@@ -36,14 +36,14 @@ public class MeteoAttack : AttackRoot
 		while (true)
 		{
 			yield return new WaitForSeconds(attackIntervalTime);
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				if (Find_TargetEnemyRandomList(out List<GameObject> _list))
 				{
 					for (int i = 0; i < attackStats.ProjectileCount; i++)
 					{
 						GameObject obj = _list[Random.Range(0, _list.Count)];
-						GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
+						GameObject projectileObj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 						if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 						{
 							projectileObj.gameObject.SetActive(true);

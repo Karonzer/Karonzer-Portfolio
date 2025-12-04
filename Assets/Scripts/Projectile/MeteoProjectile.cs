@@ -85,7 +85,7 @@ public class MeteoProjectile : Projectile
 	{
 		while (true)
 		{
-			if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				transform.Translate(Vector3.down * projectileSpeed * Time.deltaTime);
 				yield return null;
@@ -101,7 +101,7 @@ public class MeteoProjectile : Projectile
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
 		transform.gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
+		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -150,7 +150,7 @@ public class MeteoProjectile : Projectile
 		{
 			if (hit.TryGetComponent<IDamageable>(out var _enemy))
 			{
-				DamageInfo info = GSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, _enemy.CurrentObj, Type.Enemy);
+				DamageInfo info = BattleGSC.Instance.gameManager.Get_PlayerDamageInfo(projectileDemage, _enemy.CurrentObj, Type.Enemy);
 				_enemy.Take_Damage(info);
 			}
 		}
@@ -179,6 +179,6 @@ public class MeteoProjectile : Projectile
 	private void Despawn_Immediately()
 	{
 		gameObject.SetActive(false);
-		GSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, gameObject);
+		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, gameObject);
 	}
 }

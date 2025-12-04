@@ -8,7 +8,7 @@ public class UIManger : MonoBehaviour
 
 	private void Awake()
 	{
-		GSC.Instance.RegisterUIManger(this);
+		BattleGSC.Instance.RegisterUIManger(this);
 
 		var handlersInChildren = GetComponentsInChildren<IUIHandler>(true);
 		foreach (var h in handlersInChildren)

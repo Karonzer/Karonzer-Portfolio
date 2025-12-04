@@ -22,7 +22,7 @@ public class EnemyType3 : Enemy
 	}
 	protected override void Start()
 	{
-		targetNavigation = GSC.Instance.gameManager.Get_PlayerObject();
+		targetNavigation = BattleGSC.Instance.gameManager.Get_PlayerObject();
 		base.Start();
 	}
 
@@ -62,11 +62,11 @@ public class EnemyType3 : Enemy
 
 	private void Launch_Projectile()
 	{
-		if (GSC.Instance.gameManager != null && !GSC.Instance.gameManager.isPaused)
+		if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 		{
 			if (Find_TargetEnemyDir(out Vector3 _direction))
 			{
-				GameObject projectileObj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, "EnemyProjectile");
+				GameObject projectileObj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, "EnemyProjectile");
 				if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 				{
 					projectileObj.gameObject.SetActive(true);
@@ -124,26 +124,11 @@ public class EnemyType3 : Enemy
 		navigation.isStopped = true;
 		navigation.speed = 0f;
 
+		base.Die_Enemy(this);
 		Spawn_XPItem();
 
 	}
 
 
-	private void Spawn_XPItem()
-	{
-		base.Die_Enemy(this);
 
-		GameObject obj = GSC.Instance.spawnManager.Spawn(PoolObjectType.Item, GSC.Instance.gameManager.Get_ItemDataSO().xPItem);
-
-		if (obj.TryGetComponent<Item>(out Item _item))
-		{
-			Vector3 spawnPosition = transform.position + new Vector3(0, 0.2f, 0);
-			_item.Setting_SpwnPos(spawnPosition);
-		}
-
-		if (obj.TryGetComponent<XPitem>(out XPitem xpItem))
-		{
-			xpItem.SetXP(enemyStruct.xpItmeValue);
-		}
-	}
 }

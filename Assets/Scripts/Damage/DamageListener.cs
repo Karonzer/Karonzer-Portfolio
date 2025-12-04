@@ -21,9 +21,9 @@ public class DamageListener : MonoBehaviour
 
 	private void HandleDamaged(DamageInfo _damageInfo)
 	{
-		if (GSC.Instance.damagePopupManager == null)
+		if (BattleGSC.Instance.damagePopupManager == null)
 			return;
 
-		GSC.Instance.damagePopupManager.Show_Damage(_damageInfo.damage, _damageInfo.hitPoint, _damageInfo.attacker, _damageInfo.isCritical);
+		BattleGSC.Instance.damagePopupManager.Show_Damage(_damageInfo.damage, _damageInfo.hitPoint, _damageInfo.attacker, _damageInfo.isCritical);
 	}
 }

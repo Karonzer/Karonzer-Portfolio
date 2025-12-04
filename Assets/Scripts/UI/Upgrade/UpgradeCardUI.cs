@@ -29,10 +29,10 @@ public class UpgradeCardUI : MonoBehaviour
 	public void OnClick_Select()
 	{
 		Debug.Log(option.description);
-		GSC.Instance.upgradeManager.Select_Upgrade(option);
-		GSC.Instance.uIManger.Hide(UIType.UpgradePopUp);
-		GSC.Instance.gameManager.ResumeGame();
-		GSC.Instance.gameManager.Set_ShowAndHideCursor(false);
+		BattleGSC.Instance.upgradeManager.Select_Upgrade(option);
+		BattleGSC.Instance.uIManger.Hide(UIType.UpgradePopUp);
+		BattleGSC.Instance.gameManager.ResumeGame();
+		BattleGSC.Instance.gameManager.Set_ShowAndHideCursor(false);
 		// 여기서 패널 닫고 게임 재개하는 처리
 	}
 }

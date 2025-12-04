@@ -13,7 +13,7 @@ public class PlayerCinemachineFreeLook : MonoBehaviour
 	private void Update()
 	{
 
-		if(GSC.Instance.gameManager.isPaused)
+		if(BattleGSC.Instance.gameManager.isPaused)
 		{
 			inputProvider.enabled = false;
 		}

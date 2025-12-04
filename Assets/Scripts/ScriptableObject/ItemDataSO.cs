@@ -4,4 +4,5 @@ using UnityEngine;
 public class ItemDataSO : ScriptableObject
 {
 	public string xPItem = "XPitem";
+	public string healingItem = "HealingItem";
 }

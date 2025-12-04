@@ -10,7 +10,7 @@ public class MapCamera : MonoBehaviour
 	}
 	private void Start()
 	{
-		m_CameraTarget = GSC.Instance.gameManager.Get_PlayerObject().transform;
+		m_CameraTarget = BattleGSC.Instance.gameManager.Get_PlayerObject().transform;
 	}
 
 	private void Update()

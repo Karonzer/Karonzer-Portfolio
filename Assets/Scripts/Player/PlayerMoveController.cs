@@ -49,7 +49,7 @@ public class PlayerMoveController : MonoBehaviour
 
 	void Update()
 	{
-		if (GSC.Instance.gameManager != null && GSC.Instance.gameManager.isPaused)
+		if (BattleGSC.Instance.gameManager != null && BattleGSC.Instance.gameManager.isPaused)
 			return;
 
 		gravityDelta = Vector3.zero;
@@ -141,7 +141,7 @@ public class PlayerMoveController : MonoBehaviour
 
 			Vector3 worldMove = camRight * moveDirection.x + camForward * moveDirection.y;
 			if (worldMove.sqrMagnitude > 1f) worldMove.Normalize();
-			horizontalDelta = worldMove * GSC.Instance.statManager.Get_PlayerData(GSC.Instance.gameManager.CurrentPlayerKey).moveSpeed * Time.deltaTime;
+			horizontalDelta = worldMove * BattleGSC.Instance.statManager.Get_PlayerData(BattleGSC.Instance.gameManager.CurrentPlayerKey).moveSpeed * Time.deltaTime;
 
 
 			if (worldMove.sqrMagnitude > 0.001f)

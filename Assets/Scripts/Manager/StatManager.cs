@@ -14,7 +14,7 @@ public class StatManager : MonoBehaviour
 
 	private void Awake()
 	{
-		GSC.Instance.RegisterStatManager(this);
+		BattleGSC.Instance.RegisterStatManager(this);
 		Build_Dict();
 
 	}

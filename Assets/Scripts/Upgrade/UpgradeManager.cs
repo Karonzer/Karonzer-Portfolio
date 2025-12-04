@@ -8,7 +8,7 @@ public class UpgradeManager : MonoBehaviour
 	private Dictionary<string, UpgradeOptionSO> optionsDict;
 	private void Awake()
 	{
-		GSC.Instance.RegisterUpgradeManager(this);
+		BattleGSC.Instance.RegisterUpgradeManager(this);
 		Build_Dict();
 	}
 
@@ -25,7 +25,7 @@ public class UpgradeManager : MonoBehaviour
 	public List<UpgradeOptionSO> Get_RandomOptions(int count)
 	{
 		var candidates = new List<UpgradeOptionSO>();
-		var skillMgr = GSC.Instance.skillManager;
+		var skillMgr = BattleGSC.Instance.skillManager;
 
 		foreach (var option in optionsDict.Values)
 		{
