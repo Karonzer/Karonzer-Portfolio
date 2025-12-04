@@ -25,7 +25,7 @@ public class HpHUD : MonoBehaviour, IUIHandler
 		transform.gameObject.SetActive(true);
 	}
 
-	public void Show(GameObject _obj = null)
+	public void ShowAndInitialie(GameObject _obj = null)
 	{
 		transform.gameObject.SetActive(true);
 		if (_obj.TryGetComponent<IHealthChanged>(out IHealthChanged _healthChanged))

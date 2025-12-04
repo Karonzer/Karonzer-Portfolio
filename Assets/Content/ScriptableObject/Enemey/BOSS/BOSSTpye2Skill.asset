@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bda180a2a179db04a94c606758953a5a, type: 3}
-  m_Name: PlayerData
+  m_Script: {fileID: 11500000, guid: 18f51126b364f394f9d8cd58307606ed, type: 3}
+  m_Name: BOSSTpye2Skill
   m_EditorClassIdentifier: 
-  playerStruct:
-    key: Player
-    moveSpeed: 6
-    maxHP: 200
-    currentHP: 200
-    criticalDamage: 100
-    criticalChance: 50
-    startAttackObj: Fireball
+  bossSkill:
+    projectile:
+      key: BossAttackIndicator
+      keyCount: 5
+      baseProjectileSpeed: 3
+      baseExplosionRange: 3

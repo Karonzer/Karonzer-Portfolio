@@ -14,18 +14,18 @@ public class SpawnManager : MonoBehaviour
 		prefabHandles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
 
 		pools = new Dictionary<PoolObjectType, Dictionary<string, Queue<GameObject>>>()
-	{
-		{ PoolObjectType.Enemy, new Dictionary<string, Queue<GameObject>>() },
-		{ PoolObjectType.Projectile, new Dictionary<string, Queue<GameObject>>() },
-		{ PoolObjectType.Item, new Dictionary<string, Queue<GameObject>>() }
-	};
+		{
+			{ PoolObjectType.Enemy, new Dictionary<string, Queue<GameObject>>() },
+			{ PoolObjectType.Projectile, new Dictionary<string, Queue<GameObject>>() },
+			{ PoolObjectType.Item, new Dictionary<string, Queue<GameObject>>() }
+		};
 
 		parents = new Dictionary<PoolObjectType, Transform>()
-	{
-		{ PoolObjectType.Enemy, transform.Find("EnemySpawnGroup") },
-		{ PoolObjectType.Projectile, transform.Find("ProjectileSpawn") },
-		{ PoolObjectType.Item, transform.Find("ItemSpawnGroup") }
-	};
+		{
+			{ PoolObjectType.Enemy, transform.Find("EnemySpawnGroup") },
+			{ PoolObjectType.Projectile, transform.Find("ProjectileSpawn") },
+			{ PoolObjectType.Item, transform.Find("ItemSpawnGroup") }
+		};
 	}
 
 	private void Awake()
@@ -121,6 +121,29 @@ public class SpawnManager : MonoBehaviour
 	{
 		obj.SetActive(false);
 		pools[type][name].Enqueue(obj);
+	}
+
+	public void Despawn_All()
+	{
+		Despawn_ByType(PoolObjectType.Enemy);
+		Despawn_ByType(PoolObjectType.Projectile);
+		Despawn_ByType(PoolObjectType.Item);
+	}
+
+	private void Despawn_ByType(PoolObjectType type)
+	{
+		if (!parents.ContainsKey(type))
+			return;
+
+		Transform parent = parents[type];
+
+		foreach (Transform child in parent)
+		{
+			if (child.gameObject.activeSelf)
+			{
+				child.gameObject.SetActive(false);
+			}
+		}
 	}
 
 }

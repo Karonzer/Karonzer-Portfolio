@@ -9,7 +9,7 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 
 	public event Action<int> OnLevelChanged;
 	public event Action<int, int> OnXPChanged;
-	public event Action OnLevelUp;
+	public event Action<int> OnLevelUp;
 
 	[SerializeField] private AnimationCurve xpCurve;
 
@@ -41,13 +41,13 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 	{
 		currentXP -= maxXP;
 		currentLevel += 1;
-		OnLevelUp?.Invoke();
+		OnLevelUp?.Invoke(currentXP);
 
 		maxXP = CalculateNextLevelXP(currentLevel);
 		OnLevelChanged?.Invoke(currentLevel);
 		OnXPChanged?.Invoke(CurrentXP, MaxXP);
 		GSC.Instance.gameManager.Update_ToPlayerAttackObj();
-		GSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
+		GSC.Instance.statManager.IncreaseAllEnemyStats(0.1f);
 	}
 
 

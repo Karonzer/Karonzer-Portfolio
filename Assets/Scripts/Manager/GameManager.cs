@@ -7,22 +7,37 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class GameManager : MonoBehaviour
 {
+	public EnemySpawnListSO enemySpawnListSO;
+	public EnemySpawnListSO enemyBossSpawnListSO;
+	public GameManagerValueSO gameManagerValueSO;
+
 	[SerializeField] private Transform playerPos;
 	[SerializeField] private GameObject player;
 	[SerializeField] private string currentPlayerKey;
 	public string CurrentPlayerKey => currentPlayerKey;
 
+	[SerializeField] private int minSpawnCount;
+	[SerializeField] private int maxSpawnCount;
+	[SerializeField] private int spawnCount;
 
 	[SerializeField] private ItemDataSO itemData;
 	[SerializeField] private PopUpDataSO popUpData;
 
 	private Coroutine spwanTimeRoutine;
-	[SerializeField] private float enemySpawnInterval = 5f; // 초기 5초
+	[SerializeField] private float enemySpawnInterval;
 	public float EnemySpawnInterval => enemySpawnInterval;
+
+	private float survivalTime;
+	public float SurvivalTime => survivalTime;
+	private Coroutine timerRoutine;
+
+	private float lastBossSpawnTime;
+	[SerializeField] private float bossSpawnInterval;
 
 
 	public event Action OnPause;
 	public event Action OnResume;
+	public event Action<float> TimerAction;
 	public bool isPaused { get; private set; }
 
 	private void Awake()
@@ -36,24 +51,51 @@ public class GameManager : MonoBehaviour
 
 		Setting_Cursor();
 		Setting_StartUI();
-		player.GetComponent<PlayerLevel>().OnLevelUp += Handle_PlayerLevelUp;
+		Settting_PlayerEvnet();
+
+		Start_Game();
 	}
 
 	private void OnEnable()
 	{
+		Setting_GameManagerValue();
+
+	}
+
+	private void OnDestroy()
+	{ 
+		Addressables.ReleaseInstance(player);
+	}
+
+	private void Setting_GameManagerValue()
+	{
+
+		survivalTime = 0;
+		enemySpawnInterval = gameManagerValueSO.enemySpawnInterval;
+		lastBossSpawnTime = 0;
+
 		isPaused = false;
+
+		minSpawnCount = gameManagerValueSO.minSpawnCount;
+		maxSpawnCount = gameManagerValueSO.maxSpawnCount;
+		spawnCount = gameManagerValueSO.spawnCount;
+
+		bossSpawnInterval = gameManagerValueSO.bossSpawnInterval;
+	}
+
+	private void Start_Game()
+	{
 		if (spwanTimeRoutine != null)
 		{
 			StopCoroutine(spwanTimeRoutine);
 			spwanTimeRoutine = null;
 		}
 
-		spwanTimeRoutine = StartCoroutine(Enemy_SpawnRoutine());
-	}
+		if (timerRoutine != null)
+			StopCoroutine(timerRoutine);
+		timerRoutine = StartCoroutine(SurvivalTimerRoutine());
 
-	private void OnDestroy()
-	{
-		Addressables.ReleaseInstance(player);
+		spwanTimeRoutine = StartCoroutine(Enemy_SpawnRoutine());
 	}
 
 	private void Initialize_Player()
@@ -61,11 +103,18 @@ public class GameManager : MonoBehaviour
 		Spawn_Player(currentPlayerKey, Vector3.zero,Quaternion.identity);
 	}
 
+	private void Settting_PlayerEvnet()
+	{
+		player.GetComponent<PlayerLevel>().OnLevelUp += Handle_PlayerLevelUp;
+		player.GetComponent<Player>().OnDead += Game_Over;
+	}
+
 	private void Setting_StartUI()
 	{
 		GSC.Instance.uIManger.Show(UIType.XPBar, player);
 		GSC.Instance.uIManger.Show(UIType.PlayerHP, player);
 		GSC.Instance.uIManger.Show(UIType.PlayerHPFollow, player);
+		GSC.Instance.uIManger.Show(UIType.Timer, gameObject);
 	}
 	public void Spawn_Player(string address, Vector3 pos, Quaternion rot)
 	{
@@ -93,31 +142,18 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator Enemy_SpawnRoutine()
 	{
-		//yield return new WaitForSeconds(1f);
-
-		//if (!isPaused)
-		//{
-		//	Vector3 spawnPos = GetRandomSpawnPosition();
-		//	if (spawnPos != Vector3.zero)
-		//		Spawn_BossAt(spawnPos, "BOSSEnemyType1");  // 스폰할 적 key
-
-		//	yield return new WaitForSeconds(EnemySpawnInterval); // 주기
-		//}
-		//else
-		//{
-		//	yield return null;
-		//}
 		yield return new WaitForSeconds(1f);
 		while (true)
 		{
 			if (!isPaused)
 			{
-				int count = UnityEngine.Random.Range(3, 6); // 3~5마리
+				int count = UnityEngine.Random.Range(minSpawnCount, maxSpawnCount); // 3~5마리
+				int spawnKey = UnityEngine.Random.Range(0, spawnCount);
 				for (int i = 0; i < count; i++)
 				{
 					Vector3 spawnPos = GetRandomSpawnPosition();
 					if (spawnPos != Vector3.zero)
-						Spawn_EnemyAt(spawnPos, "IceMan");  // 스폰할 적 key
+						Spawn_EnemyAt(spawnPos, enemySpawnListSO.enemyKey[spawnKey]);  // 스폰할 적 key
 				}
 
 				yield return new WaitForSeconds(EnemySpawnInterval); // 주기
@@ -128,11 +164,42 @@ public class GameManager : MonoBehaviour
 			}
 
 		}
-
-
 	}
 
-	private void Handle_PlayerLevelUp()
+	private void SpawnBossByTime()
+	{
+		int spawnKey = UnityEngine.Random.Range(0, 2);
+		Vector3 pos = GetRandomSpawnPosition();
+		if (pos != Vector3.zero)
+		{
+			Spawn_BossAt(pos, enemyBossSpawnListSO.enemyKey[spawnKey]);
+		}
+	}
+
+	IEnumerator SurvivalTimerRoutine()
+	{
+		survivalTime = 0f;
+
+		while (true)
+		{
+			if (!isPaused)
+			{
+				survivalTime += Time.deltaTime;
+				TimerAction?.Invoke(survivalTime);
+
+
+				if (survivalTime - lastBossSpawnTime >= bossSpawnInterval)
+				{
+					SpawnBossByTime();
+					lastBossSpawnTime = survivalTime;
+				}
+			}
+			yield return null;
+		}
+	}
+
+
+	private void Handle_PlayerLevelUp(int _currentLevel)
 	{
 		// 감소값: 레벨업마다 0.2초씩 감소
 		if (enemySpawnInterval < 0.5f)
@@ -142,6 +209,17 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			enemySpawnInterval -= 0.2f;
+		}
+
+		if(_currentLevel / 2 == 0)
+		{
+			minSpawnCount++;
+			maxSpawnCount++;
+		}
+
+		if(spawnCount < enemySpawnListSO.enemyKey.Length && _currentLevel / 4 == 0)
+		{
+			spawnCount++;
 		}
 
 		// 최소값 제한 (너무 빨라지는 것 방지)
@@ -203,6 +281,7 @@ public void Update_ToPlayerAttackObj()
 		PauseGame();
 		Set_ShowAndHideCursor(true);
 		GSC.Instance.uIManger.Show(UIType.UpgradePopUp);
+		GSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
 	}
 
 	public ItemDataSO Get_ItemDataSO()
@@ -223,6 +302,12 @@ public void Update_ToPlayerAttackObj()
 		OnResume?.Invoke();
 		isPaused = false;
 	}
+
+	public void Game_Over(IDamageable _damageable)
+	{
+		isPaused = true;
+		GSC.Instance.spawnManager.Despawn_All();
+	}	
 
 	public DamageInfo Get_PlayerDamageInfo(int damage, GameObject hitPoint, Type attacker)
 	{

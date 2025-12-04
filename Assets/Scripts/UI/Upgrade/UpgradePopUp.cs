@@ -25,7 +25,7 @@ public class UpgradePopUp : MonoBehaviour, IUIHandler
 
 	}
 
-	public void Show(GameObject _obj = null)
+	public void ShowAndInitialie(GameObject _obj = null)
 	{
 		popUp.gameObject.SetActive(true);
 		Open_UpgradeCard();

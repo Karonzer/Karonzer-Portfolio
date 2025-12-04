@@ -29,7 +29,7 @@ public class UIManger : MonoBehaviour
 	public void Show(UIType type, GameObject _obj = null)
 	{
 		if (handlers.TryGetValue(type, out var handler))
-			handler.Show(_obj);
+			handler.ShowAndInitialie(_obj);
 	}
 
 	public void Hide(UIType type)

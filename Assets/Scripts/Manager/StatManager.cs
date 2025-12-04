@@ -78,7 +78,7 @@ public class StatManager : MonoBehaviour
 
 			s.maxHP *= (1f + percent);
 			s.currentHP = s.maxHP;
-			s.damage = Mathf.RoundToInt(s.damage * (1f + percent));
+			s.rawDamage = Mathf.RoundToInt(s.damage * (1f + percent));
 
 			enemyStatDict[key] = s;
 		}

@@ -51,13 +51,14 @@ public enum UIType
 	PlayerHP,
 	PlayerHPFollow,
 	UpgradePopUp,
+	Timer,
 }
 
 public interface IUIHandler
 {
 	UIType Type { get; }
 	void Show();
-	void Show(GameObject _obj = null);
+	void ShowAndInitialie(GameObject _obj = null);
 	void Hide();
 }
 
@@ -100,7 +101,8 @@ public struct EnemyStruct
 	public float maxHP;
 	public float currentHP;
 	public float attackInterval;
-	public int damage;
+	public float rawDamage;
+	public int damage => Mathf.RoundToInt(rawDamage);
 	public float attackRange;
 	public int xpItmeValue;
 }

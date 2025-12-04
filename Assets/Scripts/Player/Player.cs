@@ -94,11 +94,11 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 		playerStruct.currentHP -= _damageInfo.damage;
 		Invoke_Damaged(_damageInfo);
+		Invoke_HealthChanged();
 		if (playerStruct.currentHP <= 0)
 		{
-
+			OnDead?.Invoke(this);
 		}
-		Invoke_HealthChanged();
 	}
 
 	private void HitFlash()

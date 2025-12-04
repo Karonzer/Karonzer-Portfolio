@@ -23,7 +23,7 @@ public class BossHPHUD : MonoBehaviour, IUIHandler
 
 	}
 
-	public void Show(GameObject _obj = null)
+	public void ShowAndInitialie(GameObject _obj = null)
 	{
 		if (_obj.TryGetComponent<IHealthChanged>(out IHealthChanged _healthChanged))
 			Setting_BossUIBar(_healthChanged);
