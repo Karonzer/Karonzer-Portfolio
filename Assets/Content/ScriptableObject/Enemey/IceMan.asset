@@ -18,6 +18,6 @@ MonoBehaviour:
     maxHP: 10
     currentHP: 10
     attackInterval: 5
-    damage: 10
+    rawDamage: 10
     attackRange: 10
     xpItmeValue: 10

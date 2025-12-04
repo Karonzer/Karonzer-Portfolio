@@ -15,7 +15,7 @@ MonoBehaviour:
   title: "\uAD00\uD1B5 \uBC1C\uC0AC\uCCB4 \uB370\uBBF8\uC9C0 \uC99D\uAC00"
   description: "\uAD00\uD1B5 \uBC1C\uC0AC\uCCB4 \uB370\uBBF8\uC9C0 20%  \uC99D\uAC00"
   icon: {fileID: 0}
-  optionType: 1
+  optionType: 0
   numKey: Penetrating_01
   targetKey: Penetrating
   effectType: 0

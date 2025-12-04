@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
 
 	private void SpawnBossByTime()
 	{
-		int spawnKey = UnityEngine.Random.Range(0, 2);
+		int spawnKey = UnityEngine.Random.Range(1, enemyBossSpawnListSO.enemyKey.Length);
 		Vector3 pos = GetRandomSpawnPosition();
 		if (pos != Vector3.zero)
 		{
@@ -201,28 +201,27 @@ public class GameManager : MonoBehaviour
 
 	private void Handle_PlayerLevelUp(int _currentLevel)
 	{
-		// 감소값: 레벨업마다 0.2초씩 감소
-		if (enemySpawnInterval < 0.5f)
+
+		if (enemySpawnInterval < gameManagerValueSO.enemySpawnIntervalMin)
 		{
-			enemySpawnInterval = 0.5f;
+			enemySpawnInterval = gameManagerValueSO.enemySpawnIntervalMin;
 		}
 		else
 		{
-			enemySpawnInterval -= 0.2f;
+			enemySpawnInterval -= gameManagerValueSO.enemySpawnIntervalDecrease;
 		}
 
-		if(_currentLevel / 2 == 0)
+		if(_currentLevel / gameManagerValueSO.LevetCheck == 0)
 		{
 			minSpawnCount++;
 			maxSpawnCount++;
 		}
 
-		if(spawnCount < enemySpawnListSO.enemyKey.Length && _currentLevel / 4 == 0)
+		if(spawnCount < enemySpawnListSO.enemyKey.Length && _currentLevel / gameManagerValueSO.spawnCountDecreaseValue == 0)
 		{
 			spawnCount++;
 		}
 
-		// 최소값 제한 (너무 빨라지는 것 방지)
 		enemySpawnInterval = Mathf.Clamp(enemySpawnInterval, 1.0f, 10f);
 	}
 

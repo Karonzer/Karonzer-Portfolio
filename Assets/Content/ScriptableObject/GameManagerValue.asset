@@ -15,5 +15,9 @@ MonoBehaviour:
   minSpawnCount: 3
   maxSpawnCount: 6
   spawnCount: 2
+  spawnCountDecreaseValue: 4
   enemySpawnInterval: 5
+  enemySpawnIntervalMin: 0.5
+  enemySpawnIntervalDecrease: 0.2
   bossSpawnInterval: 600
+  LevetCheck: 2
