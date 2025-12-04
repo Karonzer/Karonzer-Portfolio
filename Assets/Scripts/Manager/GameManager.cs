@@ -230,7 +230,7 @@ public class GameManager : MonoBehaviour
 	{
 		Vector3 playerPos = GSC.Instance.gameManager.Get_PlayerObject().transform.position;
 
-		for (int i = 0; i < 10; i++) // 10번까지 시도
+		for (int i = 0; i < 10; i++)
 		{
 			Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
 			float distance = UnityEngine.Random.Range(15f, 30f);
@@ -245,7 +245,7 @@ public class GameManager : MonoBehaviour
 			}
 		}
 
-		return Vector3.zero; // 실패
+		return Vector3.zero;
 	}
 
 	private void Spawn_EnemyAt(Vector3 pos, string key)

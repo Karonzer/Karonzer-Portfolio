@@ -47,7 +47,6 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 		OnLevelChanged?.Invoke(currentLevel);
 		OnXPChanged?.Invoke(CurrentXP, MaxXP);
 		GSC.Instance.gameManager.Update_ToPlayerAttackObj();
-		GSC.Instance.statManager.IncreaseAllEnemyStats(0.1f);
 	}
 
 
