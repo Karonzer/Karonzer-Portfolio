@@ -278,6 +278,13 @@ public class GameManager : MonoBehaviour
 		BattleGSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
 	}
 
+	public void Update_ToPlayerAttackObjIsChestBox()
+	{
+		PauseGame();
+		Set_ShowAndHideCursor(true);
+		BattleGSC.Instance.uIManger.Show(UIType.UpgradePopUp);
+	}
+
 	public void Check_PendingLevelUp()
 	{
 		player.GetComponent<PlayerLevel>().Handle_CloseUpgradePopup();

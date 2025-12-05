@@ -12,6 +12,7 @@ public enum PoolObjectType
 	Projectile,
 	Enemy,
 	Item,
+	Actor,
 }
 
 
@@ -20,6 +21,20 @@ public enum StateID
 	tracking,
 	Attack,
 	die,
+}
+
+public enum BuffType
+{
+	DamagePercent,
+	MoveSpeedPercent,
+	AttackSpeedPercent,
+}
+
+public class BuffData
+{
+	public BuffType type;
+	public float value;      // +20%, +30%
+	public float duration;   // 몇 초 동안 유지?
 }
 
 public enum UpgradeOptionType
@@ -55,6 +70,13 @@ public enum UIType
 	GameOver,
 }
 
+
+public interface IInteractable
+{
+	GameObject currentObj { get; }
+	bool CanInteract { get; }
+	void Interact(GameObject interactor);
+}
 public interface IUIHandler
 {
 	UIType Type { get; }

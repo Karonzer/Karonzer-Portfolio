@@ -1,7 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
 public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemyDoAttack
 {
@@ -146,6 +146,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		enemyStruct.currentHP = 0;
 		transform.gameObject.SetActive(false);
 		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Enemy, EnemyKey, transform.gameObject);
+
+		float chance = 0.01f;
+		if (UnityEngine.Random.value <= chance)
+		{
+			GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Actor, "ChestBox");
+			if (obj != null)
+			{
+				obj.gameObject.SetActive(true);
+				obj.transform.position = transform.position;
+			}
+		}
 	}
 
 	public virtual void Spawn_XPItem()

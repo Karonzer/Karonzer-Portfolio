@@ -17,14 +17,16 @@ public class SpawnManager : MonoBehaviour
 		{
 			{ PoolObjectType.Enemy, new Dictionary<string, Queue<GameObject>>() },
 			{ PoolObjectType.Projectile, new Dictionary<string, Queue<GameObject>>() },
-			{ PoolObjectType.Item, new Dictionary<string, Queue<GameObject>>() }
+			{ PoolObjectType.Item, new Dictionary<string, Queue<GameObject>>() },
+			{ PoolObjectType.Actor, new Dictionary<string, Queue<GameObject>>() }
 		};
 
 		parents = new Dictionary<PoolObjectType, Transform>()
 		{
 			{ PoolObjectType.Enemy, transform.Find("EnemySpawnGroup") },
 			{ PoolObjectType.Projectile, transform.Find("ProjectileSpawn") },
-			{ PoolObjectType.Item, transform.Find("ItemSpawnGroup") }
+			{ PoolObjectType.Item, transform.Find("ItemSpawnGroup") },
+			{ PoolObjectType.Actor, transform.Find("ActorSpawnGroup") }
 		};
 	}
 

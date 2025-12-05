@@ -12,6 +12,7 @@ public class StatManager : MonoBehaviour
 
 	public event Action onChangePlayerStruct;
 
+
 	private void Awake()
 	{
 		BattleGSC.Instance.RegisterStatManager(this);
@@ -83,6 +84,9 @@ public class StatManager : MonoBehaviour
 			enemyStatDict[key] = s;
 		}
 	}
+
+
+
 
 
 }

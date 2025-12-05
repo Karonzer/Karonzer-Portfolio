@@ -7,7 +7,6 @@ public class PlayerMoveController : MonoBehaviour
 
 	[Header("기본 설정")]
 	[SerializeField] private CharacterController characterController;
-	[SerializeField] private InputSystem_Actions inputActions;
 	[SerializeField] private GravityController playerGravityController;
 
 
@@ -35,15 +34,11 @@ public class PlayerMoveController : MonoBehaviour
 
 	private void OnEnable()
 	{
-		inputActions.Enable();
-		Setting_InputActionMove();
 		Setting_PlayerMoveController();
 	}
 
 	private void OnDisable()
 	{
-		inputActions.Disable();
-		DiSetting_InputActionMove();
 	}
 
 	void Update()
@@ -65,7 +60,6 @@ public class PlayerMoveController : MonoBehaviour
 	private void Initialize_PlayerMoveController()
 	{
 		characterController = GetComponent<CharacterController>();
-		inputActions = new InputSystem_Actions();
 		playerGravityController = transform.AddComponent<GravityController>();
 		cameraPos = Camera.main;
 	}
@@ -83,21 +77,14 @@ public class PlayerMoveController : MonoBehaviour
 	}
 
 
-	private void Setting_InputActionMove()
-	{
-		inputActions.Player.Move.performed += OnMove;
-		inputActions.Player.Move.canceled += OnMoveCanceled;
-		inputActions.Player.Jump.performed += OnJump;
-	}	
 
-	private void DiSetting_InputActionMove()
+	public void OnInteract(InputAction.CallbackContext context)
 	{
-		inputActions.Player.Move.performed -= OnMove;
-		inputActions.Player.Move.canceled -= OnMoveCanceled;
-		inputActions.Player.Jump.performed -= OnJump;
+		Debug.Log("test");
+
 	}
 
-	private void OnMove(InputAction.CallbackContext context)
+	public void OnMove(InputAction.CallbackContext context)
 	{
 		moveDirection = context.ReadValue<Vector2>();
 		if (moveRoutine == null)
@@ -107,7 +94,7 @@ public class PlayerMoveController : MonoBehaviour
 
 	}
 
-	private void OnMoveCanceled(InputAction.CallbackContext context)
+	public void OnMoveCanceled(InputAction.CallbackContext context)
 	{
 		moveDirection = Vector2.zero;
 		horizontalDelta = Vector3.zero;
@@ -120,6 +107,7 @@ public class PlayerMoveController : MonoBehaviour
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
+		Debug.Log("test");
 		if (context.performed)
 		{
 			playerGravityController?.Jump();

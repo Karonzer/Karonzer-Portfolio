@@ -2,24 +2,66 @@ using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : Player
 {
-	PlayerMoveController moveController;
+	[SerializeField] private InputSystem_Actions inputActions;
+
+	[SerializeField] private PlayerMoveController moveController;
+	[SerializeField] private PlayerInteractor interactor;
+	 
 	protected override void Awake()
 	{
 		base.Awake();
-		if (meshRenderer != null)
-			hitMatInstance = meshRenderer.material;
-	}
-	protected override void Start()
-	{
-		base.Start();
-		if(moveController == null)
+		inputActions = new InputSystem_Actions();
+		if (moveController == null)
 		{
 			moveController = transform.AddComponent<PlayerMoveController>();
 		}
 
+		if (interactor == null)
+		{
+			interactor = transform.AddComponent<PlayerInteractor>();
+		}
+
+		if (meshRenderer != null)
+			hitMatInstance = meshRenderer.material;
+	}
+
+
+	private void OnEnable()
+	{
+		inputActions.Enable();
+		Setting_InputActionMove();
+	}
+
+	private void OnDisable()
+	{
+		inputActions.Disable();
+		DiSetting_InputActionMove();
+	}
+	protected override void Start()
+	{
+		base.Start();
 		Add_AttackObject(StartAttackKey);
+	}
+
+
+
+	private void Setting_InputActionMove()
+	{
+		inputActions.Player.Move.performed += moveController.OnMove;
+		inputActions.Player.Move.canceled += moveController.OnMoveCanceled;
+		inputActions.Player.Jump.performed += moveController.OnJump;
+		inputActions.Player.Interact.performed += interactor.OnInteract;
+	}
+
+	private void DiSetting_InputActionMove()
+	{
+		inputActions.Player.Move.performed -= moveController.OnMove;
+		inputActions.Player.Move.canceled -= moveController.OnMoveCanceled;
+		inputActions.Player.Jump.performed -= moveController.OnJump;
+		inputActions.Player.Interact.performed -= interactor.OnInteract;
 	}
 }

@@ -61,6 +61,29 @@ public static class Utilities
 		return target;
 	}
 
+	public static GameObject Get_CloseObj(this Collider[] _results, Transform _from, int count)
+	{
+		if (_results == null || count <= 0)
+			return null;
+
+		float minDist = float.MaxValue;
+		GameObject target = null;
+
+		for (int i = 0; i < count; i++)
+		{
+			Collider c = _results[i];
+
+			float dist = (c.transform.position - _from.position).sqrMagnitude;
+
+			if (dist < minDist)
+			{
+				minDist = dist;
+				target = c.gameObject;
+			}
+		}
+		return target;
+	}
+
 	// Enemy 태그 가진 Transform들을 모두 반환
 	public static List<Transform> Get_Enemies(this Collider[] _results)
 	{
