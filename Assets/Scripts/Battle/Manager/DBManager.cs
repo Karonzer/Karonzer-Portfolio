@@ -15,6 +15,14 @@ public enum PoolObjectType
 	Actor,
 }
 
+public enum PoolObjectTypeSpawnParents
+{
+	EnemySpawnGroup,
+	ProjectileSpawn,
+	ItemSpawnGroup,
+	ActorSpawnGroup,
+}
+
 
 public enum StateID
 {
@@ -66,6 +74,7 @@ public enum UIType
 	PlayerHP,
 	PlayerHPFollow,
 	UpgradePopUp,
+	TextPopUp,
 	Timer,
 	GameOver,
 }

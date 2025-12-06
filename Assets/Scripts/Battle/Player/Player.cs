@@ -126,6 +126,7 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 		if (hitMatInstance == null)
 			yield break;
 
+		Function_HitFlashEmission();
 		hitMatInstance.EnableKeyword("_EMISSION");
 		hitMatInstance.SetColor("_EmissionColor", Color.red * 2f); // 번쩍
 
@@ -133,6 +134,17 @@ public abstract class Player : MonoBehaviour, IDamageable, IHealthChanged
 
 		hitMatInstance.SetColor("_EmissionColor", Color.black); // 원래대로
 	}
+
+	public void Function_HitFlashEmission()
+	{
+		Event_ChildEvnet();
+	}
+
+
+	protected virtual void Event_ChildEvnet()
+	{
+
+	}	
 
 	public void Add_AttackObject(string _key)
 	{

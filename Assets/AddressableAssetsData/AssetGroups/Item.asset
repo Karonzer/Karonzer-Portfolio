@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Item
   m_GUID: 11669e6d2caa4ae42a59f60cc2b68b7e
   m_SerializeEntries:
+  - m_GUID: 3560058ca99471346b8ec192d62e1f6f
+    m_Address: MagnetItem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3a318a5d36719e14f8ed2e1df35707db
     m_Address: HealingItem
     m_ReadOnly: 0

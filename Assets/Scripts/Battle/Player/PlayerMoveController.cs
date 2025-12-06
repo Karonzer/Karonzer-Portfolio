@@ -52,6 +52,7 @@ public class PlayerMoveController : MonoBehaviour
 
 		characterController.Move(horizontalDelta + gravityDelta);
 
+
 		animator.SetFloat("HSpeed", moveDirection.x);
 		animator.SetFloat("VSpeed", moveDirection.y);
 		animator.SetBool("IsGrounded", playerGravityController.IsGrounded);
@@ -77,13 +78,6 @@ public class PlayerMoveController : MonoBehaviour
 	}
 
 
-
-	public void OnInteract(InputAction.CallbackContext context)
-	{
-		Debug.Log("test");
-
-	}
-
 	public void OnMove(InputAction.CallbackContext context)
 	{
 		moveDirection = context.ReadValue<Vector2>();
@@ -107,7 +101,6 @@ public class PlayerMoveController : MonoBehaviour
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
-		Debug.Log("test");
 		if (context.performed)
 		{
 			playerGravityController?.Jump();
@@ -141,6 +134,8 @@ public class PlayerMoveController : MonoBehaviour
 			yield return null;
 		}
 	}
+
+
 
 
 }

@@ -1,47 +1,30 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 public class ItemFollowToPlayer : MonoBehaviour
 {
-	private GameObject target;
+	private XPitem xPitem;
 	private SphereCollider sphereCollider;
-	private Coroutine followRoutine;
 
 	private void Awake()
 	{
 		sphereCollider = transform.GetComponent<SphereCollider>();
 		sphereCollider.isTrigger = true;
+		xPitem = transform.parent.GetComponent<XPitem>();
 	}
 
 	private void OnEnable()
 	{
-		if (followRoutine != null) 
-		{
-			StopCoroutine(followRoutine);
-			followRoutine = null;
-		}
+
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if(other.CompareTag("Player"))
 		{
-			if (followRoutine == null)
+			if (!xPitem.Get_isFollowToPlayer())
 			{
-				target = other.gameObject;
-				followRoutine = StartCoroutine(Follow_ToPlayer(target));
+				xPitem.Start_FollowToPlayer(other.gameObject);
 			}
-		}
-	}
-
-	private IEnumerator Follow_ToPlayer(GameObject _obj)
-	{
-		while (true)
-		{
-			Vector3 projectileDir = _obj.Get_TargetDir(transform);
-			transform.parent.Translate(projectileDir * 5 * Time.deltaTime);
-			yield return null;
 		}
 	}
 

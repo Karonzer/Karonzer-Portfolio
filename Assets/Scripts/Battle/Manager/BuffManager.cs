@@ -1,9 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using NUnit.Framework.Constraints;
 public class BuffManager : MonoBehaviour
 {
-	private Dictionary<BuffType, Coroutine> activeBuffs = new();
+	private Dictionary<BuffType, Coroutine> activeBuffs;
+
+	private void Awake()
+	{
+		activeBuffs = new Dictionary<BuffType, Coroutine>();
+	}
+
+	//private void OnEnable()
+	//{
+	//	foreach (var b in activeBuffs.Values)
+	//	{
+	//		if(b != null)
+	//		{
+	//			StopCoroutine(b);
+	//			b = null;
+	//		}
+	//	}
+	//}
 
 	//public void ApplyBuff(BuffData data)
 	//{

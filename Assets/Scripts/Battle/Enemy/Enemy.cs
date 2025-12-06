@@ -157,6 +157,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 				obj.transform.position = transform.position;
 			}
 		}
+
+
+
+		float value = 0.05f;
+		if (UnityEngine.Random.value <= value)
+		{
+			BattleGSC.Instance.gameManager.Spawn_ItemPos(transform.position);
+		}
 	}
 
 	public virtual void Spawn_XPItem()

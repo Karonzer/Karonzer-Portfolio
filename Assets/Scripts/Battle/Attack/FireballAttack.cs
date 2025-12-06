@@ -17,6 +17,7 @@ public class FireballAttack : AttackRoot
 	private void OnEnable()
 	{
 		Attack();
+		GameObject projectileObj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 	}
 	protected override void Attack()
 	{

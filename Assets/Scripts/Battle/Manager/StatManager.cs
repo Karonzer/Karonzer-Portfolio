@@ -6,6 +6,7 @@ public class StatManager : MonoBehaviour
 {
 	public List<PlayerDataSO> playerStatList = new List<PlayerDataSO>();
 	private Dictionary<string, PlayerStruct> playerStatDict;
+	[SerializeField] private PlayerStruct currentPlayerBuffStat = new PlayerStruct();
 
 	public List<EnemyDataSO> enemyStatList = new List<EnemyDataSO>();
 	private Dictionary<string, EnemyStruct> enemyStatDict;
@@ -40,11 +41,17 @@ public class StatManager : MonoBehaviour
 
 	public PlayerStruct Get_PlayerData(string _key)
 	{
-		if (playerStatDict.TryGetValue(_key, out var stats))
-			return stats;
+		if (!playerStatDict.TryGetValue(_key, out var baseStats))
+			return default;
 
-		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
-		return default;
+		PlayerStruct result = baseStats;
+
+		// 버프가 들어가는 구조
+		result.moveSpeed += currentPlayerBuffStat.moveSpeed;
+		result.maxHP += currentPlayerBuffStat.maxHP;
+		result.criticalChance += currentPlayerBuffStat.criticalChance;
+		result.criticalChance += currentPlayerBuffStat.criticalChance;
+		return result;
 	}
 
 	public void Set_PlayerData(string _key, PlayerStruct _value)

@@ -114,7 +114,6 @@ public class EnemyProjectile : Projectile
 
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("test");
 		if (isHit) return;
 		if (other.CompareTag("Enemy"))
 			return;

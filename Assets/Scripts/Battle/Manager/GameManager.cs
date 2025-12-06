@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,7 +30,10 @@ public class GameManager : MonoBehaviour
 
 	private float survivalTime;
 	public float SurvivalTime => survivalTime;
+	public float lastWaveTime;
 	private Coroutine timerRoutine;
+
+	private Coroutine itempSpawnRoutine;
 
 	private float lastBossSpawnTime;
 	[SerializeField] private float bossSpawnInterval;
@@ -70,6 +74,7 @@ public class GameManager : MonoBehaviour
 	{
 
 		survivalTime = 0;
+		lastWaveTime = 0;
 		enemySpawnInterval = gameManagerValueSO.enemySpawnInterval;
 		lastBossSpawnTime = 0;
 
@@ -91,10 +96,21 @@ public class GameManager : MonoBehaviour
 		}
 
 		if (timerRoutine != null)
+		{
 			StopCoroutine(timerRoutine);
-		timerRoutine = StartCoroutine(SurvivalTimerRoutine());
+			timerRoutine = null;
+		}
 
+		if(itempSpawnRoutine != null)
+		{
+			StopCoroutine(itempSpawnRoutine);
+			itempSpawnRoutine = null;
+		}
+
+		timerRoutine = StartCoroutine(SurvivalTimerRoutine());
 		spwanTimeRoutine = StartCoroutine(Enemy_SpawnRoutine());
+		itempSpawnRoutine= StartCoroutine(Itemp_SpawnRoutine());
+
 	}
 
 	private void Initialize_Player()
@@ -191,8 +207,56 @@ public class GameManager : MonoBehaviour
 					SpawnBossByTime();
 					lastBossSpawnTime = survivalTime;
 				}
+
+				if (survivalTime - lastWaveTime >= gameManagerValueSO.waveInterval)
+				{
+					StartCoroutine(SpawnWaveRoutine());
+					lastWaveTime = survivalTime;
+				}
 			}
 			yield return null;
+		}
+	}
+
+	IEnumerator SpawnWaveRoutine()
+	{
+		// 잠시 텀 → 갑자기 화면 흔들림, 경고 효과 등을 넣을 수 있음
+		BattleGSC.Instance.uIManger.Show(UIType.TextPopUp);
+		yield return new WaitForSeconds(1);
+
+		int spawnKey = UnityEngine.Random.Range(0, spawnCount);
+		int count = UnityEngine.Random.Range(gameManagerValueSO.waveMinCount, gameManagerValueSO.waveMaxCount);
+
+		for (int i = 0; i < count; i++)
+		{
+			Vector3 pos = GetRandomSpawnWavePosition();
+			if (pos != Vector3.zero)
+				Spawn_EnemyAt(pos, enemySpawnListSO.enemyKey[spawnKey]);
+
+			yield return null; // 프레임 나눠서 생성하면 랙 감소
+		}
+	}
+
+	IEnumerator Itemp_SpawnRoutine()
+	{
+		yield return new WaitForSeconds(1f);
+		while (true)
+		{
+			if (!isPaused)
+			{
+				int spawnKey = UnityEngine.Random.Range(0, itemData.list.Count);
+
+				Vector3 spawnPos = GetRandomPointOnNavMesh();
+				if (spawnPos != Vector3.zero)
+					Spawn_ItemAt(spawnPos, itemData.list[spawnKey]);
+
+				yield return new WaitForSeconds(50f);
+			}
+			else
+			{
+				yield return null;
+			}
+
 		}
 	}
 
@@ -230,19 +294,82 @@ public class GameManager : MonoBehaviour
 		for (int i = 0; i < 10; i++)
 		{
 			Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
-			float distance = UnityEngine.Random.Range(15f, 30f);
+			float distance = UnityEngine.Random.Range(30f, 45f);
 
 			Vector3 randomPos =
 				playerPos +
 				new Vector3(circle.x, 0f, circle.y) * distance;
 
-			if (NavMesh.SamplePosition(randomPos, out var hit, 3f, NavMesh.AllAreas))
+			if (NavMesh.SamplePosition(randomPos, out var hit, 5f, NavMesh.AllAreas))
 			{
 				return hit.position;
 			}
 		}
 
 		return Vector3.zero;
+	}
+
+	Vector3 GetRandomSpawnWavePosition()
+	{
+		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
+
+		for (int i = 0; i < 10; i++)
+		{
+			Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
+			float distance = UnityEngine.Random.Range(100f, 125f);
+
+			Vector3 randomPos =
+				playerPos +
+				new Vector3(circle.x, 0f, circle.y) * distance;
+
+			if (NavMesh.SamplePosition(randomPos, out var hit, 10f, NavMesh.AllAreas))
+			{
+				return hit.position;
+			}
+		}
+
+		return Vector3.zero;
+	}
+
+	public static Vector3 GetRandomPointOnNavMesh()
+	{
+		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
+
+		for (int i = 0; i < 10; i++)
+		{
+			Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
+			float distance = UnityEngine.Random.Range(50f, 75f);
+
+			Vector3 randomPos =
+				playerPos +
+				new Vector3(circle.x, 0f, circle.y) * distance;
+
+			if (NavMesh.SamplePosition(randomPos, out var hit, 10f, NavMesh.AllAreas))
+			{
+				return hit.position;
+			}
+		}
+		return Vector3.zero;
+	}
+
+	public void Spawn_ItemPos(Vector3 _pos)
+	{
+		int spawnKey = UnityEngine.Random.Range(0, itemData.list.Count);
+
+		Vector3 spawnPos = _pos;
+		if (spawnPos != Vector3.zero)
+			Spawn_ItemAt(spawnPos, itemData.list[spawnKey]);
+	}
+
+	public void Spawn_ItemAt(Vector3 pos, string key)
+	{
+		GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Item, key);
+		if (obj != null)
+		{
+			pos.y += 1;
+			obj.transform.position = pos;
+			obj.gameObject.SetActive(true);
+		}
 	}
 
 	private void Spawn_EnemyAt(Vector3 pos, string key)

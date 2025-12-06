@@ -12,5 +12,8 @@ public class GameManagerValueSO : ScriptableObject
 	public float enemySpawnIntervalDecrease;
 	public float bossSpawnInterval;
 	public int LevetCheck;
+	public float waveInterval;
+	public int waveMinCount;
+	public int waveMaxCount;
 
 }

@@ -10,7 +10,8 @@ public class PlayerController : Player
 
 	[SerializeField] private PlayerMoveController moveController;
 	[SerializeField] private PlayerInteractor interactor;
-	 
+	[SerializeField] private PlayerCinemachineFreeLook playerCinemachineFreeLook;
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -24,7 +25,7 @@ public class PlayerController : Player
 		{
 			interactor = transform.AddComponent<PlayerInteractor>();
 		}
-
+		playerCinemachineFreeLook = transform.GetComponentInChildren<PlayerCinemachineFreeLook>();
 		if (meshRenderer != null)
 			hitMatInstance = meshRenderer.material;
 	}
@@ -47,7 +48,10 @@ public class PlayerController : Player
 		Add_AttackObject(StartAttackKey);
 	}
 
-
+	protected override void Event_ChildEvnet()
+	{
+		playerCinemachineFreeLook.Shake(1, 1);
+	}
 
 	private void Setting_InputActionMove()
 	{

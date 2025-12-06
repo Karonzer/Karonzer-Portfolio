@@ -1,7 +1,9 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Collections.Generic;
 public class SpawnManager : MonoBehaviour
 {
 	Dictionary<string, AsyncOperationHandle<GameObject>> prefabHandles;
@@ -23,10 +25,10 @@ public class SpawnManager : MonoBehaviour
 
 		parents = new Dictionary<PoolObjectType, Transform>()
 		{
-			{ PoolObjectType.Enemy, transform.Find("EnemySpawnGroup") },
-			{ PoolObjectType.Projectile, transform.Find("ProjectileSpawn") },
-			{ PoolObjectType.Item, transform.Find("ItemSpawnGroup") },
-			{ PoolObjectType.Actor, transform.Find("ActorSpawnGroup") }
+			{ PoolObjectType.Enemy, transform.Find(PoolObjectTypeSpawnParents.EnemySpawnGroup.ToString()) },
+			{ PoolObjectType.Projectile, transform.Find(PoolObjectTypeSpawnParents.ProjectileSpawn.ToString()) },
+			{ PoolObjectType.Item, transform.Find(PoolObjectTypeSpawnParents.ItemSpawnGroup.ToString()) },
+			{ PoolObjectType.Actor, transform.Find(PoolObjectTypeSpawnParents.ActorSpawnGroup.ToString()) }
 		};
 	}
 
@@ -147,5 +149,21 @@ public class SpawnManager : MonoBehaviour
 			}
 		}
 	}
+
+	public bool Get_ItemParents(out Transform _tra)
+	{
+		_tra = null;
+		if (parents.TryGetValue(PoolObjectType.Item, out Transform _value))
+		{
+			_tra = _value;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+
 
 }
