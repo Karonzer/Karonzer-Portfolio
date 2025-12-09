@@ -19,7 +19,7 @@ MonoBehaviour:
   enemySpawnInterval: 5
   enemySpawnIntervalMin: 0.5
   enemySpawnIntervalDecrease: 0.2
-  bossSpawnInterval: 20
+  bossSpawnInterval: 300
   LevetCheck: 2
   waveInterval: 60
   waveMinCount: 50
