@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
 		Settting_PlayerEvnet();
 		Setting_EnemyEvent();
 		Start_Game();
+		GlobalGSC.Instance.audioManager.ChangeBGM(SceneBGMType.Battle);
 	}
 
 	private void OnEnable()

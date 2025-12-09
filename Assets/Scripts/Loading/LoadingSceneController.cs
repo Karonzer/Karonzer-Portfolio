@@ -8,6 +8,7 @@ public class LoadingSceneController : MonoBehaviour
 
 	private IEnumerator Start()
 	{
+		GlobalGSC.Instance.audioManager.ChangeBGM(SceneBGMType.None);
 		yield return GlobalGSC.Instance.sceneManager
 			.LoadBattleSceneCoroutine(
 				(p) => progressBar.value = p

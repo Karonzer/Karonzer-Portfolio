@@ -12,7 +12,7 @@ public class Title : MonoBehaviour
 
 	private void Start()
 	{
-		
+		GlobalGSC.Instance.audioManager.ChangeBGM(SceneBGMType.Title);
 	}
 
 	public void Click_StartGame()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class SettingMenulUI : MonoBehaviour
@@ -8,6 +9,8 @@ public class SettingMenulUI : MonoBehaviour
 	[SerializeField] Slider masterSlider;
 	[SerializeField] Slider bgmSlider;
 	[SerializeField] Slider sfxSlider;
+
+	public event Action OnClose;
 
 	private void Awake()
 	{
@@ -52,6 +55,8 @@ public class SettingMenulUI : MonoBehaviour
 	}
 	public void Hide_PopUp()
 	{
+		GlobalGSC.Instance.audioManager.Play_Click();
 		popUp.gameObject.SetActive(false);
+		OnClose?.Invoke();
 	}
 }

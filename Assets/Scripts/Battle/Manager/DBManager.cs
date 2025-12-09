@@ -23,6 +23,13 @@ public enum PoolObjectTypeSpawnParents
 	ActorSpawnGroup,
 }
 
+public enum SceneBGMType
+{
+	None,
+	Title,
+	Loading,
+	Battle
+}
 
 public enum StateID
 {

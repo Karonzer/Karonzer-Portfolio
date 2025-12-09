@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using System.Collections;
 
 public class GlobalAudioManager : MonoBehaviour
 {
@@ -8,17 +9,21 @@ public class GlobalAudioManager : MonoBehaviour
 	[SerializeField] private AudioSource sfx;
 	[SerializeField] private AudioClip clickClip;
 
+	[SerializeField] private AudioClip titleBGM;
+	[SerializeField] private AudioClip battleBGM;
+
 	[Header("Audio Volume")]
 	public float masterVolume = 1f;
 	public float bgmVolume = 1f;
 	public float sfxVolume = 1f;
+
+	private Coroutine fadeRoutine;
 
 	private void Awake()
 	{
 		GlobalGSC.Instance.RegisterGlobalAudioManager(this);
 		bgm = transform.Find("BGM").GetComponent<AudioSource>();
 		sfx = transform.Find("SFX").GetComponent<AudioSource>();
-
 	}
 
 	private void OnEnable()
@@ -31,15 +36,18 @@ public class GlobalAudioManager : MonoBehaviour
 	private void Reset()
 	{
 		masterVolume = 1;
-		AudioListener.volume = masterVolume;
 		bgmVolume = 1;
 		sfxVolume = 1;
 	}
 
 	private void LoadVolume()
 	{
-		audioMixer.SetFloat("BGM", bgmVolume);
-		audioMixer.SetFloat("Effect", sfxVolume);
+		float dMaster = Mathf.Log10(masterVolume) * 20f;
+		float dBBGM = Mathf.Log10(bgmVolume) * 20f;
+		float dBSFX = Mathf.Log10(sfxVolume) * 20f;
+		audioMixer.SetFloat("Master", dMaster);
+		audioMixer.SetFloat("BGM", dBBGM);
+		audioMixer.SetFloat("SFX", dBSFX);
 	}
 
 	private void Setting_BGM()
@@ -47,7 +55,7 @@ public class GlobalAudioManager : MonoBehaviour
 		bgm.playOnAwake = false;
 		bgm.clip = null;
 		bgm.loop = true;
-		bgmVolume = 0.25f;
+		bgmVolume = 0.5f;
 		bgm.volume = bgmVolume;
 
 	}
@@ -73,19 +81,79 @@ public class GlobalAudioManager : MonoBehaviour
 	public void Set_MasterVolume(float _value)
 	{
 		masterVolume = _value;
-		AudioListener.volume = masterVolume;
+		float dB = (masterVolume <= 0.0001f) ? -80f : Mathf.Log10(masterVolume) * 20f;
+		audioMixer.SetFloat("Master", dB);
 	}
 
 	public void Set_BGMVolume(float _value)
 	{
 		bgmVolume = _value;
-		audioMixer.SetFloat("BGM", bgmVolume);
+		float dB = (bgmVolume <= 0.0001f) ? -80f : Mathf.Log10(bgmVolume) * 20f;
+		audioMixer.SetFloat("BGM", dB);
 	}
 
 	public void Set_SFXVolume(float _value)
 	{
 		sfxVolume = _value;
-		audioMixer.SetFloat("SFX", sfxVolume);
+		float dB = (sfxVolume <= 0.0001f) ? -80f : Mathf.Log10(sfxVolume) * 20f;
+		audioMixer.SetFloat("SFX", dB);
+	}
+
+	public void ChangeBGM(SceneBGMType type)
+	{
+		if (type == SceneBGMType.None)
+		{
+			FadeTo(null); 
+			return;
+		}
+
+		AudioClip clip = type switch
+		{
+			SceneBGMType.Title => titleBGM,
+			SceneBGMType.Loading => null, 
+			SceneBGMType.Battle => battleBGM,
+			_ => null
+		};
+
+		FadeTo(clip);
+	}
+
+	private void FadeTo(AudioClip newClip, float fadeTime = 1f)
+	{
+		if (fadeRoutine != null)
+			StopCoroutine(fadeRoutine);
+
+		fadeRoutine = StartCoroutine(FadeRoutine(newClip, fadeTime));
+	}
+
+	private IEnumerator FadeRoutine(AudioClip newClip, float fadeTime)
+	{
+		float start = bgm.volume;
+
+		// Fade Out
+		for (float t = 0; t < fadeTime; t += Time.deltaTime)
+		{
+			bgm.volume = Mathf.Lerp(start, 0f, t / fadeTime);
+			yield return null;
+		}
+
+		if (newClip == null)
+		{
+			bgm.Stop();
+			yield break;
+		}
+
+		bgm.clip = newClip;
+		bgm.Play();
+
+		// Fade In
+		for (float t = 0; t < fadeTime; t += Time.deltaTime)
+		{
+			bgm.volume = Mathf.Lerp(0f, bgmVolume, t / fadeTime);
+			yield return null;
+		}
+
+		bgm.volume = bgmVolume;
 	}
 
 
