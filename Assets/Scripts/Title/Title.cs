@@ -10,10 +10,28 @@ public class Title : MonoBehaviour
 			Instantiate(gscPrefab);
 	}
 
+	private void Start()
+	{
+		
+	}
+
 	public void Click_StartGame()
 	{
 		GlobalGSC.Instance.sceneManager.LoadBattle_WithLoading();
+		GlobalGSC.Instance.audioManager.Play_Click();
 	}	
+
+	public void Click_SoundSetting()
+	{
+		GlobalGSC.Instance.settingMenulUI.Show_PopUp();
+		GlobalGSC.Instance.audioManager.Play_Click();
+	}	
+
+	public void Click_GameEnd()
+	{
+		GlobalGSC.Instance.audioManager.Play_Click();
+		Application.Quit();
+	}
 
 
 }
