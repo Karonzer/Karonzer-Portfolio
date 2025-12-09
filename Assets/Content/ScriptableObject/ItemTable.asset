@@ -16,3 +16,6 @@ MonoBehaviour:
   list:
   - HealingItem
   - MagnetItem
+  - MoveSpeedItem
+  - DamageItem
+  - AttackSpeedItem

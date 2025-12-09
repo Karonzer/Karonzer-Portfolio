@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
 	public event Action<float> TimerAction;
 	public bool isPaused { get; private set; }
 
+	[SerializeField] private int currentKillCount;
+
 	private void Awake()
 	{
 		BattleGSC.Instance.RegisterGameManager(this);
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
 		Setting_Cursor();
 		Setting_StartUI();
 		Settting_PlayerEvnet();
+		Setting_EnemyEvent();
 		Start_Game();
 	}
 
@@ -68,6 +71,7 @@ public class GameManager : MonoBehaviour
 	{ 
 		Addressables.ReleaseInstance(player);
 		player.GetComponent<Player>().OnDead -= Game_Over;
+		ReSetting_EnemyEvent();
 	}
 
 	private void Setting_GameManagerValue()
@@ -122,6 +126,19 @@ public class GameManager : MonoBehaviour
 	{
 		player.GetComponent<PlayerLevel>().OnLevelUp += Handle_PlayerLevelUp;
 		player.GetComponent<Player>().OnDead += Game_Over;
+	}
+
+	private void Setting_EnemyEvent()
+	{
+		Enemy.OnDeadGlobal += Check_ItmeSpawn;
+		Enemy.OnDeadGlobal += Add_CurrentKillCount;
+
+	}
+
+	private void ReSetting_EnemyEvent()
+	{
+		Enemy.OnDeadGlobal -= Check_ItmeSpawn;
+		Enemy.OnDeadGlobal -= Add_CurrentKillCount;
 	}
 
 	private void Setting_StartUI()
@@ -352,6 +369,15 @@ public class GameManager : MonoBehaviour
 		return Vector3.zero;
 	}
 
+	public void Check_ItmeSpawn(GameObject _obj)
+	{
+		float value = 0.05f;
+		if (UnityEngine.Random.value <= value)
+		{
+			Spawn_ItemPos(_obj.transform.position);
+		}
+	}
+
 	public void Spawn_ItemPos(Vector3 _pos)
 	{
 		int spawnKey = UnityEngine.Random.Range(0, itemData.list.Count);
@@ -395,6 +421,11 @@ public class GameManager : MonoBehaviour
 			enemy.Start_Enemy();
 			BattleGSC.Instance.uIManger.Show(UIType.BossHP, obj);
 		}
+	}
+
+	public void Add_CurrentKillCount(GameObject _obj)
+	{
+		currentKillCount++;
 	}
 
 	public void Update_ToPlayerAttackObj()

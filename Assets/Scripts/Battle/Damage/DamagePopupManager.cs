@@ -118,4 +118,27 @@ public class DamagePopupManager : MonoBehaviour
 
 		}
 	}
+
+	public void Show_Text(string _text, Vector3 worldPos, Type _type)
+	{
+		var popup = Get_FromPool();
+
+		popup.transform.position = worldPos;
+
+		if (mainCam == null) mainCam = Camera.main;
+		if (mainCam != null)
+			popup.transform.forward = mainCam.transform.forward;
+
+		if (popup.TryGetComponent<DamagePopup>(out DamagePopup _component))
+		{
+			switch (_type)
+			{
+				case Type.Player:
+					_component.Init_Text(_text);
+					break;
+
+			}
+
+		}
+	}
 }

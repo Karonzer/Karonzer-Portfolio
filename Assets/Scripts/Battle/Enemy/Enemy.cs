@@ -21,7 +21,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	public event Action<DamageInfo> OnDamaged;
 	public event Action<IDamageable> OnDead;
 
-	public static event Action OnDeadGlobal;
+	public static event Action<GameObject> OnDeadGlobal;
 
 	[SerializeField] protected bool isDead = true;
 
@@ -137,7 +137,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		{
 			stateMachine.ChangeState(StateID.die);
 			InvokeDead(this);
-			OnDeadGlobal?.Invoke();
+			OnDeadGlobal?.Invoke(this.gameObject);
 		}
 	}
 
@@ -156,14 +156,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 				obj.gameObject.SetActive(true);
 				obj.transform.position = transform.position;
 			}
-		}
-
-
-
-		float value = 0.05f;
-		if (UnityEngine.Random.value <= value)
-		{
-			BattleGSC.Instance.gameManager.Spawn_ItemPos(transform.position);
 		}
 	}
 

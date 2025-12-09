@@ -17,19 +17,50 @@ public class GravityController : MonoBehaviour
 	public float VelocityY => velocityY;
 	public bool IsGrounded => isGrounded;
 
+	[SerializeField] private float groundCheckDistance = 0.2f;
+	[SerializeField] private LayerMask groundMask;
+
+	private void OnEnable()
+	{
+		groundMask = LayerMask.NameToLayer("Ground");
+	}
+
+	private bool CheckGrounded(CharacterController controller)
+	{
+		Vector3 pos = controller.transform.position;
+		float radius = controller.radius * 0.9f;
+
+		Vector3 origin = pos + Vector3.up * 0.1f;
+
+		bool hit = Physics.SphereCast(
+			origin,
+			radius,
+			Vector3.down,
+			out RaycastHit hitInfo,
+			groundCheckDistance,
+			groundMask,
+			QueryTriggerInteraction.Ignore
+		);
+
+		return hit;
+	}
+
 
 
 	public Vector3 GetGravityDelta(CharacterController controller)
 	{
-		isGrounded = controller.isGrounded;
+		bool controllerGround = controller.isGrounded;
+		bool rayGround = CheckGrounded(controller);
 
+		isGrounded = controllerGround || rayGround;
+
+		// 2) 바닥 접촉 시 Y속도 초기화
 		if (isGrounded && velocityY < 0f)
-		{
 			velocityY = -2f;
-		}
 
+		// 3) 중력 적용
 		velocityY += gravity * gravityScale * Time.deltaTime;
-		if (velocityY < terminalVelocity) velocityY = terminalVelocity;
+		velocityY = Mathf.Max(velocityY, terminalVelocity);
 
 		return new Vector3(0f, velocityY * Time.deltaTime, 0f);
 	}

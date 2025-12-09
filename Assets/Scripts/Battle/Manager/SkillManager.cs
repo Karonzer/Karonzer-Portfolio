@@ -6,6 +6,10 @@ public class SkillManager : MonoBehaviour
 {
 	public List<AttackStatsSO> attackStatsList = new List<AttackStatsSO>();
 	private Dictionary<string, AttackStats> statsDict;
+	private Dictionary<string, AttackStats> currentPlayerBuffstatsDict;
+
+	[SerializeField] private float globalSkillDamageBuff;
+	[SerializeField] private float globalSkillAttackSpeedBuff;
 
 	// 특정 스킬 스탯이 바뀔 때 알려주는 이벤트
 	public Dictionary<string, Action<string>> eventTableOnAttackStatsChanged = new Dictionary<string, Action<string>>();
@@ -18,23 +22,51 @@ public class SkillManager : MonoBehaviour
 
 	}
 
+
+	private void Reset()
+	{
+		globalSkillDamageBuff = 0;
+		globalSkillAttackSpeedBuff = 0;
+	}
+
 	void Build_Dict()
 	{
 		statsDict = new Dictionary<string, AttackStats>();
+		currentPlayerBuffstatsDict = new Dictionary<string, AttackStats>();
 		foreach (var s in attackStatsList)
 		{
 			if (s != null && !string.IsNullOrEmpty(s.attackStats.key))
+			{
 				statsDict[s.attackStats.key] = s.attackStats;
+				currentPlayerBuffstatsDict[s.attackStats.key] = new AttackStats();
+			}
+
 		}
 	}
 
+	//public AttackStats Get_Stats(string _key)
+	//{
+	//	if (statsDict.TryGetValue(_key, out AttackStats stats))
+	//		return stats;
+
+	//	Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
+	//	return default;
+	//}
+
+
 	public AttackStats Get_Stats(string _key)
 	{
-		if (statsDict.TryGetValue(_key, out AttackStats stats))
-			return stats;
+		if (!statsDict.TryGetValue(_key, out AttackStats baseStats))
+			return default;
 
-		Debug.LogWarning($"[SkillManager] AttackStats not found for key: {_key}");
-		return default;
+		if (!currentPlayerBuffstatsDict.TryGetValue(_key, out AttackStats buff))
+			return default;
+
+		AttackStats result = baseStats;
+
+		result.rawDamage = result.rawDamage * (1f + globalSkillDamageBuff);
+		result.baseAttackInterval = result.baseAttackInterval * (1f + globalSkillAttackSpeedBuff);
+		return result;
 	}
 
 	public void Set_Stats(string _key, AttackStats _value)
@@ -85,7 +117,43 @@ public class SkillManager : MonoBehaviour
 
 	}
 
+	public void AddBuff(BuffData data)
+	{
+		switch (data.effectType)
+		{
+			case BuffEffectType.DamagePercent:
+					globalSkillDamageBuff += (data.value / 100f);
+					foreach (var key in statsDict.Keys)
+						NotifyStatsChanged(key);
+					break;
+				
+			case BuffEffectType.AttackSpeedPercent:
+				globalSkillAttackSpeedBuff += (data.value / 100f);
+				foreach (var key in statsDict.Keys)
+					NotifyStatsChanged(key);
+				break;
+
+		}
+	}
 
 
+	public void RemoveBuff(BuffData data)
+	{
+		switch (data.effectType)
+		{
+			case BuffEffectType.DamagePercent:
+				globalSkillDamageBuff = 0;
+				foreach (var key in statsDict.Keys)
+					NotifyStatsChanged(key);
+				break;
+
+			case BuffEffectType.AttackSpeedPercent:
+				globalSkillAttackSpeedBuff = 0;
+				foreach (var key in statsDict.Keys)
+					NotifyStatsChanged(key);
+				break;
+
+		}
+	}
 
 }

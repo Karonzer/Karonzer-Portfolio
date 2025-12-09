@@ -30,21 +30,18 @@ public enum StateID
 	Attack,
 	die,
 }
-
 public enum BuffType
+{
+	Player,
+	Skill
+}
+
+public enum BuffEffectType
 {
 	DamagePercent,
 	MoveSpeedPercent,
 	AttackSpeedPercent,
 }
-
-public class BuffData
-{
-	public BuffType type;
-	public float value;      // +20%, +30%
-	public float duration;   // 몇 초 동안 유지?
-}
-
 public enum UpgradeOptionType
 {
 	SkillUpgrade,   // 기존 스킬 강화
@@ -113,6 +110,17 @@ public interface IXPTable
 	public event Action<int> OnLevelChanged;
 	public event Action<int, int> OnXPChanged;
 }
+
+[System.Serializable]
+public class BuffData
+{
+	public BuffType type;
+	public BuffEffectType effectType;
+	public float value;      // +20%, +30%
+	public float duration;   // 몇 초 동안 유지?
+	public string description;
+}
+
 
 [System.Serializable]
 public struct PlayerStruct

@@ -52,6 +52,16 @@ public class DamagePopup : MonoBehaviour
 		canvasGroup.alpha = 1f;
 	}
 
+	public void Init_Text(string _text)
+	{
+		string input = _text.Replace("/n", "\n");
+		text.text = _text;
+		text.color = Color.yellow;
+		text.fontSize = 50;
+		timer = lifeTime;
+		canvasGroup.alpha = 1f;
+	}
+
 
 	void Update()
 	{

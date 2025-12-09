@@ -94,6 +94,31 @@ public class StatManager : MonoBehaviour
 
 
 
+	public void AddBuff(BuffData _data)
+	{
+		switch(_data.effectType)
+		{
+			case BuffEffectType.MoveSpeedPercent:
+				{
+					var baseStats = playerStatDict[BattleGSC.Instance.gameManager.CurrentPlayerKey];
+					float addValue = baseStats.moveSpeed * (_data.value / 100f);
+					currentPlayerBuffStat.moveSpeed += addValue;
+					break;
+				}
+		}
+		InvokeAction_ChangePlayerStruct();
+	}
+
+	public void RemoveBuff(BuffData _data)
+	{
+		switch (_data.effectType)
+		{
+			case BuffEffectType.MoveSpeedPercent:
+				currentPlayerBuffStat.moveSpeed = 0;
+				break;
+		}
+		InvokeAction_ChangePlayerStruct();
+	}
 
 
 }

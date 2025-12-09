@@ -37,6 +37,10 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 		{
 			LevelUp();
 		}
+		else 
+		{
+			MaxLevel();
+		}
 	}
 
 	private void LevelUp()
@@ -49,6 +53,12 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 		OnLevelChanged?.Invoke(currentLevel);
 		OnXPChanged?.Invoke(CurrentXP, MaxXP);
 		pendingLevelUp++;
+		TryProcessLevelUpUI();
+	}
+
+	private void MaxLevel()
+	{
+		currentXP -= maxXP;
 		TryProcessLevelUpUI();
 	}
 
