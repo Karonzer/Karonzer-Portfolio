@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private ItemDataSO itemData;
 	[SerializeField] private PopUpDataSO popUpData;
 
+	[SerializeField] private int maxEnemyAlive;
+	private int currentEnemyAlive = 0;
 	private Coroutine spwanTimeRoutine;
 	[SerializeField] private float enemySpawnInterval;
 	public float EnemySpawnInterval => enemySpawnInterval;
@@ -76,6 +78,8 @@ public class GameManager : MonoBehaviour
 
 	private void Setting_GameManagerValue()
 	{
+		currentEnemyAlive = 0;
+		maxEnemyAlive = gameManagerValueSO.maxEnemyAlive;
 
 		survivalTime = 0;
 		lastWaveTime = 0;
@@ -173,19 +177,23 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator Enemy_SpawnRoutine()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(5f);
 		while (true)
 		{
 			if (!isPaused)
 			{
-				int count = UnityEngine.Random.Range(minSpawnCount, maxSpawnCount); // 3~5마리
-				int spawnKey = UnityEngine.Random.Range(0, spawnCount);
-				for (int i = 0; i < count; i++)
+				if(currentEnemyAlive < maxEnemyAlive)
 				{
-					Vector3 spawnPos = GetRandomSpawnPosition();
-					if (spawnPos != Vector3.zero)
-						Spawn_EnemyAt(spawnPos, enemySpawnListSO.enemyKey[spawnKey]);  // 스폰할 적 key
+					int count = UnityEngine.Random.Range(minSpawnCount, maxSpawnCount); // 3~5마리
+					int spawnKey = UnityEngine.Random.Range(0, spawnCount);
+					for (int i = 0; i < count; i++)
+					{
+						Vector3 spawnPos = GetRandomSpawnPosition();
+						if (spawnPos != Vector3.zero)
+							Spawn_EnemyAt(spawnPos, enemySpawnListSO.enemyKey[spawnKey]);  // 스폰할 적 key
+					}
 				}
+
 
 				yield return new WaitForSeconds(EnemySpawnInterval); // 주기
 			}
@@ -237,6 +245,10 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator SpawnWaveRoutine()
 	{
+		if (currentEnemyAlive > maxEnemyAlive * 0.7f)
+		{
+			yield break; // 너무 많으면 웨이브 스킵
+		}
 		// 잠시 텀 → 갑자기 화면 흔들림, 경고 효과 등을 넣을 수 있음
 		BattleGSC.Instance.uIManger.Show(UIType.TextPopUp);
 		yield return new WaitForSeconds(1);
@@ -284,17 +296,13 @@ public class GameManager : MonoBehaviour
 		if (enemySpawnInterval < gameManagerValueSO.enemySpawnIntervalMin)
 		{
 			enemySpawnInterval = gameManagerValueSO.enemySpawnIntervalMin;
+			BattleGSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
 		}
 		else
 		{
 			enemySpawnInterval -= gameManagerValueSO.enemySpawnIntervalDecrease;
 		}
 
-		if(_currentLevel / gameManagerValueSO.LevetCheck == 0)
-		{
-			minSpawnCount++;
-			maxSpawnCount++;
-		}
 
 		if(spawnCount < enemySpawnListSO.enemyKey.Length && _currentLevel / gameManagerValueSO.spawnCountDecreaseValue == 0)
 		{

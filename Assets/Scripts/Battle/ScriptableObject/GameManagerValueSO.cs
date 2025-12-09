@@ -15,5 +15,6 @@ public class GameManagerValueSO : ScriptableObject
 	public float waveInterval;
 	public int waveMinCount;
 	public int waveMaxCount;
+	public int maxEnemyAlive;
 
 }
