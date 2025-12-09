@@ -5,6 +5,7 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 {
 	[SerializeField] private int pendingLevelUp;
 	[SerializeField] private int currentLevel;
+	[SerializeField] private int maxLevel;
 	[SerializeField] private int currentXP;
 	[SerializeField] private int maxXP;
 
@@ -23,6 +24,7 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 	private void OnEnable()
 	{
 		currentLevel = 1;
+		maxLevel = 100;
 		currentXP = 0;
 		pendingLevelUp = 0;
 		maxXP = Mathf.RoundToInt(xpCurve.Evaluate(currentLevel));
@@ -37,18 +39,21 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 		{
 			LevelUp();
 		}
-		else 
-		{
-			MaxLevel();
-		}
 	}
 
 	private void LevelUp()
 	{
 		currentXP -= maxXP;
-		currentLevel += 1;
-		OnLevelUp?.Invoke(currentXP);
+		if (currentLevel >= maxLevel)
+		{
+			currentLevel = maxLevel;
+		}
+		else
+		{
+			currentLevel += 1;
+		}
 
+		OnLevelUp?.Invoke(currentXP);
 		maxXP = CalculateNextLevelXP(currentLevel);
 		OnLevelChanged?.Invoke(currentLevel);
 		OnXPChanged?.Invoke(CurrentXP, MaxXP);
@@ -56,11 +61,6 @@ public class PlayerLevel : MonoBehaviour, IXPTable
 		TryProcessLevelUpUI();
 	}
 
-	private void MaxLevel()
-	{
-		currentXP -= maxXP;
-		TryProcessLevelUpUI();
-	}
 
 	private void TryProcessLevelUpUI()
 	{

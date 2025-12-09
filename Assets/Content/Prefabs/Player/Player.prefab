@@ -2118,6 +2118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pendingLevelUp: 0
   currentLevel: 0
+  maxLevel: 0
   currentXP: 0
   maxXP: 0
   xpCurve:
@@ -2133,8 +2134,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 110.38312
-      value: 10193.73
+      time: 100.09088
+      value: 9986.062
       inSlope: 0
       outSlope: 0
       tangentMode: 0
