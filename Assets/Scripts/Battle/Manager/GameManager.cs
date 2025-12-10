@@ -124,7 +124,9 @@ public class GameManager : MonoBehaviour
 
 	private void Initialize_Player()
 	{
-		Spawn_Player(currentPlayerKey, Vector3.zero,Quaternion.identity);
+		Vector3 pos = Get_RandomPointOnNavMesh();
+		pos.y += 1;
+		Spawn_Player(currentPlayerKey, pos, Quaternion.identity);
 	}
 
 	private void Settting_PlayerEvnet()
@@ -248,22 +250,19 @@ public class GameManager : MonoBehaviour
 	{
 		if (currentEnemyAlive > maxEnemyAlive * 0.7f)
 		{
-			yield break; // 너무 많으면 웨이브 스킵
+			yield break;
 		}
-		// 잠시 텀 → 갑자기 화면 흔들림, 경고 효과 등을 넣을 수 있음
 		BattleGSC.Instance.uIManger.Show(UIType.TextPopUp);
 		yield return new WaitForSeconds(1);
-
-		int spawnKey = UnityEngine.Random.Range(0, spawnCount);
 		int count = UnityEngine.Random.Range(gameManagerValueSO.waveMinCount, gameManagerValueSO.waveMaxCount);
-
 		for (int i = 0; i < count; i++)
 		{
-			Vector3 pos = GetRandomSpawnWavePosition();
+			Vector3 pos = Get_RandomSpawnWavePosition();
+			int spawnKey = UnityEngine.Random.Range(0, spawnCount);
 			if (pos != Vector3.zero)
 				Spawn_EnemyAt(pos, enemySpawnListSO.enemyKey[spawnKey]);
 
-			yield return null; // 프레임 나눠서 생성하면 랙 감소
+			yield return null; 
 		}
 	}
 
@@ -276,7 +275,7 @@ public class GameManager : MonoBehaviour
 			{
 				int spawnKey = UnityEngine.Random.Range(0, itemData.list.Count);
 
-				Vector3 spawnPos = GetRandomPointOnNavMesh();
+				Vector3 spawnPos = Get_RandomPointOnItem();
 				if (spawnPos != Vector3.zero)
 					Spawn_ItemAt(spawnPos, itemData.list[spawnKey]);
 
@@ -313,7 +312,7 @@ public class GameManager : MonoBehaviour
 		enemySpawnInterval = Mathf.Clamp(enemySpawnInterval, 1.0f, 10f);
 	}
 
-	Vector3 GetRandomSpawnPosition()
+	public Vector3 GetRandomSpawnPosition()
 	{
 		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
 
@@ -335,7 +334,7 @@ public class GameManager : MonoBehaviour
 		return Vector3.zero;
 	}
 
-	Vector3 GetRandomSpawnWavePosition()
+	public Vector3 Get_RandomSpawnWavePosition()
 	{
 		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
 
@@ -357,7 +356,7 @@ public class GameManager : MonoBehaviour
 		return Vector3.zero;
 	}
 
-	public static Vector3 GetRandomPointOnNavMesh()
+	public static Vector3 Get_RandomPointOnItem()
 	{
 		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
 
@@ -375,6 +374,32 @@ public class GameManager : MonoBehaviour
 				return hit.position;
 			}
 		}
+		return Vector3.zero;
+	}
+
+	public Vector3 Get_RandomPointOnNavMesh()
+	{
+		NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation();
+
+		int triangleIndex = UnityEngine.Random.Range(0, navMeshData.indices.Length / 3) * 3;
+
+		Vector3 v0 = navMeshData.vertices[navMeshData.indices[triangleIndex]];
+		Vector3 v1 = navMeshData.vertices[navMeshData.indices[triangleIndex + 1]];
+		Vector3 v2 = navMeshData.vertices[navMeshData.indices[triangleIndex + 2]];
+
+		float r1 = Mathf.Sqrt(UnityEngine.Random.value);
+		float r2 = UnityEngine.Random.value;
+
+		Vector3 randomPoint =
+			(1 - r1) * v0 +
+			(r1 * (1 - r2)) * v1 +
+			(r1 * r2) * v2;
+
+		if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+		{
+			return hit.position;
+		}
+
 		return Vector3.zero;
 	}
 

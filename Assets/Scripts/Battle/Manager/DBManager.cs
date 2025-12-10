@@ -84,6 +84,23 @@ public enum UIType
 }
 
 
+public enum SoundType
+{
+	UI_Click,
+	Player_Move,
+	Player_Jump,
+	Player_Die,
+	Enemy_Hit,
+	Enmey_Move,
+	Skill_Fireball,
+	Skill_Lightning,
+	Skill_Meteo,
+	Skill_Shockwave,
+	Skill_Penetrating,
+	BGM_Title,
+	BGM_Battle,
+}
+
 public interface IInteractable
 {
 	GameObject currentObj { get; }
@@ -117,6 +134,14 @@ public interface IXPTable
 	public event Action<int> OnLevelChanged;
 	public event Action<int, int> OnXPChanged;
 }
+
+public interface IAudioHandler
+{	
+	public void Play(SoundType _type);
+	public void Play_OneShot(SoundType _type);
+	public void Stop();
+}
+
 
 [System.Serializable]
 public class BuffData

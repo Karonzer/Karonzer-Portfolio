@@ -843,6 +843,7 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: 3552a5c1b73201244951f33f059672ee, type: 2}
   bgm: {fileID: 0}
   sfx: {fileID: 0}
+  db: {fileID: 11400000, guid: a580f6181ca0bf6448231a7b685f5146, type: 2}
   clickClip: {fileID: 8300000, guid: c9fa02848ca082a4e8537e1aa1d15411, type: 3}
   titleBGM: {fileID: 8300000, guid: f680fa295a44f014385d7988f575b4fc, type: 3}
   battleBGM: {fileID: 8300000, guid: 6cb252fc62063ae45a3f62d4293145fc, type: 3}

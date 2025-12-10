@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class PlayerInteractor : MonoBehaviour
 {
 	public float interactRange;
-	private GameObject tagetObj;
 	private readonly Collider[] tagetObjBuffer = new Collider[5];
 
 	private void Awake()
@@ -17,7 +16,6 @@ public class PlayerInteractor : MonoBehaviour
 	private void OnEnable()
 	{
 
-		tagetObj = null;
 	}
 
 	private void OnDisable()

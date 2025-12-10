@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class PlayerController : Player
 {
 	[SerializeField] private InputSystem_Actions inputActions;
@@ -11,6 +12,7 @@ public class PlayerController : Player
 	[SerializeField] private PlayerMoveController moveController;
 	[SerializeField] private PlayerInteractor interactor;
 	[SerializeField] private PlayerCinemachineFreeLook playerCinemachineFreeLook;
+	[SerializeField] private PlayerAudioController audioController;
 
 	protected override void Awake()
 	{
@@ -26,6 +28,9 @@ public class PlayerController : Player
 			interactor = transform.AddComponent<PlayerInteractor>();
 		}
 		playerCinemachineFreeLook = transform.GetComponentInChildren<PlayerCinemachineFreeLook>();
+
+		audioController = transform.GetComponent<PlayerAudioController>();
+
 		if (meshRenderer != null)
 			hitMatInstance = meshRenderer.material;
 	}
@@ -35,12 +40,14 @@ public class PlayerController : Player
 	{
 		inputActions.Enable();
 		Setting_InputActionMove();
+		Setting_Action();
 	}
 
 	private void OnDisable()
 	{
 		inputActions.Disable();
 		DiSetting_InputActionMove();
+		DiSetting_Action();
 	}
 	protected override void Start()
 	{
@@ -67,5 +74,15 @@ public class PlayerController : Player
 		inputActions.Player.Move.canceled -= moveController.OnMoveCanceled;
 		inputActions.Player.Jump.performed -= moveController.OnJump;
 		inputActions.Player.Interact.performed -= interactor.OnInteract;
+	}
+
+	private void Setting_Action()
+	{
+		moveController.onJump += audioController.Play_Jump;
+	}
+
+	private void DiSetting_Action()
+	{
+
 	}
 }

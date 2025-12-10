@@ -54,21 +54,20 @@ public class GravityController : MonoBehaviour
 
 		isGrounded = controllerGround || rayGround;
 
-		// 2) 바닥 접촉 시 Y속도 초기화
 		if (isGrounded && velocityY < 0f)
 			velocityY = -2f;
 
-		// 3) 중력 적용
 		velocityY += gravity * gravityScale * Time.deltaTime;
 		velocityY = Mathf.Max(velocityY, terminalVelocity);
 
 		return new Vector3(0f, velocityY * Time.deltaTime, 0f);
 	}
 
-	public void Jump()
+	public bool Jump()
 	{
-		if (!isGrounded) return;
+		if (!isGrounded) return false;
 		velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity * gravityScale);
+		return true;
 	}
 
 

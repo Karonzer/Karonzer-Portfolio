@@ -34,6 +34,6 @@ public class UpgradeCardUI : MonoBehaviour
 		BattleGSC.Instance.gameManager.ResumeGame();
 		BattleGSC.Instance.gameManager.Set_ShowAndHideCursor(false);
 		BattleGSC.Instance.gameManager.Check_PendingLevelUp();
-		// 여기서 패널 닫고 게임 재개하는 처리
+		GlobalGSC.Instance.audioManager.Play_Click();
 	}
 }

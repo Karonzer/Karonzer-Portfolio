@@ -7,6 +7,7 @@ public class GlobalAudioManager : MonoBehaviour
 	public AudioMixer audioMixer;
 	[SerializeField] private AudioSource bgm;
 	[SerializeField] private AudioSource sfx;
+	[SerializeField] private SoundDatabase db;
 	[SerializeField] private AudioClip clickClip;
 
 	[SerializeField] private AudioClip titleBGM;
@@ -38,6 +39,17 @@ public class GlobalAudioManager : MonoBehaviour
 		masterVolume = 1;
 		bgmVolume = 1;
 		sfxVolume = 1;
+	}
+
+	public bool Get_AudioClip(SoundType _type, out AudioClip _clip)
+	{
+		_clip = null;
+		_clip = db.GetClip(_type);
+		if (_clip != null)
+		{ return true; }
+		else
+		{ return false; }
+
 	}
 
 	private void LoadVolume()

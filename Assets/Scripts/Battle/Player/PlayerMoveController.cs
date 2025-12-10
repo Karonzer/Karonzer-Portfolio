@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 public class PlayerMoveController : MonoBehaviour
 {
 
@@ -23,7 +24,7 @@ public class PlayerMoveController : MonoBehaviour
 
 	private Coroutine moveRoutine;
 
-
+	public event Action onJump;
 
 	private void Awake()
 	{
@@ -103,7 +104,10 @@ public class PlayerMoveController : MonoBehaviour
 	{
 		if (context.performed)
 		{
-			playerGravityController?.Jump();
+			if(playerGravityController.Jump())
+			{
+				onJump?.Invoke();
+			}
 		}
 	}
 
