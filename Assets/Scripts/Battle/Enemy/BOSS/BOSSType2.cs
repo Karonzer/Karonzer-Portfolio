@@ -67,6 +67,7 @@ public class BOSSType2 : Enemy
 		}
 
 		animator.SetTrigger("Attack");
+		audioHandler.Play_OneShot(SoundType.Enemy_attack);
 		attackTime = StartCoroutine(Create_BossAttackIndicator());
 	}
 

@@ -23,6 +23,7 @@ public class FireballProjectile : Projectile
 
 		visualRoot = transform.GetChild(0).gameObject;
 		hitParticle = transform.GetChild(1).GetComponent<ParticleSystem>() ;
+		audioHandler = GetComponent<IAudioHandler>();
 	}
 
 	private void OnEnable()
@@ -86,6 +87,7 @@ public class FireballProjectile : Projectile
 			hitRoutine = null;
 		}
 
+		audioHandler.Play_OneShot(SoundType.Skill_Fireball);
 		moveRoutine = StartCoroutine(Start_MoveFireballProjectile());
 		projectileSurvivalTimeCoroutine = StartCoroutine(Start_ProjectileSurvivalTimeCoroutine());
 	}

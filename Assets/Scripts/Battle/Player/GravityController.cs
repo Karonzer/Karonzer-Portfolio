@@ -22,26 +22,13 @@ public class GravityController : MonoBehaviour
 
 	private void OnEnable()
 	{
-		groundMask = LayerMask.NameToLayer("Ground");
+		groundMask = LayerMask.GetMask("Ground");
 	}
 
 	private bool CheckGrounded(CharacterController controller)
 	{
-		Vector3 pos = controller.transform.position;
-		float radius = controller.radius * 0.9f;
-
-		Vector3 origin = pos + Vector3.up * 0.1f;
-
-		bool hit = Physics.SphereCast(
-			origin,
-			radius,
-			Vector3.down,
-			out RaycastHit hitInfo,
-			groundCheckDistance,
-			groundMask,
-			QueryTriggerInteraction.Ignore
-		);
-
+		Vector3 origin = controller.transform.position;
+		bool hit = Physics.Raycast(origin,Vector3.down,1.1f, groundMask);
 		return hit;
 	}
 

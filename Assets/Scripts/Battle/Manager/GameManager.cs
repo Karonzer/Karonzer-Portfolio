@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 	public bool isPaused { get; private set; }
 
 	[SerializeField] private int currentKillCount;
+	public int CurrentKillCount => currentKillCount;
 
 	private void Awake()
 	{
@@ -464,6 +465,7 @@ public class GameManager : MonoBehaviour
 
 	public void Update_ToPlayerAttackObj()
 	{
+		GlobalGSC.Instance.audioManager.Play_Sound(SoundType.LevelUp);
 		PauseGame();
 		Set_ShowAndHideCursor(true);
 		BattleGSC.Instance.uIManger.Show(UIType.UpgradePopUp);
@@ -472,6 +474,7 @@ public class GameManager : MonoBehaviour
 
 	public void Update_ToPlayerAttackObjIsChestBox()
 	{
+		GlobalGSC.Instance.audioManager.Play_Sound(SoundType.LevelUp);
 		PauseGame();
 		Set_ShowAndHideCursor(true);
 		BattleGSC.Instance.uIManger.Show(UIType.UpgradePopUp);
@@ -503,6 +506,7 @@ public class GameManager : MonoBehaviour
 
 	public void Game_Over(IDamageable _damageable)
 	{
+		GlobalGSC.Instance.audioManager.Play_Sound(SoundType.Player_Die);
 		isPaused = true;
 		Set_ShowAndHideCursor(true);
 		BattleGSC.Instance.spawnManager.Despawn_All();

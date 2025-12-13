@@ -11,6 +11,7 @@ public class PenetratingProjectile : Projectile
 	{
 		sphereCollider = GetComponent<SphereCollider>();
 		sphereCollider.isTrigger = true;
+		audioHandler = GetComponent<IAudioHandler>();
 	}
 
 
@@ -55,6 +56,7 @@ public class PenetratingProjectile : Projectile
 			projectileSurvivalTimeCoroutine = null;
 		}
 
+		audioHandler.Play_OneShot(SoundType.Skill_Penetrating);
 		moveRoutine = StartCoroutine(Start_MoveFireballProjectile());
 		projectileSurvivalTimeCoroutine = StartCoroutine(Start_ProjectileSurvivalTimeCoroutine());
 	}

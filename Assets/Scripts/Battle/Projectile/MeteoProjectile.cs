@@ -23,6 +23,7 @@ public class MeteoProjectile : Projectile
 
 		visualRoot = transform.GetChild(0).gameObject;
 		hitParticle = transform.GetChild(1).GetComponent<ParticleSystem>();
+		audioHandler = GetComponent<IAudioHandler>();
 	}
 
 	private void OnEnable()
@@ -111,7 +112,7 @@ public class MeteoProjectile : Projectile
 			return;
 
 		isHit = true;
-
+		audioHandler.Play_OneShot(SoundType.Skill_Meteo);
 		if (moveRoutine != null)
 		{
 			StopCoroutine(moveRoutine);

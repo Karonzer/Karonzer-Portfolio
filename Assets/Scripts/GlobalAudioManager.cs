@@ -110,6 +110,13 @@ public class GlobalAudioManager : MonoBehaviour
 		float dB = (sfxVolume <= 0.0001f) ? -80f : Mathf.Log10(sfxVolume) * 20f;
 		audioMixer.SetFloat("SFX", dB);
 	}
+	public void Play_Sound(SoundType _type)
+	{
+		if (GlobalGSC.Instance.audioManager.Get_AudioClip(_type, out AudioClip _clip) && !BattleGSC.Instance.gameManager.isPaused)
+		{
+			sfx.PlayOneShot(_clip);
+		}
+	}
 
 	public void ChangeBGM(SceneBGMType type)
 	{

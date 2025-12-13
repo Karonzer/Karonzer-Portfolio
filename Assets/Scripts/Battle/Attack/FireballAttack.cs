@@ -17,7 +17,8 @@ public class FireballAttack : AttackRoot
 	private void OnEnable()
 	{
 		Attack();
-		GameObject projectileObj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
+
+		//Spawn_Projectile();
 	}
 	protected override void Attack()
 	{
@@ -67,6 +68,12 @@ public class FireballAttack : AttackRoot
 
 		}
 
+	}
+
+	private async Awaitable Spawn_Projectile()
+	{
+		await Awaitable.WaitForSecondsAsync(1.0f);
+		BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
 	}
 
 	private bool Find_TargetEnemyDir(out Vector3 _direction)

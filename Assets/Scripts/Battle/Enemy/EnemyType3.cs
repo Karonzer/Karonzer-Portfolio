@@ -75,6 +75,7 @@ public class EnemyType3 : Enemy
 					spawnPosition += new Vector3(0, 0.2f, 0);
 					_Component.Set_ProjectileInfo("EnemyProjectile", enemyStruct.damage, 1, _direction, 10, 10, spawnPosition);
 					_Component.Launch_Projectile();
+					audioHandler.Play_OneShot(SoundType.Enmey_Projectile);
 				}
 			}
 

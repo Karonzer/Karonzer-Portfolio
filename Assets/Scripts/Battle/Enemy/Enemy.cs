@@ -36,6 +36,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 	public float MaxHPDamege => enemyStruct.maxHP;
 	public EnemyStruct EnemyStruct => enemyStruct;
 
+	[SerializeField] protected IAudioHandler audioHandler;
+
 	protected virtual void Awake()
 	{
 		if (BattleGSC.Instance != null && BattleGSC.Instance.statManager != null)
@@ -43,6 +45,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 
 		stateMachine = new StateMachine<Enemy>(this);
 		animator = transform.GetComponent<Animator>();
+		audioHandler = GetComponent<IAudioHandler>();
 	}
 
 	protected virtual void Start()
@@ -130,6 +133,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		if (enemyStruct.currentHP > 0)
 			HitFlash();
 
+		audioHandler.Play_OneShot(SoundType.Enemy_Hit);
 		Invoke_Damaged(_damageInfo);
 		enemyStruct.currentHP -= _damageInfo.damage;
 		InvokeHealthChanged();

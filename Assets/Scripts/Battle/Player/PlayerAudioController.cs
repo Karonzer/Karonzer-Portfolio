@@ -3,10 +3,29 @@ using UnityEngine.Audio;
 
 public class PlayerAudioController : AudioController
 {
+	[SerializeField] private IDamageable damageable;
 	private void OnEnable()
 	{
 		audioSource.volume = 0.2f;
 	}
+
+	private void Start()
+	{
+		damageable = transform.GetComponent<IDamageable>();
+		damageable.OnDamaged += (DamageInfo info) => 
+		{
+			Play_Hit();
+		};
+	}
+
+	private void OnDisable()
+	{
+		damageable.OnDamaged -= (DamageInfo info) =>
+		{
+			Play_Hit();
+		};
+	}
+
 
 	public override void Play(SoundType _type)
 	{
@@ -44,6 +63,14 @@ public class PlayerAudioController : AudioController
 	public void Play_Jump()
 	{
 		if (GlobalGSC.Instance.audioManager.Get_AudioClip(SoundType.Player_Jump, out AudioClip _clip) && !BattleGSC.Instance.gameManager.isPaused )
+		{
+			audioSource.PlayOneShot(_clip);
+		}
+	}
+
+	public void Play_Hit()
+	{
+		if (GlobalGSC.Instance.audioManager.Get_AudioClip(SoundType.Player_Hit, out AudioClip _clip) && !BattleGSC.Instance.gameManager.isPaused)
 		{
 			audioSource.PlayOneShot(_clip);
 		}

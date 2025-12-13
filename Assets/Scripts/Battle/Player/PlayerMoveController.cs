@@ -59,6 +59,11 @@ public class PlayerMoveController : MonoBehaviour
 		animator.SetBool("IsGrounded", playerGravityController.IsGrounded);
 	}
 
+	private void FixedUpdate()
+	{
+		
+	}
+
 	private void Initialize_PlayerMoveController()
 	{
 		characterController = GetComponent<CharacterController>();

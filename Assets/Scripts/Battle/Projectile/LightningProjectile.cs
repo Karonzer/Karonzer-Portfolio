@@ -23,6 +23,7 @@ public class LightningProjectile : Projectile
 
 		lightning = transform.GetChild(0).GetComponent<ParticleSystem>();
 		light = transform.GetChild(1).GetComponent<Light>();
+		audioHandler = GetComponent<IAudioHandler>();
 	}
 
 
@@ -50,6 +51,12 @@ public class LightningProjectile : Projectile
 		light.intensity = projectileRange;
 		light.range = projectileRange;
 
+	}
+
+
+
+	public override void Launch_Projectile()
+	{
 		if (hitRoutine != null)
 			StopCoroutine(hitRoutine);
 
@@ -62,14 +69,8 @@ public class LightningProjectile : Projectile
 			projectileSurvivalTimeCoroutine = null;
 		}
 
+		audioHandler.Play_OneShot(SoundType.Skill_Lightning);
 		projectileSurvivalTimeCoroutine = StartCoroutine(Start_ProjectileSurvivalTimeCoroutine());
-	}
-
-
-
-	public override void Launch_Projectile()
-	{
-
 	}
 
 

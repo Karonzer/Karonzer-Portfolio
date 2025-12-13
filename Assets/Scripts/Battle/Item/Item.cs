@@ -19,6 +19,7 @@ public abstract class Item : MonoBehaviour
 		if (other.CompareTag("Player"))
 		{
 			Fuction_Event(other.gameObject);
+			GlobalGSC.Instance.audioManager.Play_Sound(SoundType.Item);
 			gameObject.SetActive(false);
 		}
 	}
