@@ -81,6 +81,7 @@ public enum UIType
 	TextPopUp,
 	Timer,
 	GameOver,
+	Pause,
 }
 
 

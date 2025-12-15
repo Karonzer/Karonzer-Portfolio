@@ -8,9 +8,9 @@ public class BattleGSC : GenericSingletonClass<BattleGSC>
 	public SpawnManager spawnManager { get; private set; }
 	public DamagePopupManager damagePopupManager { get; private set; }
 	public UpgradeManager upgradeManager { get; private set; }
-
 	public BuffManager BuffManager { get; private set; }
 	public UIManger uIManger { get; private set; }
+	public InputManager inputManager { get; private set; }
 
 
 	public void RegisterGameManager(GameManager _gameManager) => gameManager = _gameManager;
@@ -23,4 +23,5 @@ public class BattleGSC : GenericSingletonClass<BattleGSC>
 	public void RegisterBuffManager(BuffManager _buffManager)=> BuffManager = _buffManager;
 
 	public void RegisterUIManger(UIManger _uIManger) => uIManger = _uIManger;
+	public void RegisterInputManager(InputManager _inputManager) => inputManager = _inputManager;
 }

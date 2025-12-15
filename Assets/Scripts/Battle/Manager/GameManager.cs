@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
-using UnityEngine.AI;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.AI;
+using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Collections.Generic;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -63,6 +65,7 @@ public class GameManager : MonoBehaviour
 		Setting_EnemyEvent();
 		Start_Game();
 		GlobalGSC.Instance.audioManager.ChangeBGM(SceneBGMType.Battle);
+		Setting_UIInputAction();
 	}
 
 	private void OnEnable()
@@ -76,6 +79,7 @@ public class GameManager : MonoBehaviour
 		Addressables.ReleaseInstance(player);
 		player.GetComponent<Player>().OnDead -= Game_Over;
 		ReSetting_EnemyEvent();
+		DiSetting_UIInputAction();
 	}
 
 	private void Setting_GameManagerValue()
@@ -502,6 +506,50 @@ public class GameManager : MonoBehaviour
 	{
 		OnResume?.Invoke();
 		isPaused = false;
+	}
+
+	public void Toggle_Pause(InputAction.CallbackContext context)
+	{
+		if (isPaused)
+		{
+			ResumeGame();
+			Set_ShowAndHideCursor(false);
+			BattleGSC.Instance.uIManger.Hide(UIType.Pause);
+		}
+		else
+		{
+			PauseGame();
+			Set_ShowAndHideCursor(true);
+			BattleGSC.Instance.uIManger.Show(UIType.Pause);
+		}
+	}
+
+	public void Toggle_Pause()
+	{
+		if (isPaused)
+		{
+			ResumeGame();
+			Set_ShowAndHideCursor(false);
+			BattleGSC.Instance.uIManger.Hide(UIType.Pause);
+		}
+		else
+		{
+			PauseGame();
+			Set_ShowAndHideCursor(true);
+			BattleGSC.Instance.uIManger.Show(UIType.Pause);
+		}
+	}
+
+	private void Setting_UIInputAction()
+	{
+		GlobalGSC.Instance.settingMenulUI.OnClose += Toggle_Pause;
+		BattleGSC.Instance.inputManager.InputActions.UI.ESC.performed += Toggle_Pause;
+	}
+
+	private void DiSetting_UIInputAction()
+	{
+		GlobalGSC.Instance.settingMenulUI.OnClose -= Toggle_Pause;
+		BattleGSC.Instance.inputManager.InputActions.UI.ESC.performed -= Toggle_Pause;
 	}
 
 	public void Game_Over(IDamageable _damageable)

@@ -17,18 +17,19 @@ public class GravityController : MonoBehaviour
 	public float VelocityY => velocityY;
 	public bool IsGrounded => isGrounded;
 
-	[SerializeField] private float groundCheckDistance = 0.2f;
+	[SerializeField] private float groundCheckDistance;
 	[SerializeField] private LayerMask groundMask;
 
 	private void OnEnable()
 	{
 		groundMask = LayerMask.GetMask("Ground");
+		groundCheckDistance = 1.1f;
 	}
 
 	private bool CheckGrounded(CharacterController controller)
 	{
 		Vector3 origin = controller.transform.position;
-		bool hit = Physics.Raycast(origin,Vector3.down,1.1f, groundMask);
+		bool hit = Physics.Raycast(origin,Vector3.down, groundCheckDistance, groundMask);
 		return hit;
 	}
 

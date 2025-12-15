@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-
 using UnityEngine;
+
 
 public class UIManger : MonoBehaviour
 {
@@ -13,6 +13,11 @@ public class UIManger : MonoBehaviour
 		var handlersInChildren = GetComponentsInChildren<IUIHandler>(true);
 		foreach (var h in handlersInChildren)
 			RegisterHandler(h);
+	}
+
+	private void OnEnable()
+	{
+		
 	}
 
 	public void RegisterHandler(IUIHandler _handler)
@@ -49,5 +54,7 @@ public class UIManger : MonoBehaviour
 			return false;
 		}
 	}
+
+
 
 }

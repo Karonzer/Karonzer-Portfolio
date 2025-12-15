@@ -7,8 +7,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : Player
 {
-	[SerializeField] private InputSystem_Actions inputActions;
-
 	[SerializeField] private PlayerMoveController moveController;
 	[SerializeField] private PlayerInteractor interactor;
 	[SerializeField] private PlayerCinemachineFreeLook playerCinemachineFreeLook;
@@ -17,7 +15,6 @@ public class PlayerController : Player
 	protected override void Awake()
 	{
 		base.Awake();
-		inputActions = new InputSystem_Actions();
 		if (moveController == null)
 		{
 			moveController = transform.AddComponent<PlayerMoveController>();
@@ -36,23 +33,27 @@ public class PlayerController : Player
 	}
 
 
+
 	private void OnEnable()
 	{
-		inputActions.Enable();
-		Setting_InputActionMove();
 		Setting_Action();
 	}
 
 	private void OnDisable()
 	{
-		inputActions.Disable();
 		DiSetting_InputActionMove();
-		DiSetting_Action();
 	}
 	protected override void Start()
 	{
 		base.Start();
 		Add_AttackObject(StartAttackKey);
+		Setting_InputActionMove();
+	}
+
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+		DiSetting_InputActionMove();
 	}
 
 	protected override void Event_ChildEvnet()
@@ -62,18 +63,18 @@ public class PlayerController : Player
 
 	private void Setting_InputActionMove()
 	{
-		inputActions.Player.Move.performed += moveController.OnMove;
-		inputActions.Player.Move.canceled += moveController.OnMoveCanceled;
-		inputActions.Player.Jump.performed += moveController.OnJump;
-		inputActions.Player.Interact.performed += interactor.OnInteract;
+		BattleGSC.Instance.inputManager.InputActions.Player.Move.performed += moveController.OnMove;
+		BattleGSC.Instance.inputManager.InputActions.Player.Move.canceled += moveController.OnMoveCanceled;
+		BattleGSC.Instance.inputManager.InputActions.Player.Jump.performed += moveController.OnJump;
+		BattleGSC.Instance.inputManager.InputActions.Player.Interact.performed += interactor.OnInteract;
 	}
 
 	private void DiSetting_InputActionMove()
 	{
-		inputActions.Player.Move.performed -= moveController.OnMove;
-		inputActions.Player.Move.canceled -= moveController.OnMoveCanceled;
-		inputActions.Player.Jump.performed -= moveController.OnJump;
-		inputActions.Player.Interact.performed -= interactor.OnInteract;
+		BattleGSC.Instance.inputManager.InputActions.Player.Move.performed -= moveController.OnMove;
+		BattleGSC.Instance.inputManager.InputActions.Player.Move.canceled -= moveController.OnMoveCanceled;
+		BattleGSC.Instance.inputManager.InputActions.Player.Jump.performed -= moveController.OnJump;
+		BattleGSC.Instance.inputManager.InputActions.Player.Interact.performed -= interactor.OnInteract;
 	}
 
 	private void Setting_Action()
@@ -81,8 +82,4 @@ public class PlayerController : Player
 		moveController.onJump += audioController.Play_Jump;
 	}
 
-	private void DiSetting_Action()
-	{
-
-	}
 }
