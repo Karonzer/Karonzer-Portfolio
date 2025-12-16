@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Actor
   - InteractableActor
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - Tree
   - ItemDetect
   - item
   - Projectile

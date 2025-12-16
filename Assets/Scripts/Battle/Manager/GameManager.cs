@@ -55,10 +55,11 @@ public class GameManager : MonoBehaviour
 	{
 		BattleGSC.Instance.RegisterGameManager(this);
 		currentPlayerKey = "Player";// 추후 타이틀 씬에서 선택한 이름을 가지고 올 예정
-		Initialize_Player();
+
 	}
 	private void Start()
 	{
+		Initialize_Player();
 		Setting_Cursor();
 		Setting_StartUI();
 		Settting_PlayerEvnet();
@@ -226,15 +227,12 @@ public class GameManager : MonoBehaviour
 	IEnumerator SurvivalTimerRoutine()
 	{
 		survivalTime = 0f;
-
 		while (true)
 		{
 			if (!isPaused)
 			{
 				survivalTime += Time.deltaTime;
 				TimerAction?.Invoke(survivalTime);
-
-
 				if (survivalTime - lastBossSpawnTime >= bossSpawnInterval)
 				{
 					SpawnBossByTime();
@@ -324,13 +322,13 @@ public class GameManager : MonoBehaviour
 		for (int i = 0; i < 10; i++)
 		{
 			Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
-			float distance = UnityEngine.Random.Range(30f, 45f);
+			float distance = UnityEngine.Random.Range(35f, 45f);
 
 			Vector3 randomPos =
 				playerPos +
 				new Vector3(circle.x, 0f, circle.y) * distance;
 
-			if (NavMesh.SamplePosition(randomPos, out var hit, 5f, NavMesh.AllAreas))
+			if (NavMesh.SamplePosition(randomPos, out var hit, 10f, NavMesh.AllAreas))
 			{
 				return hit.position;
 			}
@@ -346,7 +344,7 @@ public class GameManager : MonoBehaviour
 		for (int i = 0; i < 10; i++)
 		{
 			Vector2 circle = UnityEngine.Random.insideUnitCircle.normalized;
-			float distance = UnityEngine.Random.Range(100f, 125f);
+			float distance = UnityEngine.Random.Range(75f, 100f);
 
 			Vector3 randomPos =
 				playerPos +
@@ -384,28 +382,18 @@ public class GameManager : MonoBehaviour
 
 	public Vector3 Get_RandomPointOnNavMesh()
 	{
-		NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation();
+		float range = 10f;
+		Vector3 randomPoint = transform.position + UnityEngine.Random.insideUnitSphere * range;
+		NavMeshHit hit;
 
-		int triangleIndex = UnityEngine.Random.Range(0, navMeshData.indices.Length / 3) * 3;
-
-		Vector3 v0 = navMeshData.vertices[navMeshData.indices[triangleIndex]];
-		Vector3 v1 = navMeshData.vertices[navMeshData.indices[triangleIndex + 1]];
-		Vector3 v2 = navMeshData.vertices[navMeshData.indices[triangleIndex + 2]];
-
-		float r1 = Mathf.Sqrt(UnityEngine.Random.value);
-		float r2 = UnityEngine.Random.value;
-
-		Vector3 randomPoint =
-			(1 - r1) * v0 +
-			(r1 * (1 - r2)) * v1 +
-			(r1 * r2) * v2;
-
-		if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+		if (NavMesh.SamplePosition(randomPoint, out hit, range, NavMesh.AllAreas))
 		{
 			return hit.position;
 		}
-
-		return Vector3.zero;
+		else
+		{
+			return Vector3.zero;
+		}
 	}
 
 	public void Check_ItmeSpawn(GameObject _obj)
@@ -443,11 +431,13 @@ public class GameManager : MonoBehaviour
 
 		if (obj != null && obj.TryGetComponent<Enemy>(out var enemy))
 		{
-			obj.transform.position = pos;
 			obj.gameObject.SetActive(true);
+			enemy.ResetForSpawn(pos);
 			enemy.Start_Enemy();
 		}
 	}
+
+
 
 	private void Spawn_BossAt(Vector3 pos, string key)
 	{
@@ -455,8 +445,8 @@ public class GameManager : MonoBehaviour
 
 		if (obj != null && obj.TryGetComponent<Enemy>(out var enemy))
 		{
-			obj.transform.position = pos;
 			obj.gameObject.SetActive(true);
+			enemy.ResetForSpawn(pos);
 			enemy.Start_Enemy();
 			BattleGSC.Instance.uIManger.Show(UIType.BossHP, obj);
 		}

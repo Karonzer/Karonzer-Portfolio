@@ -24,4 +24,4 @@ MonoBehaviour:
   waveInterval: 60
   waveMinCount: 50
   waveMaxCount: 100
-  maxEnemyAlive: 300
+  maxEnemyAlive: 500

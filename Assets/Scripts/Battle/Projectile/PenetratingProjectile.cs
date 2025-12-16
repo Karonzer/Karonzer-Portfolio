@@ -91,7 +91,7 @@ public class PenetratingProjectile : Projectile
 		if (other.CompareTag("Player"))
 			return;
 
-		if (other != null && other.CompareTag("Enemy"))
+		if (other != null && other.CompareTag("Enemy") || other.CompareTag("Boss"))
 		{
 			if (other.TryGetComponent<IDamageable>(out IDamageable _damageable))
 			{

@@ -168,7 +168,6 @@ public class MeteoProjectile : Projectile
 	{
 		hitParticle.Play();
 
-		// 파티클이 완전히 끝날 때까지 대기
 		while (hitParticle != null && hitParticle.IsAlive(true))
 		{
 			yield return null;

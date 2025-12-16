@@ -202,6 +202,28 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IHealthChanged, IEnemy
 		hitMatInstance.SetColor("_EmissionColor", Color.black); // 원래대로
 	}
 
+	public void ResetForSpawn(Vector3 spawnPos)
+	{
+		if (navigation == null) navigation = GetComponent<NavMeshAgent>();
+
+		if (navigation != null)
+		{
+			navigation.isStopped = true;
+			navigation.ResetPath();
+
+			navigation.enabled = false;
+			transform.position = spawnPos;
+			navigation.enabled = true;
+			navigation.Warp(spawnPos);
+
+			navigation.isStopped = false;
+		}
+		else
+		{
+			transform.position = spawnPos;
+		}
+	}
+
 	public abstract void Start_Enemy();
 
 

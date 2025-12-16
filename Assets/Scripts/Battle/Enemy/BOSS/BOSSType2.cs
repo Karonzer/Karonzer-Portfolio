@@ -99,14 +99,13 @@ public class BOSSType2 : Enemy
 		navigation.isStopped = true;
 		navigation.speed = 0f;
 		Spawn_XPItem();
-
+		base.Die_Enemy(this);
 	}
 
 
 
 	public override void Spawn_XPItem()
 	{
-
 		for (int i = 0; i < 5; i++)
 		{
 			GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Item, BattleGSC.Instance.gameManager.Get_ItemDataSO().xPItem);

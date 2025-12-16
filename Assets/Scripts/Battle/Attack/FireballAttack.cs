@@ -79,6 +79,7 @@ public class FireballAttack : AttackRoot
 	private bool Find_TargetEnemyDir(out Vector3 _direction)
 	{
 		_direction = Vector3.zero;
+
 		int enemyLayerMask = LayerMask.GetMask("Enemy");
 
 		int count = Physics.OverlapSphereNonAlloc(transform.position, attackRange, enemyBuffer, enemyLayerMask);

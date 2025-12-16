@@ -81,7 +81,7 @@ public class LightningAttack : AttackRoot
 		for(int i = 0; i < count;i++)
 		{
 			var col = enemyBuffer[i];
-			if (col != null && col.CompareTag("Enemy"))
+			if (col != null && col.CompareTag("Enemy") || col.CompareTag("Boss"))
 			{
 				_list.Add(col.gameObject);
 			}
