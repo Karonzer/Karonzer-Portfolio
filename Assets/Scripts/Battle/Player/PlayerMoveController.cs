@@ -112,6 +112,8 @@ public class PlayerMoveController : MonoBehaviour
 			if(playerGravityController.Jump())
 			{
 				onJump?.Invoke();
+
+				animator.SetTrigger("Jump");
 			}
 		}
 	}

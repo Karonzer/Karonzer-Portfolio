@@ -27,7 +27,13 @@ public class FireballAttack : AttackRoot
 			StopCoroutine(attackTimeRoutine);
 			attackTimeRoutine = null;
 		}
-		StartCoroutine(Coroutine_FindTargetEnemyAttackTime());
+		Initialize_ProjectileObj();
+		Start_FindTargetEnemyAttackTime();
+	}
+
+	private async void Start_FindTargetEnemyAttackTime()
+	{
+		await Coroutine_FindTargetEnemyAttackTime();
 	}
 
 	protected override void Apply_StatsFromAttackStats()
@@ -37,18 +43,18 @@ public class FireballAttack : AttackRoot
 
 
 
-	private IEnumerator Coroutine_FindTargetEnemyAttackTime()
+	private async Awaitable Coroutine_FindTargetEnemyAttackTime()
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(attackIntervalTime);
+			await Awaitable.WaitForSecondsAsync(attackIntervalTime);
 			if (BattleGSC.Instance.gameManager != null && !BattleGSC.Instance.gameManager.isPaused)
 			{
 				for (int i = 0; i < attackStats.ProjectileCount; i++)
 				{
 					if (Find_TargetEnemyDir(out Vector3 _direction))
 					{
-						GameObject projectileObj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
+						GameObject projectileObj = await BattleGSC.Instance.spawnManager.SpawnAsync(PoolObjectType.Projectile, ProjectileKey);
 						if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
 						{
 							projectileObj.gameObject.SetActive(true);
@@ -58,7 +64,7 @@ public class FireballAttack : AttackRoot
 							_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, _direction, attackStats.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
 							_Component.Launch_Projectile();
 						}
-						yield return new WaitForSeconds(0.1f);
+						await Awaitable.WaitForSecondsAsync(0.1f);
 
 					}
 				}
@@ -70,10 +76,20 @@ public class FireballAttack : AttackRoot
 
 	}
 
+	private async void Initialize_ProjectileObj()
+	{
+		await Spawn_Projectile();
+	}	
+
 	private async Awaitable Spawn_Projectile()
 	{
-		await Awaitable.WaitForSecondsAsync(1.0f);
-		BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Projectile, ProjectileKey);
+		GameObject projectileObj = await BattleGSC.Instance.spawnManager.SpawnAsync(PoolObjectType.Projectile, ProjectileKey);
+		if (projectileObj.TryGetComponent<Projectile>(out Projectile _Component))
+		{
+			Vector3 spawnPosition = transform.position;
+			_Component.Set_ProjectileInfo(ProjectileKey, attackDamage, attackStats.baseExplosionRange, Vector3.zero, attackStats.baseProjectileSpeed, DBManager.ProjectileSurvivalTime, spawnPosition);
+			projectileObj.gameObject.SetActive(false);
+		}
 	}
 
 	private bool Find_TargetEnemyDir(out Vector3 _direction)

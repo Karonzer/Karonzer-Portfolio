@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -86,9 +88,32 @@ public class SpawnManager : MonoBehaviour
 		return prefabHandles[address].Result;
 	}
 
+	private async Awaitable<GameObject> LoadPrefabAsync(string address)
+	{
+		if (!prefabHandles.TryGetValue(address, out var handle))
+		{
+			handle = Addressables.LoadAssetAsync<GameObject>(address);
+			prefabHandles[address] = handle;
+			await handle.Task;
+		}
+
+		return handle.Result;
+	}
+
 	private GameObject CreateObject(PoolObjectType type, string name)
 	{
 		GameObject prefab = LoadPrefab(name);
+		Transform parent = parents[type];
+
+		GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity, parent);
+		obj.SetActive(false);
+
+		return obj;
+	}
+
+	private async Awaitable<GameObject> CreateObjectAsync(PoolObjectType type, string name)
+	{
+		GameObject prefab = await LoadPrefabAsync(name);
 		Transform parent = parents[type];
 
 		GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity, parent);
@@ -119,6 +144,31 @@ public class SpawnManager : MonoBehaviour
 		GameObject obj = dict[name].Dequeue();
 		obj.SetActive(true);
 		return obj;
+	}
+
+
+
+	public async Awaitable<GameObject> SpawnAsync(PoolObjectType type, string name)
+	{
+		var dict = pools[type];
+
+		if (!dict.ContainsKey(name))
+		{
+			dict[name] = new Queue<GameObject>();
+		}
+
+		if (dict[name].Count == 0)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				var obj = await CreateObjectAsync(type, name);
+				dict[name].Enqueue(obj);
+			}
+		}
+
+		GameObject result = dict[name].Dequeue();
+		result.SetActive(true);
+		return result;
 	}
 
 	public void DeSpawn(PoolObjectType type, string name, GameObject obj)
