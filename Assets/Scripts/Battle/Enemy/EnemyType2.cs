@@ -2,6 +2,15 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
 
+/// <summary>
+/// EnemyType2
+/// 
+/// 근접 공격 타입(즉시 데미지) - Type1과 동일한 공격 방식.
+/// - 공격 시: 범위 안에 플레이어가 있으면 즉시 데미지
+/// - 사망 시: Die 애니메이션 종료 후 풀 반환 + XP 드랍
+/// 
+/// (실제 차이는 프리팹/스탯/애니메이션에서 발생하는 타입)
+/// </summary>
 public class EnemyType2 : Enemy
 {
 	private readonly Collider[] enemyBuffer = new Collider[1];
