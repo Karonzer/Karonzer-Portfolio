@@ -7,56 +7,94 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-
+/// <summary>
+/// GameManager
+///	전투 씬의 전체 흐름을 관리하는 매니저 스크립트입니다.
+///	 - 게임 시작/ 종료
+///	 - 플레이어 생성
+///	 - 적 / 보스 / 웨이브 스폰 / 주기적 아이템 스폰
+///	 - 생존 시간 관리
+///	 - 일시정지 / 재개 처리
+///	 - 난이도 상승 로직
+///	 
+/// </summary>
 public class GameManager : MonoBehaviour
 {
+	// 일반 몬스터 소픈 리스트
 	public EnemySpawnListSO enemySpawnListSO;
+	// 보스 몬스터 스폰 리스트
 	public EnemySpawnListSO enemyBossSpawnListSO;
+	// 게임 전반 수치(스폰 수,간격, 제한)등 게임 진행이 필요한 값을 담고 있는 데이터
 	public GameManagerValueSO gameManagerValueSO;
 
+	// 플레이어 생성과 값을 및 키를 관리하는 변수들
 	[SerializeField] private Transform playerPos;
 	[SerializeField] private GameObject player;
 	[SerializeField] private string currentPlayerKey;
 	public string CurrentPlayerKey => currentPlayerKey;
 
+	// 몬스터 스폰 관련 변수들
 	[SerializeField] private int minSpawnCount;
 	[SerializeField] private int maxSpawnCount;
 	[SerializeField] private int spawnCount;
 
+	// 아이템 스폰 리스트
 	[SerializeField] private ItemDataSO itemData;
+	// 월드 UI 팝업 리스트
 	[SerializeField] private PopUpDataSO popUpData;
 
+	// 몬스터 스폰에 관련 변수들
 	[SerializeField] private int maxEnemyAlive;
 	private int currentEnemyAlive = 0;
 	private Coroutine spwanTimeRoutine;
 	[SerializeField] private float enemySpawnInterval;
 	public float EnemySpawnInterval => enemySpawnInterval;
 
+	// 생존 시간 관련 변수들
 	private float survivalTime;
 	public float SurvivalTime => survivalTime;
 	public float lastWaveTime;
 	private Coroutine timerRoutine;
 
+	// 아이템 스폰 변수
 	private Coroutine itempSpawnRoutine;
 
+	// 보스 스폰 관련 변수
 	private float lastBossSpawnTime;
 	[SerializeField] private float bossSpawnInterval;
 
-
+	// 일시정지 관련 이벤트 및 변수
 	public event Action OnPause;
 	public event Action OnResume;
 	public event Action<float> TimerAction;
 	public bool isPaused { get; private set; }
 
+	// 현재 처치한 몬스터 수
 	[SerializeField] private int currentKillCount;
 	public int CurrentKillCount => currentKillCount;
 
+	/// <summary>
+	/// - BattleGSC에 자신을 등록하여 전역 접근 가능하도록 한다
+	/// </summary>
 	private void Awake()
 	{
+		// BattleGSC에 자신을 등록
 		BattleGSC.Instance.RegisterGameManager(this);
-		currentPlayerKey = "Player";// 추후 타이틀 씬에서 선택한 이름을 가지고 올 예정
+		currentPlayerKey = "Player";// 추후 타이틀 씬에서 선택한 캐릭터의 키로 해당 캐릭터를 생성할 수 있음 
 
 	}
+
+	/// <summary>
+	/// Start
+	///	전투 씬에 필요한 초기 세팅을 순서대로 수행
+	///	 - 플레이어 생성
+	///	 - 커서 처리
+	///	 - 기본 UI 표시
+	///	 - 플레이어 / 몬스트 이벤트 연결
+	///	 - 코루틴 시작(타이머, 몬스터 스폰 주기, 아이템 스폰 주기)
+	///	 - BGM 전환
+	///	 - UI 입력(ESC등) 연결
+	/// </summary>
 	private void Start()
 	{
 		Initialize_Player();
@@ -69,12 +107,18 @@ public class GameManager : MonoBehaviour
 		Setting_UIInputAction();
 	}
 
+	//GameManager 초기 수치 세팅
 	private void OnEnable()
 	{
 		Setting_GameManagerValue();
 
 	}
 
+	/// <summary>
+	/// OnDestroy
+	///	- Addressables로 생성된 플레이어 해채 및 이벤트 해제
+	///	- 이벤트에 등록했던 함수들 해제
+	/// </summary>
 	private void OnDestroy()
 	{ 
 		Addressables.ReleaseInstance(player);
@@ -83,6 +127,7 @@ public class GameManager : MonoBehaviour
 		DiSetting_UIInputAction();
 	}
 
+	// GameManager 초기 수치 세팅
 	private void Setting_GameManagerValue()
 	{
 		currentEnemyAlive = 0;
@@ -102,6 +147,11 @@ public class GameManager : MonoBehaviour
 		bossSpawnInterval = gameManagerValueSO.bossSpawnInterval;
 	}
 
+	/// <summary>
+	/// 코루틴 기반 게임 흐름 시작
+	///	- 혹시 이밎 실행 중인 코루틴이 있으면 중복 실행을 막기 위해 정치 후 null 처리후 코투린 시작
+	///	- 생존 시각 타이머, 몬스터 스폰 주기, 아이템 스폰 주기 코루틴 시작
+	/// </summary>
 	private void Start_Game()
 	{
 		if (spwanTimeRoutine != null)
@@ -128,19 +178,34 @@ public class GameManager : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// 플레이어를 전투 맵 내 내부메쉬 위 랜덤 위치에 생성
+	///	- 바닥에 약간 올려 지면 겹칩/끼임 방지
+	/// </summary>
 	private void Initialize_Player()
 	{
 		Vector3 pos = Get_RandomPointOnNavMesh();
-		pos.y += 1;
+		pos.y += 0.5f;
 		Spawn_Player(currentPlayerKey, pos, Quaternion.identity);
 	}
 
+
+	/// <summary>
+	/// 플레이어 관련 이벤트 연결
+	///	- 레벨업 시 난이도 상승 처리
+	///	- 사망 시 게임 오버 처리
+	/// </summary>
 	private void Settting_PlayerEvnet()
 	{
 		player.GetComponent<PlayerLevel>().OnLevelUp += Handle_PlayerLevelUp;
 		player.GetComponent<Player>().OnDead += Game_Over;
 	}
 
+	/// <summary>
+	/// 몬스터 관련 이벤트 연결
+	///	- 몬스터가 죽을 때마다 아이템 스폰 체크
+	///	- 몬스터가 죽을 때마다 현지 처치 수 증가	
+	/// </summary>
 	private void Setting_EnemyEvent()
 	{
 		Enemy.OnDeadGlobal += Check_ItmeSpawn;
@@ -148,12 +213,23 @@ public class GameManager : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// Setting_EnemyEvent에 등록한 이벤트 해제
+	///	- 씬 종료 또는 재시작 시 중복 등록 방지
+	/// </summary>
 	private void ReSetting_EnemyEvent()
 	{
 		Enemy.OnDeadGlobal -= Check_ItmeSpawn;
 		Enemy.OnDeadGlobal -= Add_CurrentKillCount;
 	}
 
+	/// <summary>
+	/// 전투 시작 시 기본으로 보여줄 UI 세팅
+	///	- 경험치 바
+	///	- 플레이어 고정 HP 바	
+	///	- 플레이어 따라다니는 HP 바
+	///	- 타이머 UI
+	/// </summary>
 	private void Setting_StartUI()
 	{
 		BattleGSC.Instance.uIManger.Show(UIType.XPBar, player);
@@ -161,6 +237,11 @@ public class GameManager : MonoBehaviour
 		BattleGSC.Instance.uIManger.Show(UIType.PlayerHPFollow, player);
 		BattleGSC.Instance.uIManger.Show(UIType.Timer, gameObject);
 	}
+
+	/// <summary>
+	/// Addressables를 통해 플레이어 생성
+	///	- parent로 playerPos를 지정해 플레이어 위치 관리
+	/// </summary>
 	public void Spawn_Player(string address, Vector3 pos, Quaternion rot)
 	{
 		AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, pos, rot, playerPos);
@@ -168,22 +249,49 @@ public class GameManager : MonoBehaviour
 		player = handle.Result;
 	}
 
+	// 비동기 처리 버전
+	//public async Awaitable<GameObject> Spawn_Player(string address, Vector3 pos, Quaternion rot)
+	//{
+	//	AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, pos, rot, playerPos);
+	//	await handle.Task;
+	//	player = handle.Result;
+	//}
+
+	/// <summary>
+	/// 전투 중 마우스 커서를 숨기고 화면 안에 고정
+	///	- 키보드/ 마우스 조작 전투에서 커서가 화면 밖으로 나가 클릭 이탈되는 것을 방지
+	/// </summary>
 	private void Setting_Cursor()
 	{
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Confined;
 	}
 
+	/// <summary>
+	/// 상황에 따라 커서를 표시 숨길 처리하는 함수
+	///	- 일시정지 / 업그레이드 팝업등에서 커서를 표시할 때 사용
+	/// </summary>
 	public void Set_ShowAndHideCursor(bool _show)
 	{
 		Cursor.visible = _show;
 	}
 
+	/// <summary>
+	/// 현재 플레이어 오브젝트 반환
+	///	- 다른 시스템에서 플레이어 참조가 필요할때 사용
+	/// </summary>
 	public GameObject Get_PlayerObject()
 	{
 		return player;
 	}
 
+	/// <summary>
+	/// 일반 몬스터 스폰 루틴
+	///	- 첫 5초 대기 후 시작
+	///	- 일시정지 상태에서 스폰하지 않고 다음 프레임까지 대기
+	///	- 현재 몬스터 수가 최대 몬스터 수보다 적을 때만 스폰
+	///	- 3~5마리 랜덤 수의 몬스터를 플레이어 중심에서 35~45 거리 내 랜덤 위치에 스폰
+	/// </summary>
 	IEnumerator Enemy_SpawnRoutine()
 	{
 		yield return new WaitForSeconds(5f);
@@ -214,6 +322,12 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+
+	/// <summary>
+	/// 보스 몬스트 생성 시간 조건으로 스폰
+	///	- boss 리스트에서 랜덤 키 선택
+	///	- 일반 스폰 위치 로직를 재 사용
+	/// </summary>
 	private void SpawnBossByTime()
 	{
 		int spawnKey = UnityEngine.Random.Range(1, enemyBossSpawnListSO.enemyKey.Length);
@@ -224,6 +338,13 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 생존 타이머 루틴
+	///	-  일시정지가 아닐 때만 시간 증가
+	///	- TimerAction 이벤트로 시간 갱신
+	/// - 보스 스폰 시간 조건 체크
+	///	- 일반 몬스터 웨이브 스폰 시간 조건 체크
+	/// </summary>
 	IEnumerator SurvivalTimerRoutine()
 	{
 		survivalTime = 0f;
@@ -249,8 +370,14 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 몬스터 웨이브 스폰 루틴
+	///	- 현재 필드에 몬스터가 많으면 웨이브를 생락하여 컴퓨터 랙 방지 및 플레이어 부담 완화
+	///	- 웨이브가 시작할때 텍스트 팝업 표시
+	/// </summary>
 	IEnumerator SpawnWaveRoutine()
 	{
+		// 적이 너무 많으면 웨이브 스폰 자체를 하지 않음
 		if (currentEnemyAlive > maxEnemyAlive * 0.7f)
 		{
 			yield break;
@@ -265,10 +392,15 @@ public class GameManager : MonoBehaviour
 			if (pos != Vector3.zero)
 				Spawn_EnemyAt(pos, enemySpawnListSO.enemyKey[spawnKey]);
 
+			// 프레임 분산(한 프레임에 너무 많이 스폰하지 않도록)
 			yield return null; 
 		}
 	}
 
+	/// <summary>
+	/// 필드에 아이템을 주기적으로 생성
+	///	- 일정 시간마다 아이템 리스트에서 랜덤으로 선택하여 플레이어 주변에서 랜덤 위치에 생성
+	/// </summary>
 	IEnumerator Itemp_SpawnRoutine()
 	{
 		yield return new WaitForSeconds(1f);
@@ -292,7 +424,12 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-
+	/// <summary>
+	/// 플레이어 레벨업 시 난이도 증가
+	///	- enemySpawnInterval를 점점 줄여서 스폰을 빠르게 변경
+	///	- 최소값 이래로 내려가면 더 이상 줄이지 않고 몬스터 스텟을 증가 시키는 방식
+	///	- spawnCount를 증가시켜 스폰 가능한 몬스터 종류를 늘림
+	/// </summary>
 	private void Handle_PlayerLevelUp(int _currentLevel)
 	{
 
@@ -315,6 +452,10 @@ public class GameManager : MonoBehaviour
 		enemySpawnInterval = Mathf.Clamp(enemySpawnInterval, 1.0f, 10f);
 	}
 
+	/// <summary>
+	/// 플레이어 주변에서 스폰을 가능한 내부 메쉬 위치를 찾는 함수
+	///	- 10회 시도하면 성공하면 해당 위치 반환, 실패 시 (0,0,0) 반환
+	/// </summary>
 	public Vector3 GetRandomSpawnPosition()
 	{
 		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
@@ -337,6 +478,10 @@ public class GameManager : MonoBehaviour
 		return Vector3.zero;
 	}
 
+	/// <summary>
+	/// 웨이브용으로 프손 위치 찾는 함수
+	///	- 일반 스폰 보다 더 멀리에서 생성해 몰려오는 압박을 만든다
+	/// </summary>
 	public Vector3 Get_RandomSpawnWavePosition()
 	{
 		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
@@ -359,6 +504,9 @@ public class GameManager : MonoBehaviour
 		return Vector3.zero;
 	}
 
+	/// <summary>
+	/// 아이템 생성 위치 찾는 함수
+	/// </summary>
 	public static Vector3 Get_RandomPointOnItem()
 	{
 		Vector3 playerPos = BattleGSC.Instance.gameManager.Get_PlayerObject().transform.position;
@@ -380,6 +528,10 @@ public class GameManager : MonoBehaviour
 		return Vector3.zero;
 	}
 
+	/// <summary>
+	/// - 현재 위치를 기준으로 네비메쉬 위의 랜덤 위치 반환
+	/// - 초기 플레이어 생성 위치 등에 사용
+	/// </summary>
 	public Vector3 Get_RandomPointOnNavMesh()
 	{
 		float range = 10f;
@@ -396,6 +548,11 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// - 몬스터 처치 시 아에팀 드랍 확률 체크
+	/// - 현재 5% 고정 확룰 
+	/// - 조건이 만족했을때 해당 몬스터 위치에 아이템 생성 시도
+	/// </summary>
 	public void Check_ItmeSpawn(GameObject _obj)
 	{
 		float value = 0.05f;
@@ -405,6 +562,10 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// - 특정 위치에서 아이템 생성
+	/// - 아이템 리스트에서 랜덤으로 생성
+	/// </summary>
 	public void Spawn_ItemPos(Vector3 _pos)
 	{
 		int spawnKey = UnityEngine.Random.Range(0, itemData.list.Count);
@@ -414,6 +575,10 @@ public class GameManager : MonoBehaviour
 			Spawn_ItemAt(spawnPos, itemData.list[spawnKey]);
 	}
 
+	/// <summary>
+	///  오브젝트 풀링을 통해 아이템을 꺼내 배치
+	///  - y를 +1 올려서 바닥에 파묻히는 문제 방지
+	/// </summary>
 	public void Spawn_ItemAt(Vector3 pos, string key)
 	{
 		GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Item, key);
@@ -425,6 +590,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	///  오브젝트 풀링을 통해 몬스터 생성
+	/// </summary>
 	private void Spawn_EnemyAt(Vector3 pos, string key)
 	{
 		GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
@@ -438,7 +606,10 @@ public class GameManager : MonoBehaviour
 	}
 
 
-
+	/// <summary>
+	/// 보스 몬스터 생성
+	/// - 보스 몬스터 생성 후 보스 HP 바 UI를 활성화 한다
+	/// </summary>
 	private void Spawn_BossAt(Vector3 pos, string key)
 	{
 		GameObject obj = BattleGSC.Instance.spawnManager.Spawn(PoolObjectType.Enemy, key);
@@ -452,11 +623,22 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 몬스터 처치 시 현재 처치 수 증가
+	/// </summary>
 	public void Add_CurrentKillCount(GameObject _obj)
 	{
 		currentKillCount++;
 	}
 
+	/// <summary>
+	/// 레벨업 등 업그레이드 팝업을 띄우는 함수
+	/// - 사운드 재생
+	/// - 일시정지
+	/// - 커서 표시
+	/// - 업그레이드 팝업 표시
+	/// - 몬스터 스탯 증가로 난이도 상승
+	/// </summary>
 	public void Update_ToPlayerAttackObj()
 	{
 		GlobalGSC.Instance.audioManager.Play_Sound(SoundType.LevelUp);
@@ -466,6 +648,10 @@ public class GameManager : MonoBehaviour
 		BattleGSC.Instance.statManager.IncreaseAllEnemyStats(0.05f);
 	}
 
+	/// <summary>
+	/// 보물상자 오브젝트 상호작용하여 업그레이드 팝업을 띄우는 함수
+	/// - 레벨업과 달리 몬스터 스탯 증가는 하지 않도록 분리
+	/// </summary>
 	public void Update_ToPlayerAttackObjIsChestBox()
 	{
 		GlobalGSC.Instance.audioManager.Play_Sound(SoundType.LevelUp);
@@ -474,30 +660,51 @@ public class GameManager : MonoBehaviour
 		BattleGSC.Instance.uIManger.Show(UIType.UpgradePopUp);
 	}
 
+	/// <summary>
+	/// 업그레이드 팝업을 닫을 뒤 남아 있는 레벨업 처리를 이어가기 위한 트리거
+	/// </summary>
 	public void Check_PendingLevelUp()
 	{
 		player.GetComponent<PlayerLevel>().Handle_CloseUpgradePopup();
 	}
 
+	/// <summary>
+	/// 아이템 리스트 반환
+	/// </summary>
 	public ItemDataSO Get_ItemDataSO()
 	{ return itemData; }
 
+	/// <summary>
+	/// 월드 UI 팝업 리스트 반환
+	/// </summary>
 	public PopUpDataSO Get_PopUpData()
 	{ return popUpData; }
 
 
+	/// <summary>
+	/// 게임 일시정지 처리
+	/// - OnPause 이벤트로 다른 스크립트에 일시정지 알림
+	/// </summary>
 	public void PauseGame()
 	{
 		OnPause?.Invoke();
 		isPaused = true;
 	}
 
+	/// <summary>
+	/// 게임 재개 처리
+	/// - OnPause 이벤트로 다른 스크립트에 일시정지 알림
+	/// </summary>
 	public void ResumeGame()
 	{
 		OnResume?.Invoke();
 		isPaused = false;
 	}
 
+	/// <summary>
+	/// 일시정지 토클 처리
+	/// - ESC 입력 또는 설정 메뉴 닫기 시 호출
+	/// </summary>
 	public void Toggle_Pause(InputAction.CallbackContext context)
 	{
 		if (isPaused)
@@ -514,6 +721,11 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+
+	/// <summary>
+	/// 일시정지 토클 처리
+	/// - UI 버튼, 메뉴 닫기 이벤트 등에서 호출하기 위한 오버로드 함수
+	/// </summary>
 	public void Toggle_Pause()
 	{
 		if (isPaused)
@@ -530,18 +742,34 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// UI 입력 이벤트 연결
+	/// - 설정 메뉴 UI의 닫기 이벤트에 일시정지 토글 함수 연결
+	/// </summary>
 	private void Setting_UIInputAction()
 	{
 		GlobalGSC.Instance.settingMenulUI.OnClose += Toggle_Pause;
 		BattleGSC.Instance.inputManager.InputActions.UI.ESC.performed += Toggle_Pause;
 	}
 
+	/// <summary>
+	/// UI 입력 이벤트 해제 
+	/// - 해제하여 중복 구독 및 메모리 누수 방지
+	/// </summary>
 	private void DiSetting_UIInputAction()
 	{
 		GlobalGSC.Instance.settingMenulUI.OnClose -= Toggle_Pause;
 		BattleGSC.Instance.inputManager.InputActions.UI.ESC.performed -= Toggle_Pause;
 	}
 
+	/// <summary>
+	/// 게임 오버 처리
+	/// - 사망 사운드 재생
+	/// - 일시정지
+	/// - 커서 표시
+	/// - 필드 전체 디스폰(몬스터,아이템)
+	/// - 게임오버 UI 표시
+	/// </summary>
 	public void Game_Over(IDamageable _damageable)
 	{
 		GlobalGSC.Instance.audioManager.Play_Sound(SoundType.Player_Die);
@@ -549,8 +777,13 @@ public class GameManager : MonoBehaviour
 		Set_ShowAndHideCursor(true);
 		BattleGSC.Instance.spawnManager.Despawn_All();
 		BattleGSC.Instance.uIManger.Show(UIType.GameOver);
-	}	
+	}
 
+	/// <summary>
+	/// 플레이어가 공격할때 전달할 데미지 정보 생성
+	/// - 크리티컬 데미지 계산
+	/// - 히트 위치 보정
+	/// </summary>
 	public DamageInfo Get_PlayerDamageInfo(int damage, GameObject hitPoint, Type attacker)
 	{
 		Vector3 hitPos = hitPoint.transform.position + Vector3.up * 1.8f;
@@ -559,6 +792,11 @@ public class GameManager : MonoBehaviour
 		return info;
 	}
 
+	/// <summary>
+	/// 몬스터가 플레이어를 공격할때 전달할 데미지 정보 생성
+	/// - 현재는 치명타를 사용하지 않으므로 isCritical을 false로 고정
+	/// - _key 파라미터는 이후 적 타입별 데미지 계산/속성 적용 등에 확장 가능
+	/// </summary>
 	public DamageInfo Get_EnemyDamageInfo(int damage, string _key ,GameObject hitPoint, Type attacker)
 	{
 		Vector3 hitPos = hitPoint.transform.position + Vector3.up * 1.8f;
