@@ -28,14 +28,12 @@ public class HoverUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		Debug.Log("Hover On");
 		Setting_HoverCoroutine();
 		hoverCoroutine = StartCoroutine(HoverOnEffect());
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		Debug.Log("Hover Off");
 		Setting_HoverCoroutine();
 		hoverCoroutine = StartCoroutine(HoverOffEffect());
 	}

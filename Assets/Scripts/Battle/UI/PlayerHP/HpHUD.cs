@@ -2,7 +2,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// 화면 고정형 플레이어 HP HUD.
+/// 
+/// 흐름:
+/// - ShowAndInitialie(obj)에서 IHealthChanged를 받아 이벤트 구독
+/// - 체력 변화 시 텍스트/게이지 갱신
+/// </summary>
 public class HpHUD : MonoBehaviour, IUIHandler
 {
 	private IHealthChanged healthChanged;
@@ -34,6 +40,9 @@ public class HpHUD : MonoBehaviour, IUIHandler
 		transform.gameObject.SetActive(false);
 	}
 
+	/// <summary>
+	/// HP 이벤트 구독 및 초기 값 반영
+	/// </summary>
 	public void Initialize(IHealthChanged _healthChanged)
 	{
 		healthChanged = _healthChanged;
@@ -48,6 +57,9 @@ public class HpHUD : MonoBehaviour, IUIHandler
 			healthChanged.OnHealthChanged -= HandleHealthChanged;
 	}
 
+	/// <summary>
+	/// HP은 UI에 반영
+	/// </summary>
 	private void HandleHealthChanged(float current, float max)
 	{
 		if (max <= 0) return;

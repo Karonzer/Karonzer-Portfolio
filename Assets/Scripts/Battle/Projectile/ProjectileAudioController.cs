@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 발사체 사운드 처리 
+/// </summary>
 public class ProjectileAudioController : AudioController
 {
 	private void OnEnable()

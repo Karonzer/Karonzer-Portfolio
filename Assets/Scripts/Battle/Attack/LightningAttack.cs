@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// 범위 내 적 중 랜덤 타겟에게  장판형 번개를 떨어뜨리는 공격
+/// </summary>
 public class LightningAttack : AttackRoot
 {
 	private Coroutine attackTimeRoutine;
@@ -37,6 +40,10 @@ public class LightningAttack : AttackRoot
 		base.Apply_StatsFromAttackStats();
 	}
 
+
+	/// <summary>
+	/// 공격 간격마다 몬스터을 탐색하고 해당 위치에 생성
+	/// </summary>
 	private IEnumerator Coroutine_FindRandomTargetEnemyAttackTime()
 	{
 		while (true)
@@ -68,6 +75,9 @@ public class LightningAttack : AttackRoot
 
 	}
 
+	/// <summary>
+	/// 범위 내 몬스터 리스트 수집
+	/// </summary>
 	private bool Find_TargetEnemyRandomList(out List<GameObject> _list)
 	{
 		_list = new List<GameObject>(); 

@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// 가장 가까운 적을 향해 화염구를 발사하는 공격
+/// - 방향성 투사체
+/// - 비동기 SpawnAsync 사용
+/// </summary>
 public class FireballAttack : AttackRoot
 {
 	private Coroutine attackTimeRoutine;
@@ -22,12 +27,17 @@ public class FireballAttack : AttackRoot
 	}
 	protected override void Attack()
 	{
+		// 기존 공격 루틴 정리
 		if (attackTimeRoutine != null)
 		{
 			StopCoroutine(attackTimeRoutine);
 			attackTimeRoutine = null;
 		}
+
+		// 풀 워밍업용 투사체 생성
 		Initialize_ProjectileObj();
+
+		// 공격 루프 시작
 		Start_FindTargetEnemyAttackTime();
 	}
 
@@ -41,8 +51,9 @@ public class FireballAttack : AttackRoot
 		base.Apply_StatsFromAttackStats();
 	}
 
-
-
+	/// <summary>
+	/// 공격 간격마다 몬스터을 탐색하고 발사
+	/// </summary>
 	private async Awaitable Coroutine_FindTargetEnemyAttackTime()
 	{
 		while (true)
@@ -76,6 +87,9 @@ public class FireballAttack : AttackRoot
 
 	}
 
+	/// <summary>
+	/// 풀에 미리 투사체를 생성해두기 위한 초기화
+	/// </summary>
 	private async void Initialize_ProjectileObj()
 	{
 		await Spawn_Projectile();
@@ -92,6 +106,9 @@ public class FireballAttack : AttackRoot
 		}
 	}
 
+	/// <summary>
+	/// 가장 가까운 몬스터 방향 탐색
+	/// </summary>
 	private bool Find_TargetEnemyDir(out Vector3 _direction)
 	{
 		_direction = Vector3.zero;

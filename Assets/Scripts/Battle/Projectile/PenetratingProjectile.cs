@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// 관통형 발사체
+/// </summary>
 public class PenetratingProjectile : Projectile
 {
+	// 이동 / 수명 
 	private Coroutine moveRoutine;
 	private Coroutine projectileSurvivalTimeCoroutine;
 
+	// 충돌 판정용 콜라이더
 	private SphereCollider sphereCollider;
 	private void Awake()
 	{
@@ -24,6 +30,9 @@ public class PenetratingProjectile : Projectile
 		}
 	}
 
+	/// <summary>
+	/// 투사체 데이터 초기화
+	/// </summary>
 	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, float _projectileRange, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 _spawnPos)
 	{
 		projectileName = _projectileName;
@@ -37,11 +46,19 @@ public class PenetratingProjectile : Projectile
 		Setting_CurrentProjectile();
 	}
 
+	/// <summary>
+	/// 재사용 시 상태 초기화
+	/// </summary>
 	private void Setting_CurrentProjectile()
 	{
 		sphereCollider.enabled = true;
 	}
 
+	/// <summary>
+	/// 투사체 발사
+	/// - 투사체 이동 코루틴 실행
+	/// - 생존 시간 체크 코루틴 실행
+	/// </summary>
 	public override void Launch_Projectile()
 	{
 		if (moveRoutine != null)
@@ -61,6 +78,9 @@ public class PenetratingProjectile : Projectile
 		projectileSurvivalTimeCoroutine = StartCoroutine(Start_ProjectileSurvivalTimeCoroutine());
 	}
 
+	/// <summary>
+	/// 투사체 이동 루프
+	/// </summary>
 	private IEnumerator Start_MoveFireballProjectile()
 	{
 
@@ -79,6 +99,9 @@ public class PenetratingProjectile : Projectile
 		}
 	}
 
+	/// <summary>
+	/// 생존 시간 만료 시 자동 디스폰
+	/// </summary>
 	private IEnumerator Start_ProjectileSurvivalTimeCoroutine()
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime - 10);
@@ -86,6 +109,9 @@ public class PenetratingProjectile : Projectile
 		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
 	}
 
+	/// <summary>
+	/// 충돌 하는 몬스터한테 데미지 전달
+	/// </summary>
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Player"))

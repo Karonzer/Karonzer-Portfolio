@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// 일정 주기로 플레이어 주변 몬스터에게 충격파 피해를 주는 공격
+/// </summary>
 public class ShockwaveAttack : AttackRoot
 {
 	[SerializeField] private ParticleSystem system;
@@ -10,6 +13,7 @@ public class ShockwaveAttack : AttackRoot
 
 	private void Awake()
 	{
+		// 파티클 및 레이어 초기화
 		system = transform.GetChild(0).GetComponent<ParticleSystem>();
 		enemyMask = LayerMask.GetMask("Enemy");
 	}
@@ -42,6 +46,9 @@ public class ShockwaveAttack : AttackRoot
 		base.Apply_StatsFromAttackStats();
 	}
 
+	/// <summary>
+	/// 공격 간격마다 실행
+	/// </summary>
 	private IEnumerator Coroutine_FindTargetEnemyAttackTime()
 	{
 		while (true)
@@ -56,6 +63,9 @@ public class ShockwaveAttack : AttackRoot
 
 	}
 
+	/// <summary>
+	/// 범위 내 모든 몬스터에게 즉시 피해 적용
+	/// </summary>
 	private void ApplyShockwaveDamage()
 	{
 		Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, enemyMask);

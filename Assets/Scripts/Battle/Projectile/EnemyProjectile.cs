@@ -1,15 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+/// <summary>
+/// 원거리 몬스터가 발사하는 투사체
+/// </summary>
 public class EnemyProjectile : Projectile
 {
+	// 이동 / 수명 / 히트 연출 코루틴
 	private Coroutine moveRoutine;
 	private Coroutine projectileSurvivalTimeCoroutine;
 	private Coroutine hitRoutine;
 
+	// 충돌 판정용 콜라이더
 	private SphereCollider sphereCollider;
 
+	// 시각 효과 루트
 	[SerializeField] private GameObject visualRoot;
+
+	// 충돌 시 재생되는 파티클
 	[SerializeField] private ParticleSystem hitParticle;
 
 	private bool isHit;
@@ -37,6 +47,9 @@ public class EnemyProjectile : Projectile
 		}
 	}
 
+	/// <summary>
+	/// 투사체 데이터 초기화
+	/// </summary>
 	public override void Set_ProjectileInfo(string _projectileName, int _projectileDemage, float _projectileRange, Vector3 _dir, float _projectileSpeed, int _projectileSurvivalTime, Vector3 _spawnPos)
 	{
 		projectileName = _projectileName;
@@ -50,6 +63,9 @@ public class EnemyProjectile : Projectile
 		Setting_CurrentProjectile();
 	}
 
+	/// <summary>
+	/// 재사용 시 상태 초기화
+	/// </summary>
 	private void Setting_CurrentProjectile()
 	{
 		isHit = false;
@@ -64,6 +80,11 @@ public class EnemyProjectile : Projectile
 		}
 	}
 
+	/// <summary>
+	/// 투사체 발사
+	/// - 투사체 이동 코루틴 실행
+	/// - 생존 시간 체크 코루틴 실행
+	/// </summary>
 	public override void Launch_Projectile()
 	{
 		if (moveRoutine != null)
@@ -88,6 +109,9 @@ public class EnemyProjectile : Projectile
 		projectileSurvivalTimeCoroutine = StartCoroutine(Start_ProjectileSurvivalTimeCoroutine());
 	}
 
+	/// <summary>
+	/// 투사체 이동 루프
+	/// </summary>
 	private IEnumerator Start_MoveFireballProjectile()
 	{
 		while (true)
@@ -105,6 +129,9 @@ public class EnemyProjectile : Projectile
 		}
 	}
 
+	/// <summary>
+	/// 생존 시간 만료 시 자동 디스폰
+	/// </summary>
 	private IEnumerator Start_ProjectileSurvivalTimeCoroutine()
 	{
 		yield return new WaitForSeconds(projectileSurvivalTime);
@@ -112,6 +139,9 @@ public class EnemyProjectile : Projectile
 		BattleGSC.Instance.spawnManager.DeSpawn(PoolObjectType.Projectile, projectileName, transform.gameObject);
 	}
 
+	/// <summary>
+	/// 충돌 처리 플레이어와 충돌 했을때 데미지 전달
+	/// </summary>
 	private void OnTriggerEnter(Collider other)
 	{
 		if (isHit) return;
@@ -151,12 +181,10 @@ public class EnemyProjectile : Projectile
 	}
 
 
-	private void OnCollisionEnter(Collision collision)
-	{
-		Debug.Log("test");
-	}
 
-
+	/// <summary>
+	/// 히트 파티클 종료 대기
+	/// </summary>
 	private IEnumerator Wait_HitParticle()
 	{
 		hitParticle.Play();
@@ -170,6 +198,9 @@ public class EnemyProjectile : Projectile
 		Despawn_Immediately();
 	}
 
+	/// <summary>
+	/// 즉시 풀 반환
+	/// </summary>
 	private void Despawn_Immediately()
 	{
 		gameObject.SetActive(false);

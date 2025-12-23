@@ -2,6 +2,16 @@ using TMPro;
 using UnityEngine;
 
 
+/// <summary>
+/// 생존 시간(또는 타이머)을 표시하는 UI.
+/// 
+/// 흐름:
+/// - ShowAndInitialie(obj)로 GameManager를 전달받으면,
+///   GameManager.TimerAction 이벤트를 구독하여 갱신.
+/// - Disable 시 반드시 구독 해제.
+/// 
+/// - UIManger에서 UIType으로 Show/Hide 제어 가능
+/// </summary>
 public class TimerUI : MonoBehaviour, IUIHandler
 {
 	public UIType Type => UIType.Timer;
@@ -47,7 +57,9 @@ public class TimerUI : MonoBehaviour, IUIHandler
 		}
 	}
 
-
+	/// <summary>
+	/// GameManager에서 전달받은 타이머 값으로 텍스트 갱신
+	/// </summary>
 	public void On_Notify(float _value)
 	{
 		float time = _value;

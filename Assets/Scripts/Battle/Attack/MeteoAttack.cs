@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 범위 내에 있는 몬스터 중 랜덤으로 위에서 낙하하는 메테오 공격
+/// </summary>
 public class MeteoAttack : AttackRoot
 {
 	private Coroutine attackTimeRoutine;
@@ -31,6 +34,9 @@ public class MeteoAttack : AttackRoot
 		StartCoroutine(Coroutine_FindRandomTargetEnemyAttackTime());
 	}
 
+	/// <summary>
+	/// 공격 간격마다 몬스터을 탐색하고 발사
+	/// </summary>
 	private IEnumerator Coroutine_FindRandomTargetEnemyAttackTime()
 	{
 		while (true)
@@ -62,6 +68,9 @@ public class MeteoAttack : AttackRoot
 
 	}
 
+	/// <summary>
+	/// 범위 내에 있는 몬스터 리스트 담기
+	/// </summary>
 	private bool Find_TargetEnemyRandomList(out List<GameObject> _list)
 	{
 		_list = new List<GameObject>();

@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 카메라 방향 기준 부채꼴로 관통 투사체 발사
+/// </summary>
 public class PenetratingAttack : AttackRoot
 {
 	private Coroutine attackTimeRoutine;
@@ -34,7 +37,9 @@ public class PenetratingAttack : AttackRoot
 	}
 
 
-
+	/// <summary>
+	/// 공격 간격마다 헤당 방향으로 발사
+	/// </summary>
 	private IEnumerator Coroutine_PenetratingAttackTime()
 	{
 		while (true)
@@ -68,6 +73,9 @@ public class PenetratingAttack : AttackRoot
 
 	}
 
+	/// <summary>
+	/// 발사체 수에 따라 부채꼴 방향 계산
+	/// </summary>
 	private bool Find_PenetratingDir(int index, int totalCount, out Vector3 _direction)
 	{
 		Vector3 camForward = Camera.main.transform.forward;
