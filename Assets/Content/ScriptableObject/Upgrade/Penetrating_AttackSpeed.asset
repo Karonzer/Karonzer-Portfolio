@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Penetrating_AttackSpeed
   m_EditorClassIdentifier: 
   title: "\uAD00\uD1B5 \uBC1C\uC0AC\uCCB4 \uACF5\uACA9 \uAC04\uACA9 \uAC10\uC18C"
-  description: "\uAD00\uD1B5 \uBC1C\uC0AC\uCCB4 \uACF5\uACA9 \uAC04\uACA9 20% \uAC10\uC18C"
-  icon: {fileID: 0}
+  description: "\uAD00\uD1B5 \uBC1C\uC0AC\uCCB4 \uACF5\uACA9\\n\uAC04\uACA9 20% \uAC10\uC18C"
+  icon: {fileID: 21300000, guid: bb0a1ddf1493b35418b3ad934453f8ee, type: 3}
   optionType: 0
   numKey: Penetrating_02
   targetKey: Penetrating

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: "\uBC88\uAC1C \uC7A5\uD310 \uCD94\uAC00"
   description: "\uBC88\uAC1C \uC7A5\uD310 \uCD94\uAC00"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6b19e7dc1eaf10e47ab280a8235f1e4e, type: 3}
   optionType: 1
   numKey: Lightning
   targetKey: Lightning

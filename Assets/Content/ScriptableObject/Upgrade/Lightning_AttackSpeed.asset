@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Lightning_AttackSpeed
   m_EditorClassIdentifier: 
   title: "\uBC88\uAC1C \uC0DD\uC131 \uAC04\uACA9 \uAC10\uC18C"
-  description: "\uBC88\uAC1C \uC0DD\uC131 \uAC04\uACA9 20% \uAC10\uC18C"
-  icon: {fileID: 0}
+  description: "\uBC88\uAC1C \uC0DD\uC131 \uAC04\uACA9\\n20% \uAC10\uC18C"
+  icon: {fileID: 21300000, guid: 6b19e7dc1eaf10e47ab280a8235f1e4e, type: 3}
   optionType: 0
   numKey: Lightning_01
   targetKey: Lightning

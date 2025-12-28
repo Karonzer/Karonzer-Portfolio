@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: "\uBA54\uD14C\uC624 \uCD94\uAC00"
   description: "\uBA54\uD14C\uC624 \uCD94\uAC00 "
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 06234f1cb112b654186148952b2018d9, type: 3}
   optionType: 1
   numKey: Meteo
   targetKey: Meteo

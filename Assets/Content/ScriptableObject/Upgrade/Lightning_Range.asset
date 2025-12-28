@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Lightning_Range
   m_EditorClassIdentifier: 
   title: "\uBC88\uAC1C \uC7A5\uD310 \uC0DD\uC131 \uBC94\uC704 \uC99D\uAC00 "
-  description: "\uBC88\uAC1C \uC7A5\uD310 \uC0DD\uC131 \uBC94\uC704 20% \uC99D\uAC00\n"
-  icon: {fileID: 0}
+  description: "\uBC88\uAC1C \uC7A5\uD310 \uC0DD\uC131\\n\uBC94\uC704 20% \uC99D\uAC00\n"
+  icon: {fileID: 21300000, guid: 6b19e7dc1eaf10e47ab280a8235f1e4e, type: 3}
   optionType: 0
   numKey: Lightning_02
   targetKey: Lightning

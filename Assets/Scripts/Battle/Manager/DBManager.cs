@@ -118,6 +118,8 @@ public enum UIType
 	Timer,
 	GameOver,
 	Pause,
+	titleBtns,
+	titleSelect,
 }
 
 /// <summary>

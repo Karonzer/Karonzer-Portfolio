@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: "\uCDA9\uACA9 \uC7A5\uD310 \uCD94\uAC00"
   description: "\uCDA9\uACA9 \uC7A5\uD310 \uCD94\uAC00 "
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 641920ce3bfc1f745aa901513835c7ba, type: 3}
   optionType: 1
   numKey: Shockwave
   targetKey: Shockwave

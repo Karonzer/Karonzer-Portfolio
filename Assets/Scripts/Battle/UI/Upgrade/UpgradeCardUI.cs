@@ -21,8 +21,6 @@ public class UpgradeCardUI : MonoBehaviour
 	{
 		Button button = GetComponent<Button>();
 		button.AddEvent(OnClick_Select);
-
-		descText  = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 	}
 
 	/// <summary>
@@ -32,11 +30,10 @@ public class UpgradeCardUI : MonoBehaviour
 	public void Setup(UpgradeOptionSO _option)
 	{
 		this.option = _option;
-		descText.text = _option.description;
-		//titleText.text = _option.title;
-		//descText.text = _option.description;
-		//if (iconImage != null && _option.icon != null)
-		//	iconImage.sprite = _option.icon;
+		titleText.text = _option.title;
+		descText.text = _option.description.Replace("\n", "\n");
+		if (iconImage != null && _option.icon != null)
+			iconImage.sprite = _option.icon;
 	}
 
 	/// <summary>

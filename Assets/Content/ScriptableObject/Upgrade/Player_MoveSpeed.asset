@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Player_MoveSpeed
   m_EditorClassIdentifier: 
   title: "\uD50C\uB808\uC774\uC5B4 \uC774\uB3D9 \uC18D\uB3C4"
-  description: "\uD50C\uB808\uC774\uC5B4 \uC774\uB3D9 \uC18D\uB3C4 20% \uC99D\uAC00"
-  icon: {fileID: 0}
+  description: "\uD50C\uB808\uC774\uC5B4 \uC774\uB3D9\\n\uC18D\uB3C4 20% \uC99D\uAC00"
+  icon: {fileID: 21300000, guid: 65352bc5261d76f4aae37e32a45d67c0, type: 3}
   optionType: 2
   numKey: Player_01
   targetKey: Player

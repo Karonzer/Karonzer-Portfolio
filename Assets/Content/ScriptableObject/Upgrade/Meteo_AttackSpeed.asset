@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Meteo_AttackSpeed
   m_EditorClassIdentifier: 
   title: "\uBA54\uD14C\uC624 \uACF5\uACA9 \uAC04\uACA9 \uAC10\uC18C "
-  description: "\uBA54\uD14C\uC624 \uACF5\uACA9 \uAC04\uACA9 5% \uAC10\uC18C "
-  icon: {fileID: 0}
+  description: "\uBA54\uD14C\uC624 \uACF5\uACA9 \uAC04\uACA9\\n5% \uAC10\uC18C "
+  icon: {fileID: 21300000, guid: 06234f1cb112b654186148952b2018d9, type: 3}
   optionType: 0
   numKey: Meteo_1
   targetKey: Meteo

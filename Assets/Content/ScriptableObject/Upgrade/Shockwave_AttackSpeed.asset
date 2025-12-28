@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Shockwave_AttackSpeed
   m_EditorClassIdentifier: 
   title: "\uCDA9\uACA9 \uACF5\uACA9 \uAC04\uACA9 \uAC10\uC18C"
-  description: "\uCDA9\uACA9 \uACF5\uACA9 \uAC04\uACA9 10% \uAC10\uC18C"
-  icon: {fileID: 0}
+  description: "\uCDA9\uACA9 \uACF5\uACA9 \uAC04\uACA9\\n10% \uAC10\uC18C"
+  icon: {fileID: 21300000, guid: 641920ce3bfc1f745aa901513835c7ba, type: 3}
   optionType: 0
   numKey: Shockwave_1
   targetKey: Shockwave
