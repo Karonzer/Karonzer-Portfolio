@@ -46,7 +46,15 @@ public class GlobalGSC : GenericSingletonClass<GlobalGSC>
 		DontDestroyOnLoad(gameObject);
 	}
 
-	public string currentPlayeName;
+	private string currentPlayeName;
+
+	public string Get_CurrentPlayeName()
+	{ return currentPlayeName; }
+
+	public void Set_CurrentPlayeName(string _value)
+	{
+		currentPlayeName = _value;
+	}
 
 	/// <summary>
 	/// 각 매니저 등록

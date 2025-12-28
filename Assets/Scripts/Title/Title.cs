@@ -31,7 +31,8 @@ public class Title : MonoBehaviour, ITitleHandler<Title>
 	[SerializeField] public TitleCameraManager cameraManager;
 	[SerializeField] public TitleSpawnManager spawnManager;
 
-	public SelectCharacterName characterName;
+	[SerializeField] private string currentPlayerName;
+	[SerializeField] private SelectCharacterName characterName;
 
 
 	public Title Value => this;
@@ -54,11 +55,9 @@ public class Title : MonoBehaviour, ITitleHandler<Title>
 
 		uIManager.Show(UIType.titleBtns);
 
-		string name = "MO_" + characterName.selectName[0];
-		SpawnAsync(name);
-		string select = characterName.selectName[0];
-		GlobalGSC.Instance.currentPlayeName = select;
+		SpawnAsync(0);
 	}
+
 
 
 	public void GoToSelectCamera()
@@ -73,6 +72,18 @@ public class Title : MonoBehaviour, ITitleHandler<Title>
 		cameraManager.To_MainCam();
 		uIManager.Show(UIType.titleBtns);
 		uIManager.Hide(UIType.titleSelect);
+	}
+
+	public void Start_Game()
+	{
+		GlobalGSC.Instance.Set_CurrentPlayeName(currentPlayerName);
+	}
+
+	public void SpawnAsync(int _index)
+	{
+		string name = "MO_" + characterName.selectName[_index];
+		currentPlayerName = characterName.selectName[_index];
+		spawnManager.SpawnAsync(name);
 	}
 
 	public void SpawnAsync(string name)

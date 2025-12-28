@@ -33,17 +33,13 @@ public class TitleSelectPopUp : MonoBehaviour, IUIHandler
 
 	public void Click_SelectBtn(int _index)
 	{
-		string name = "MO_Player_" + _index;
-		curentSelectIndex = _index;
-		Debug.Log(curentSelectIndex);
-		uiUIManager.titleHandler.Value.SpawnAsync(name);
+		uiUIManager.titleHandler.Value.SpawnAsync(_index);
 	}
 
 	public void Click_StartGame()
 	{
 		GlobalGSC.Instance.audioManager.Play_Click();
-		string name = "Player_" + curentSelectIndex;
-		GlobalGSC.Instance.currentPlayeName = name;
+		uiUIManager.titleHandler.Value.Start_Game();
 		GlobalGSC.Instance.sceneManager.LoadBattle_WithLoading();
 	}	
 
