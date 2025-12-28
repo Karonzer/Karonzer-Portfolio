@@ -25,8 +25,14 @@ public class Title : MonoBehaviour, ITitleHandler<Title>
 {
 	// GlobalGSC 프리팹
 	[SerializeField] private GameObject gscPrefab;
+	
+	//각 매니저 스크립트
 	[SerializeField] public TitleUIManager uIManager;
 	[SerializeField] public TitleCameraManager cameraManager;
+	[SerializeField] public TitleSpawnManager spawnManager;
+
+	public SelectCharacterName characterName;
+
 
 	public Title Value => this;
 
@@ -47,6 +53,11 @@ public class Title : MonoBehaviour, ITitleHandler<Title>
 		GlobalGSC.Instance.audioManager.ChangeBGM(SceneBGMType.Title);
 
 		uIManager.Show(UIType.titleBtns);
+
+		string name = "MO_" + characterName.selectName[0];
+		SpawnAsync(name);
+		string select = characterName.selectName[0];
+		GlobalGSC.Instance.currentPlayeName = select;
 	}
 
 
@@ -54,12 +65,19 @@ public class Title : MonoBehaviour, ITitleHandler<Title>
 	{
 		cameraManager.To_SelectCam();
 		uIManager.Hide(UIType.titleBtns);
+		uIManager.Show(UIType.titleSelect);
 	}
 
 	public void GoToMainCamera()
 	{
 		cameraManager.To_MainCam();
 		uIManager.Show(UIType.titleBtns);
+		uIManager.Hide(UIType.titleSelect);
+	}
+
+	public void SpawnAsync(string name)
+	{
+		spawnManager.SpawnAsync(name);
 	}
 
 

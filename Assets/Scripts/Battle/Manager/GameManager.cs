@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 	{
 		// BattleGSC에 자신을 등록
 		BattleGSC.Instance.RegisterGameManager(this);
-		currentPlayerKey = "Player";// 추후 타이틀 씬에서 선택한 캐릭터의 키로 해당 캐릭터를 생성할 수 있음 
+		currentPlayerKey = GlobalGSC.Instance.currentPlayeName;
 
 	}
 

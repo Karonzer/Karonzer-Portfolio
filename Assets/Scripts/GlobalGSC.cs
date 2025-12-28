@@ -46,6 +46,8 @@ public class GlobalGSC : GenericSingletonClass<GlobalGSC>
 		DontDestroyOnLoad(gameObject);
 	}
 
+	public string currentPlayeName;
+
 	/// <summary>
 	/// 각 매니저 등록
 	/// - 각 매니저 스크립트 Awake에서 호출됨

@@ -12,7 +12,11 @@ public class TitleUIManager : MonoBehaviour
 		// 자식들에서 IUIHandler를 모두 수집하여 등록
 		var handlersInChildren = GetComponentsInChildren<IUIHandler>(true);
 		foreach (var h in handlersInChildren)
+		{
 			RegisterHandler(h);
+			h.Hide();
+		}
+
 	}
 
 	private void OnEnable()

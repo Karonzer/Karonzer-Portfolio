@@ -15,6 +15,21 @@ MonoBehaviour:
   m_GroupName: Player
   m_GUID: 1f7eb94b9c1022f429428a86c8d0b6c6
   m_SerializeEntries:
+  - m_GUID: 0ea8ebc70e6a6524da770f0ce0c32efc
+    m_Address: Player_2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 472e37802df542d46a382b712acf0a62
+    m_Address: Player_3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7db6712e225377f4da5036c352506a24
+    m_Address: Player_1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c89a26053554cf44f990c676fe32a797
     m_Address: Player
     m_ReadOnly: 0

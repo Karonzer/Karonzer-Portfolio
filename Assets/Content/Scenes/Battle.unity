@@ -511,6 +511,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStatList:
   - {fileID: 11400000, guid: 784cec4e6a3971544a7beb839b34da11, type: 2}
+  - {fileID: 11400000, guid: 6c1675af54264ee459b7ce5f71c948cc, type: 2}
+  - {fileID: 11400000, guid: c0ed6a3f81ddaa645a171fa9a7f18bde, type: 2}
   currentPlayerBuffStat:
     key: 
     moveSpeed: 0

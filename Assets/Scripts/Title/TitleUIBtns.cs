@@ -34,8 +34,8 @@ public class TitleUIBtns : MonoBehaviour, IUIHandler
 	/// </summary>
 	public void Click_SelectMenu()
 	{
-		//uiUIManager.titleHandler.Value.GoToSelectCamera();
-		GlobalGSC.Instance.sceneManager.LoadBattle_WithLoading();
+		uiUIManager.titleHandler.Value.GoToSelectCamera();
+		//GlobalGSC.Instance.sceneManager.LoadBattle_WithLoading();
 		GlobalGSC.Instance.audioManager.Play_Click();
 
 	}
