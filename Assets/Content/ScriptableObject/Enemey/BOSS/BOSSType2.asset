@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BOSSType2
   m_EditorClassIdentifier: 
   enemyStruct:
-    key: BOSSEnemyType1
+    key: BOSSEnemyType2
     moveSpeed: 5
     maxHP: 1000
     currentHP: 1000

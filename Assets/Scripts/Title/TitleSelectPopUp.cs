@@ -34,6 +34,7 @@ public class TitleSelectPopUp : MonoBehaviour, IUIHandler
 	public void Click_SelectBtn(int _index)
 	{
 		uiUIManager.titleHandler.Value.SpawnAsync(_index);
+		GlobalGSC.Instance.audioManager.Play_Click();
 	}
 
 	public void Click_StartGame()
